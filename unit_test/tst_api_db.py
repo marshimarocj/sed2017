@@ -1,4 +1,8 @@
 import os
+import sys
+sys.path.append('../')
+
+import api.db
 
 
 '''func
@@ -9,7 +13,7 @@ def tst_c3d_ftdb():
   ft_gap = 16
   chunk_gap = 10000
 
-  ftdb = FtDb(ft_dir, ft_gap, chunk_gap)
+  ftdb = api.db.FtDb(ft_dir, ft_gap, chunk_gap)
   fts = ftdb.load_chunk(10)
 
   print fts.shape
