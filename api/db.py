@@ -114,11 +114,14 @@ class FtDb(object):
   @staticmethod
   def _decompress_chunk(file):
     data = np.load(file)
-    shape = data['shape']
-    keys = data['keys']
-    ft = np.zeros((shape[0], shape[1]*shape[2]*shape[3]), dtype=np.float32)
-    ft[keys[:, 0], keys[:, 1]] = data['values']
-    ft = np.reshape(ft, shape)
+    if 'fts' in data:
+      ft = data['fts']
+    else:
+      shape = data['shape']
+      keys = data['keys']
+      ft = np.zeros((shape[0], shape[1]*shape[2]*shape[3]), dtype=np.float32)
+      ft[keys[:, 0], keys[:, 1]] = data['values']
+      ft = np.reshape(ft, shape)
 
     return ft
 
