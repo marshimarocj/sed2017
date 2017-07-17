@@ -114,9 +114,9 @@ class FtDb(object):
   @staticmethod
   def _decompress_chunk(file):
     data = np.load(file)
-    if 'fts' in data:
+    if 'fts' in data: # dense storage
       ft = data['fts']
-    else:
+    else: # sparse storage
       shape = data['shape']
       keys = data['keys']
       ft = np.zeros((shape[0], shape[1]*shape[2]*shape[3]), dtype=np.float32)
@@ -149,6 +149,20 @@ class FtDb(object):
     is_xy = np.logical_and(is_x, is_y)
 
     return is_xy
+
+
+class C3DFtDb(FtDb):
+  def __init__(self, ft_dir):
+    ft_gap = 16
+    chunk_gap = 10000
+    FtDb.__init__(self, ft_dir, ft_gap, chunk_gap)
+
+
+class PAFFtDb(FtDb):
+  def __init__(self, ft_dir):
+    ft_gap = 5
+    chunk_gap = 7500
+    FtDb.__init__(self, ft_dir, ft_gap, chunk_gap)
 
 
 def get_vgg19_centers(shape, sample=1):
