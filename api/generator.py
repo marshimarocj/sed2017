@@ -1,0 +1,124 @@
+from collections import deque
+
+import cv2
+
+from db import TrackDb, ClipDb, FtDb
+
+
+def ft_in_track_generator(trackdb, ftdb, centers, chunk):
+  fts = ftdb.load_chunk(chunk)
+  shape = fts.shape
+
+  cache = {}
+  q = deque()
+  for f in range(shape[0]):
+    frame = chunk + ftdb.ft_gap * f
+
+    # update or insert new tracklets
+    start_frame, tracks = trackdb.query_by_frame(frame)
+    if start_frame != -1:
+      boxs = tracks[frame-start_frame, ::]
+      is_xy = ftdb.query_center_in_box(centers, boxs)
+      center_idxs, box_idxs = np.where(is_xy)
+      for center_idx, box_idx in zip(center_idxs, box_idxs):
+        key = '%d %d'%(start_frame, box_idx)
+        if key not in trackdb.frame_box2trackletid:
+          continue
+        trackletid = trackdb.frame_box2trackletid[key]
+        if trackletid not in cache:
+          cache[trackletid] = []
+          q.append((trackletid, start_frame))
+        cache[trackletid].append(
+          fts[f, :, center_idx/shape[3], center_idx%shape[3]])
+
+    # remove old tracklets
+    while len(q) > 0:
+      if q[0][1] + trackdb.track_len > frame:
+        break
+      d = q.pop()
+      trackletid = d[0]
+      _fts = cache[trackletid]
+      _fts = np.array(_fts)
+      del cache[trackletid]
+      yield (trackletid, _fts)
+
+  # remove rest tracklets
+  while len(q) > 0:
+    d = q.pop()
+    trackletid = d[0]
+    _fts = cache[trackletid]
+    _fts = np.array(_fts)
+    del cache[trackletid]
+    yield (trackletid, _fts)
+
+
+# the size of img in yielded imgs may not be the same!
+def clip_in_track_generator(clipdb, trackdb):
+  clip2trackletids = {}
+  for start_frame in trackdb.start_frames:
+    clips = clipdb.query_tracklet(start_frame, trackdb.track_len)
+    _, tracks = trackdb.query_by_frame(start_frame)
+    trackletids = []
+    for i, track in enumerate(tracks):
+      frame_box = '%d %d'%(start_frame, i)
+      if frame_box in trackdb.frame_box2trackletid:
+        trackletid = trackdb.frame_box2trackletid[frame_box]
+        trackletids.append(trackletid)
+    for clip in clips:
+      clip_name = '%d %d'%(clip[0], clip[1])
+      if clip_name not in clip2track_idxs:
+        clip2trackletids[clip_name] = []
+      clip2trackletids[clip_name].extend(trackletids)
+
+  for clip_name in clip2track_idxs:
+    clip_file = clipdb.query_clip(clip_name)
+    trackletids = clip2track_idxs[clip_name]
+    trackletids = set(trackletids)
+
+    pos = clip_name.find('_')
+    base_frame = int(clip_name[:pos])
+    cap = cv2.VideoCapture(clip_file)
+    frame = base_frame
+
+    cache = {}
+    q = deque()
+    while True:
+      ret, img = cap.read()
+      if ret == 0:
+        break
+
+      # update or insert new tracklets
+      start_frame, tracks = trackdb.query_by_frame(frame)
+      if start_frame != -1:
+        boxs = tracks[frame-start_frame, ::]
+        for box_idx, box in enumerate(boxs):
+          key = '%d %d'%(start_frame, box_idx)
+          if key not in trackdb.frame_box2trackletid:
+            continue
+          trackletid = trackdb.frame_box2trackletid[key]
+          if trackletid in trackletids:
+            if trackletid not in cache:
+              cache[trackletid] = []
+              q.append((trackletid, start_frame))
+            cache[trackletid].append(
+              img[box[1]:box[3], box[0]:box[2]])
+
+      # remove old tracklets
+      while len(q) > 0:
+        if q[0][1] + trackdb.track_len > frame:
+          break
+        d = q.pop()
+        trackletid = d[0]
+        imgs = cache[trackletid]
+        del cache[trackletid]
+        yield (trackletid, imgs)
+
+      frame += 1
+
+    # remove rest tracklets
+    while len(q) > 0:
+      d = q.pop()
+      trackletid = d[0]
+      imgs = cache[trackletid]
+      del cache[trackletid]
+      yield (trackletid, imgs)
