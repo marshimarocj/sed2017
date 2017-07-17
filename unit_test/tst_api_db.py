@@ -36,4 +36,5 @@ def tst_paf_ftdb():
 
 
 if __name__ == '__main__':
-  tst_c3d_ftdb()
+  # tst_c3d_ftdb()
+  tst_paf_ftdb()
