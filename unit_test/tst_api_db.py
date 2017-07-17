@@ -14,7 +14,7 @@ def tst_c3d_ftdb():
   chunk_gap = 10000
 
   ftdb = api.db.FtDb(ft_dir, ft_gap, chunk_gap)
-  fts = ftdb.load_chunk(10)
+  fts = ftdb.load_chunk(chunk_gap*5)
 
   print fts.shape
 
