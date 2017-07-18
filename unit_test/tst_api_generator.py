@@ -27,10 +27,10 @@ def tst_c3d_toi():
   c3d_dir = os.path.join(c3d_root_dir, video_name)
   c3d_db = api.db.C3DFtDb(c3d_dir)
 
-  chunk = 1
+  chunk_idx = 1
   centers = api.db.get_c3d_centers()
   ft_in_track_generator = api.generator.ft_in_track_generator(
-    track_db, c3d_db, centers, chunk)
+    track_db, c3d_db, centers, c3d_db.chunk_gap*chunk_idx)
 
   cnt = 0
   for trackletid, fts in ft_in_track_generator:
