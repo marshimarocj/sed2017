@@ -44,9 +44,9 @@ def ft_in_track_generator(trackdb, ftdb, centers, chunk):
       trackletid = d[0]
       _fts = cache[trackletid]
       _copy_fts = {
-        'ft': np.array(_fts['ft']),
-        'frame': _fts['frame'],
-        'center': _fts['center']
+        'ft': np.array([d['ft'] for d in _fts]),
+        'frame': [d['frame'] for d in _fts],
+        'center': np.array([d['center'] for d in _fts])
       } 
       del cache[trackletid]
       yield (trackletid, _copy_fts)
