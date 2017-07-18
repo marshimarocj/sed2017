@@ -9,8 +9,8 @@ import os
 '''
 def generate_dev08_script():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  data_dir = root_dir
-  lst_file = os.path.join(root_dir, 'video.lst')
+  data_dir = os.path.join(root_dir, 'video')
+  lst_file = os.path.join(data_dir, 'video.lst')
   video_dir = '/data/'
   out_dir = '/data/preprocess'
   img_name = 'diva_preprocess_opencv3:latest'
@@ -20,7 +20,7 @@ def generate_dev08_script():
     for line in f:
       line = line.strip()
 
-      out_lst_file = os.path.join(root_dir, line + '.lst')
+      out_lst_file = os.path.join(data_dir, line + '.lst')
       with open(out_lst_file, 'w') as _fout:
         _fout.write(line + '\n')
       _out_lst_file = os.path.join('/data', line + '.lst')
