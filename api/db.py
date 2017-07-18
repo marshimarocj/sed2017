@@ -27,6 +27,12 @@ class TrackDb(object):
           key = '%d %d'%(start_frame, boxid)
           self._frame_box2trackletid[key] = id
 
+    if self._valid_trackletids is None:
+      self._valid_trackletids = set()
+      for key in self._frame_box2trackletid:
+        id = self._frame_box2trackletid[key]
+        self._valid_trackletids.add(id)
+
     self._start_frames = sorted(list(start_frames))
 
     self._tracks = []
