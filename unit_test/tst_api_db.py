@@ -59,10 +59,10 @@ def tst_track_db():
 
   trackdb = api.db.TrackDb(track_map_file, track_file, track_len)
   
-  print len(trackdb.valid_trackletids)
-  print trackdb.track_len
-  print len(trackdb.tracks)
-  # print trackdb.frame_box2trackletid
+  # print len(trackdb.valid_trackletids)
+  # print trackdb.track_len
+  # print len(trackdb.tracks)
+  print trackdb.frame_box2trackletid
 
 
 if __name__ == '__main__':
