@@ -9,7 +9,7 @@ import os
 '''
 def generate_dev09_script():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  data_dir = os.path.join(root_dir, video)
+  data_dir = os.path.join(root_dir, 'dev09')
   lst_file = '/data/dev09.lst'
   video_dir = '/data/dev09'
   out_dir = '/data/dev09/preprocess'
@@ -30,7 +30,7 @@ def generate_dev09_script():
 
 def generate_dev08_script():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  data_dir = os.path.join(root_dir, video)
+  data_dir = root_dir
   lst_file = '/data/video.lst'
   video_dir = '/data/'
   out_dir = '/data/preprocess'
