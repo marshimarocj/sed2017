@@ -123,8 +123,16 @@ class ClipDb(object):
 class FtDb(object):
   def __init__(self, ft_dir, ft_gap, chunk_gap):
     self.ft_dir = ft_dir
-    self.ft_gap = ft_gap
-    self.chunk_gap = chunk_gap
+    self._ft_gap = ft_gap
+    self._chunk_gap = chunk_gap
+
+  @property
+  def ft_gap(self):
+    return self._ft_gap
+
+  @property
+  def chunk_gap(self):
+    return self._chunk_gap
 
   @staticmethod
   def _decompress_chunk(file):
@@ -172,14 +180,6 @@ class C3DFtDb(FtDb):
     self._chunk_gap = 10000
     FtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
-  @property
-  def ft_gap(self):
-    return self._ft_gap
-
-  @property
-  def chunk_gap(self):
-    return self._chunk_gap
-
 
 class PAFFtDb(FtDb):
   def __init__(self, ft_dir):
@@ -187,28 +187,12 @@ class PAFFtDb(FtDb):
     self._chunk_gap = 7500
     FtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
-  @property
-  def ft_gap(self):
-    return self._ft_gap
-
-  @property
-  def chunk_gap(self):
-    return self._chunk_gap
-
 
 class VGG19FtDb(FtDb):
   def __init__(self, ft_dir):
     self._ft_gap = 5
     self._chunk_gap = 7500
     FtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
-
-  @property
-  def ft_gap(self):
-    return self._ft_gap
-
-  @property
-  def chunk_gap(self):
-    return self._chunk_gap
 
 
 def get_vgg19_centers(shape, sample=1):
