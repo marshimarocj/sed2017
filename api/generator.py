@@ -5,6 +5,7 @@ import cv2
 from db import TrackDb, ClipDb, FtDb
 
 
+# one pass of ftdb to generate features in the tracklets from trackdb
 def ft_in_track_generator(trackdb, ftdb, centers, chunk):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape

@@ -75,8 +75,13 @@ def tst_track_db():
   print tracks.shape
 
 
+def tst_clip_db():
+  pass
+
+
 if __name__ == '__main__':
   # tst_c3d_ftdb()
   # tst_paf_ftdb()
   # tst_vgg_ftdb()
-  tst_track_db()
+  # tst_track_db()
+  tst_clip_db()

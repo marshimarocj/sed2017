@@ -196,9 +196,11 @@ def get_vgg19_centers(shape, sample=1):
   return centers
 
 
-def get_c3d_centers(shape, sample=1):
+def get_c3d_centers():
+  grid_h = 36
+  grid_w = 45
   centers = [
-    (16*sample*i, 16*sample*j) for i in range(shape[2]) for j in range(shape[3])
+    (16*i, 16*j) for i in range(grid_h) for j in range(grid_w)
   ]
   centers = np.array(centers)
 
