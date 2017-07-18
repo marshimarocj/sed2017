@@ -7,31 +7,10 @@ import os
 
 '''expr
 '''
-def generate_dev09_script():
-  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  data_dir = os.path.join(root_dir, 'dev09')
-  lst_file = '/data/dev09.lst'
-  video_dir = '/data/dev09'
-  out_dir = '/data/dev09/preprocess'
-  img_name = 'diva_preprocess_opencv3:latest'
-
-  cmd = [
-    'docker', 'run',
-    '--rm', '-it',
-    '-v', data_dir + ':/data',
-    '-v', '/dev/null:/dev/raw1394',
-    img_name,
-    '--segment_clip', '1',
-    '--clip_length', '6000',
-    '--video_dir', video_dir, 
-    '--video_lst_file', lst_file,
-    '--out_dir', out_dir
-  ]
-
 def generate_dev08_script():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   data_dir = root_dir
-  lst_file = '/data/video.lst'
+  lst_file = os.path.join(root_dir, 'video.lst')
   video_dir = '/data/'
   out_dir = '/data/preprocess'
   img_name = 'diva_preprocess_opencv3:latest'
@@ -44,6 +23,7 @@ def generate_dev08_script():
       out_lst_file = os.path.join(root_dir, line + '.lst')
       with open(out_lst_file, 'w') as _fout:
         _fout.write(line + '\n')
+      _out_lst_file = os.path.join('/data', line + '.lst')
 
       cmd = [
         'docker', 'run',
@@ -54,7 +34,7 @@ def generate_dev08_script():
         '--segment_clip', '1',
         '--clip_length', '6000',
         '--video_dir', video_dir, 
-        '--video_lst_file', out_lst_file,
+        '--video_lst_file', _out_lst_file,
         '--out_dir', out_dir
       ]
       fout.write(' '.join(cmd) + '\n')
