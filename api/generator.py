@@ -43,9 +43,13 @@ def ft_in_track_generator(trackdb, ftdb, centers, chunk):
       d = q.pop()
       trackletid = d[0]
       _fts = cache[trackletid]
-      _fts = np.array(_fts)
+      _copy_fts = {
+        'ft': np.array(_fts['ft']),
+        'frame': _fts['frame'],
+        'center': _fts['center']
+      } 
       del cache[trackletid]
-      yield (trackletid, _fts)
+      yield (trackletid, _copy_fts)
 
   # remove rest tracklets
   while len(q) > 0:
