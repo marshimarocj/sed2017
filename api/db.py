@@ -63,6 +63,7 @@ class TrackDb(object):
   # returns a list of tracks, the index corresponds to the return list of start_frames
   # element i of the list is the tracklets begin at frame start_frames[i]
   # the shape element i is (track_len, num_bracklet, 4), 4 corresponds to xywh
+  # refer to the query_by_frame for an example usage
   @property
   def tracks(self):
     return self._tracks
@@ -72,6 +73,7 @@ class TrackDb(object):
   def frame_box2trackletid(self):
     return self._frame_box2trackletid
 
+  # returns the tracklets whose time interval covers the input frame
   def query_by_frame(self, frame):
     start_idx = bisect.bisect_right(self.start_frames, frame)-1
     if start_idx != -1:
