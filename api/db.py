@@ -165,6 +165,13 @@ class PAFFtDb(FtDb):
     FtDb.__init__(self, ft_dir, ft_gap, chunk_gap)
 
 
+class VGG19FtDb(FtDb):
+  def __init__(self, ft_dir):
+    ft_gap = 5
+    chunk_gap = 7500
+    FtDb.__init__(self, ft_dir, ft_gap, chunk_gap)
+
+
 def get_vgg19_centers(shape, sample=1):
   centers = [
     (32*sample*i + 31, 32*sample*j + 31) for i in range(shape[2]) for j in range(shape[3])
