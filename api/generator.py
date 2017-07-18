@@ -28,8 +28,13 @@ def ft_in_track_generator(trackdb, ftdb, centers, chunk):
         if trackletid not in cache:
           cache[trackletid] = []
           q.append((trackletid, start_frame))
-        cache[trackletid].append(
-          fts[f, :, center_idx/shape[3], center_idx%shape[3]])
+        r = center_idx/shape[3]
+        c = center_idx%shape[3]
+        cache[trackletid].append({
+          'ft': fts[f, :, r, c],
+          'frame': frame,
+          'center': centers[center_idx] 
+        })
 
     # remove old tracklets
     while len(q) > 0:

@@ -161,6 +161,8 @@ class FtDb(object):
 
   @staticmethod
   def query_center_in_box(centers, boxs):
+    # say there are m centers and n boxs
+    # this is a trick to generate (m,n) comparison efficiently with numpy
     is_x = np.logical_and(
       np.expand_dims(centers[:, 0], 1) >= np.expand_dims(boxs[:, 1], 0), 
       np.expand_dims(centers[:, 0], 1) < np.expand_dims(boxs[:, 3], 0)

@@ -34,7 +34,7 @@ def tst_c3d_toi():
 
   cnt = 0
   for trackletid, fts in ft_in_track_generator:
-    print trackletid, fts.shape
+    print trackletid, fts['frame'], fts['center'][0], fts['center'][1], fts['ft'].shape
     cnt += 1
     if cnt == 100:
       break
