@@ -62,7 +62,17 @@ def tst_track_db():
   # print len(trackdb.valid_trackletids)
   # print trackdb.track_len
   # print len(trackdb.tracks)
-  print trackdb.frame_box2trackletid
+
+  # cnt = 0
+  # for key in trackdb.frame_box2trackletid:
+  #   print key, trackdb.frame_box2trackletid[key]
+  #   cnt += 1
+  #   if cnt == 10:
+  #     break
+
+  start_frame, tracks = trackdb.query_by_frame(999)
+  print start_frame
+  print tracks.shape
 
 
 if __name__ == '__main__':

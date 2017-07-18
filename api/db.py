@@ -45,22 +45,29 @@ class TrackDb(object):
       track[:, :, 1] = np.maximum(track[:, :, 1], np.zeros(track.shape[:2]))
       self._tracks.append(track)
 
+  # returns a set of ids (int)
   @property
   def valid_trackletids(self):
     return self._valid_trackletids
 
+  # returns an int
   @property
   def track_len(self):
     return self._track_len
 
+  # returns a list of frame numbers sorted by time
   @property
   def start_frames(self):
     return self._start_frames
 
+  # returns a list of tracks, the index corresponds to the return list of start_frames
+  # element i of the list is the tracklets begin at frame start_frames[i]
+  # the shape element i is (track_len, num_bracklet, 4), 4 corresponds to xywh
   @property
   def tracks(self):
     return self._tracks
 
+  # returns the map from '%d %d'%(start_frame, boxid) to the id (int) of tracklet
   @property
   def frame_box2trackletid(self):
     return self._frame_box2trackletid
