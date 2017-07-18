@@ -1,8 +1,7 @@
 from collections import deque
 
 import cv2
-
-from db import TrackDb, ClipDb, FtDb
+import numpy as np
 
 
 # one pass of ftdb to generate features in the tracklets from trackdb
