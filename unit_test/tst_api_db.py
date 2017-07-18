@@ -61,7 +61,7 @@ def tst_track_db():
   
   print len(trackdb.valid_trackletids)
   print trackdb.track_len
-  print trackdb.tracks.shape
+  print len(trackdb.tracks)
   # print trackdb.frame_box2trackletid
 
 
