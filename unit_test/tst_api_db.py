@@ -54,8 +54,8 @@ def tst_track_db():
   video_name = 'LGW_20071107_E1_CAM3'
   direction = 'forward'
   track_len = 25
-  track_map_file = os.path.join(tracking_dir, '%s.%s.%d.map'%(video_name, direction, track_len))
-  track_file = os.path.join(tracking_dir, '%s.%s.%d.npz'%(video_name, direction, track_len))
+  track_map_file = os.path.join(tracking_dir, '%s.%d.%s.map'%(video_name, track_len, direction))
+  track_file = os.path.join(tracking_dir, '%s.%d.%s.npz'%(video_name, track_len, direction))
 
   trackdb = api.db.TrackDb(track_map_file, track_file, track_len)
   
