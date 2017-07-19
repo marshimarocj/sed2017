@@ -40,9 +40,5 @@ def generate_08_script():
       fout.write(' '.join(cmd) + '\n')
 
 
-def generate_09_script():
-
-
-
 if __name__ == '__main__':
   generate_dev08_script()
