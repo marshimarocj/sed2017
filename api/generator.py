@@ -152,7 +152,7 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
     for track in tracks:
       id = track.id
       if frame - track.start_frame >= track.track.shape[0]:
-        print track.start_frame, track.track.shape, frame, ftdb.ft_duration
+        print track.id, track.start_frame, track.track.shape, frame, ftdb.ft_duration
       box = track.track[frame-track.start_frame]
       boxs = np.expand_dims(box, 0)
       is_xy = ftdb.query_center_in_box(centers, boxs)
