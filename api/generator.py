@@ -4,7 +4,32 @@ import cv2
 import numpy as np
 
 
+class FtInTrack(object):
+  def __init__(self, id, cached_ft_in_track):
+    self._id = id
+    self._fts = np.array([d['ft'] for d in cached_ft_in_track])
+    self._frames = [d['frame'] for d in cached_ft_in_track]
+    self._centers = np.array([d['center'] for d in cached_ft_in_track])
+
+  @property
+  def id(self):
+    return self._id
+
+  @property
+  def fts(self):
+    return self._fts
+
+  @property
+  def frames(self):
+    return self._frames
+
+  @property
+  def centers(self):
+    return self._centers
+
+
 # one pass of ftdb to generate features in the tracklets from trackdb
+# this is a generator and yield FtInTrack object
 def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
@@ -15,25 +40,43 @@ def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
     frame = chunk + ftdb.ft_gap * f
 
     # update or insert new tracklets
-    start_frame, tracks = trackdb.query_by_frame(frame)
-    if start_frame != -1:
-      boxs = tracks[frame-start_frame, ::]
+    # start_frame, tracks = trackdb.query_by_frame(frame)
+    # if start_frame != -1:
+    #   boxs = tracks[frame-start_frame, ::]
+    #   is_xy = ftdb.query_center_in_box(centers, boxs)
+    #   center_idxs, box_idxs = np.where(is_xy)
+    #   for center_idx, box_idx in zip(center_idxs, box_idxs):
+    #     key = '%d %d'%(start_frame, box_idx)
+    #     if key not in trackdb.frame_box2trackletid:
+    #       continue
+    #     trackletid = trackdb.frame_box2trackletid[key]
+    #     if trackletid not in cache:
+    #       cache[trackletid] = []
+    #       q.append((trackletid, start_frame))
+    #     r = center_idx/shape[3]
+    #     c = center_idx%shape[3]
+    #     cache[trackletid].append({
+    #       'ft': fts[f, :, r, c],
+    #       'frame': frame,
+    #       'center': centers[center_idx] 
+    #     })
+    tracks = trackdb.query_by_frame(frame)
+    for track in tracks:
+      id = track.id
+      box = track.track[frame-track.start_frame]
+      box = np.expand_dims(box, 0)
       is_xy = ftdb.query_center_in_box(centers, boxs)
       center_idxs, box_idxs = np.where(is_xy)
       for center_idx, box_idx in zip(center_idxs, box_idxs):
-        key = '%d %d'%(start_frame, box_idx)
-        if key not in trackdb.frame_box2trackletid:
-          continue
-        trackletid = trackdb.frame_box2trackletid[key]
-        if trackletid not in cache:
-          cache[trackletid] = []
-          q.append((trackletid, start_frame))
+        if id not in cache:
+          cache[id] = []
+          q.append((id, start_frame))
         r = center_idx/shape[3]
         c = center_idx%shape[3]
-        cache[trackletid].append({
+        cache[id].append({
           'ft': fts[f, :, r, c],
           'frame': frame,
-          'center': centers[center_idx] 
+          'center': centers[center_idx]
         })
 
     # remove old tracklets
@@ -41,34 +84,37 @@ def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
       if q[0][1] + trackdb.track_len > frame:
         break
       d = q.pop()
-      trackletid = d[0]
-      _fts = cache[trackletid]
-      _copy_fts = {
-        'ft': np.array([d['ft'] for d in _fts]),
-        'frame': [d['frame'] for d in _fts],
-        'center': np.array([d['center'] for d in _fts])
-      } 
-      del cache[trackletid]
-      yield (trackletid, _copy_fts)
+      id = d[0]
+      _fts = cache[id]
+      # _copy_fts = {
+      #   'ft': np.array([d['ft'] for d in _fts]),
+      #   'frame': [d['frame'] for d in _fts],
+      #   'center': np.array([d['center'] for d in _fts])
+      # }
+      ft_in_track = FtInTrack(id, _fts)
+      del cache[id]
+      # yield (id, _copy_fts)
+      yield ft_in_track
 
   # remove rest tracklets
   while len(q) > 0:
     d = q.pop()
-    trackletid = d[0]
-    _fts = cache[trackletid]
-    _copy_fts = {
-      'ft': np.array([d['ft'] for d in _fts]),
-      'frame': [d['frame'] for d in _fts],
-      'center': np.array([d['center'] for d in _fts])
-    } 
-    del cache[trackletid]
-    yield (trackletid, _copy_fts)
+    id = d[0]
+    _fts = cache[id]
+    # _copy_fts = {
+    #   'ft': np.array([d['ft'] for d in _fts]),
+    #   'frame': [d['frame'] for d in _fts],
+    #   'center': np.array([d['center'] for d in _fts])
+    # }
+    ft_in_track = FtInTrack(id, _fts)
+    del cache[id]
+    yield ft_in_track
 
 
 # one pass of ftdb to generate features in the tracklets from trackdb
 # for duration feature, we consider that the feature is counted as included in the tracklet 
 # if more than half the feature duration intersects with the tracklet time interval
-def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk):
+def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold):
   ft_duration = ftdb.ft_duration
   track_len = trackdb.track_len
 
@@ -81,27 +127,44 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk):
     frame = chunk + ftdb.ft_gap * f
 
     # update or insert new tracklets
-    start_frame, tracks = trackdb.query_by_frame(frame)
-    _frame = frame + ft_duration
-    _start_frame, _tracks = trackdb.query_by_frame(_frame)
-    if start_frame != -1 and start_frame + track_len - frame >= ft_duration/2:
-      boxs = tracks[frame-start_frame, ::]
+    # start_frame, tracks = trackdb.query_by_frame(frame)
+    # _frame = frame + ft_duration
+    # if start_frame != -1 and start_frame + track_len - frame >= ft_duration/2:
+    #   boxs = tracks[frame-start_frame, ::]
+    #   is_xy = ftdb.query_center_in_box(centers, boxs)
+    #   center_idxs, box_idxs = np.where(is_xy)
+    #   for center_idx, box_idx in zip(center_idxs, box_idxs):
+    #     key = '%d %d'%(start_frame, box_idx)
+    #     if key not in trackdb.frame_box2trackletid:
+    #       continue
+    #     trackletid = trackdb.frame_box2trackletid[key]
+    #     if trackletid not in cache:
+    #       cache[trackletid] = []
+    #       q.append((trackletid, start_frame))
+    #     r = center_idx/shape[3]
+    #     c = center_idx%shape[3]
+    #     cache[trackletid].append({
+    #       'ft': fts[f, :, r, c],
+    #       'frame': frame,
+    #       'center': centers[center_idx] 
+    #     })
+    tracks = trackdb.query_by_tiou_threshold(frame, frame + ft_duration, tiou_threshold)
+    for track in tracks:
+      id = track.id
+      box = track.track[frame-track.start_frame]
+      box = np.expand_dims(box, 0)
       is_xy = ftdb.query_center_in_box(centers, boxs)
       center_idxs, box_idxs = np.where(is_xy)
       for center_idx, box_idx in zip(center_idxs, box_idxs):
-        key = '%d %d'%(start_frame, box_idx)
-        if key not in trackdb.frame_box2trackletid:
-          continue
-        trackletid = trackdb.frame_box2trackletid[key]
-        if trackletid not in cache:
-          cache[trackletid] = []
-          q.append((trackletid, start_frame))
+        if id not in cache:
+          cache[id] = []
+          q.append((id, start_frame))
         r = center_idx/shape[3]
         c = center_idx%shape[3]
-        cache[trackletid].append({
+        cache[id].append({
           'ft': fts[f, :, r, c],
           'frame': frame,
-          'center': centers[center_idx] 
+          'center': centers[center_idx]
         })
 
     # remove old tracklets
@@ -109,28 +172,32 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk):
       if q[0][1] + trackdb.track_len > frame:
         break
       d = q.pop()
-      trackletid = d[0]
-      _fts = cache[trackletid]
-      _copy_fts = {
-        'ft': np.array([d['ft'] for d in _fts]),
-        'frame': [d['frame'] for d in _fts],
-        'center': np.array([d['center'] for d in _fts])
-      } 
-      del cache[trackletid]
-      yield (trackletid, _copy_fts)
+      id = d[0]
+      _fts = cache[id]
+      # _copy_fts = {
+      #   'ft': np.array([d['ft'] for d in _fts]),
+      #   'frame': [d['frame'] for d in _fts],
+      #   'center': np.array([d['center'] for d in _fts])
+      # } 
+      ft_in_track = FtInTrack(id, _fts)
+      del cache[id]
+      # yield (trackletid, _copy_fts)
+      yield ft_in_track
 
   # remove rest tracklets
   while len(q) > 0:
     d = q.pop()
-    trackletid = d[0]
-    _fts = cache[trackletid]
-    _copy_fts = {
-      'ft': np.array([d['ft'] for d in _fts]),
-      'frame': [d['frame'] for d in _fts],
-      'center': np.array([d['center'] for d in _fts])
-    } 
-    del cache[trackletid]
-    yield (trackletid, _copy_fts)
+    id = d[0]
+    _fts = cache[id]
+    # _copy_fts = {
+    #   'ft': np.array([d['ft'] for d in _fts]),
+    #   'frame': [d['frame'] for d in _fts],
+    #   'center': np.array([d['center'] for d in _fts])
+    # } 
+    ft_in_track = FtInTrack(id, _fts)
+    del cache[id]
+    # yield (trackletid, _copy_fts)
+    yield ft_in_track
 
 
 # the size of img in yielded imgs may not be the same!

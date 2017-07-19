@@ -11,16 +11,18 @@ class Track(object):
     self._track = track
     self._start_frame = start_frame
 
+  # id of the track
   @property
   def id(self):
     return self._id
 
   # np.array in shape (track_len, 4)
-  # 4 correspond to xmin, ymin, xmax, ymax
+  # 4 corresponds to xmin, ymin, xmax, ymax
   @property
   def track(self):
     return self._track
 
+  # start frame of the track
   @property
   def start_frame(self):
     return self._start_frame
@@ -76,7 +78,6 @@ class TrackDb(object):
         if self._valid_trackletids is None or id in self._valid_trackletids:
           fields = data[1].split('_')
           start_frame = int(fields[0])
-          # start_frames.add(start_frame)
           boxid = int(fields[1])
           key = '%d %d'%(start_frame, boxid)
           frame_box2trackid[key] = id
@@ -132,7 +133,7 @@ class TrackDb(object):
   # def frame_box2trackletid(self):
   #   return self._frame_box2trackletid
 
-  # returns the tracklets whose time interval covers the input frame
+  # return list of Track objects whose time interval covers the input frame
   def query_by_frame(self, frame):
     # start_idx = bisect.bisect_right(self.start_frames, frame)-1
     # if start_idx != -1:
@@ -144,6 +145,26 @@ class TrackDb(object):
     #   return (-1, None)
     results = self._index[frame]
     results = [d.data for d in results]
+    return results
+
+  # return list of Track objects whose tiou with the query interval (begin, end) >= tiou_threshold
+  def query_by_tiou_threshold(self, qbegin, qend, tiou_threshold):
+    intersects = self._index[qbegin:qend]
+    results = []
+    for intersect in intersects:
+      track = intersect.data
+      tbegin = track.start_frame
+      tend = tbegin + self.track_len
+
+      ibegin = max(tbegin, qbegin)
+      iend = min(tend, qend)
+      ubegin = min(tbegin, qbegin)
+      uend = max(tend, qend)
+
+      tiou = (iend-ibegin) / float(uend-ubegin)
+      if tiou >= tiou_threshold:
+        results.append(track)
+
     return results
 
 
