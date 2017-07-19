@@ -70,7 +70,7 @@ def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
           cache[id] = []
-          q.append((id, start_frame))
+          q.append((id, track.start_frame))
         r = center_idx/shape[3]
         c = center_idx%shape[3]
         cache[id].append({
@@ -115,8 +115,8 @@ def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
 # for duration feature, we consider that the feature is counted as included in the tracklet 
 # if more than half the feature duration intersects with the tracklet time interval
 def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold):
-  ft_duration = ftdb.ft_duration
-  track_len = trackdb.track_len
+  # ft_duration = ftdb.ft_duration
+  # track_len = trackdb.track_len
 
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
@@ -148,7 +148,7 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
     #       'frame': frame,
     #       'center': centers[center_idx] 
     #     })
-    tracks = trackdb.query_by_tiou_threshold(frame, frame + ft_duration, tiou_threshold)
+    tracks = trackdb.query_by_tiou_threshold(frame, frame + ftdb.ft_duration, tiou_threshold)
     for track in tracks:
       id = track.id
       box = track.track[frame-track.start_frame]
@@ -158,7 +158,7 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
           cache[id] = []
-          q.append((id, start_frame))
+          q.append((id, track.start_frame))
         r = center_idx/shape[3]
         c = center_idx%shape[3]
         cache[id].append({
