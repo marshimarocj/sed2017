@@ -97,12 +97,12 @@ class TrackDb(object):
       tracks[:, :, 3] += tracks[:, :, 1]
       tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(tracks.shape[:2]))
       tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(tracks.shape[:2]))
-      num_track = tracks.shape[0]
+      num_track = tracks.shape[1]
       for i in range(num_track):
         frame_box = '%d %d'%(start_frame, i)
         if frame_box in frame_box2trackid:
           trackid = frame_box2trackid[frame_box]
-          track = Track(trackid, tracks[i], start_frame)
+          track = Track(trackid, tracks[:, i, :], start_frame)
           self._index[start_frame:start_frame + track_len] = track
 
   # returns a set of ids (int)
