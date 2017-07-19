@@ -76,7 +76,7 @@ class TrackDb(object):
         if self._valid_trackletids is None or id in self._valid_trackletids:
           fields = data[1].split('_')
           start_frame = int(fields[0])
-          start_frames.add(start_frame)
+          # start_frames.add(start_frame)
           boxid = int(fields[1])
           key = '%d %d'%(start_frame, boxid)
           frame_box2trackid[key] = id
