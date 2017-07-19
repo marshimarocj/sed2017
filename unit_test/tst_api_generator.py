@@ -59,7 +59,7 @@ def tst_vgg_toi():
   track_db = api.db.TrackDb(track_map_file, track_file, track_len)
 
   vgg_dir = os.path.join(vgg_root_dir, video_name)
-  vgg_db = api.db.VGG19FbDb(vgg_dir)
+  vgg_db = api.db.VGG19FtDb(vgg_dir)
 
   chunk_idx = 1
   centers = api.db.get_vgg19_centers()
