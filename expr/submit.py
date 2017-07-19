@@ -31,6 +31,8 @@ def tar_tst_videos():
       line = line.strip()
       name, _ = os.path.splitext(line)
       video_file = os.path.join(video_dir, name + '.avi')
+      if not os.path.exists(video_file):
+        continue
       fout.add(video_file, name + '.avi')
 
 
