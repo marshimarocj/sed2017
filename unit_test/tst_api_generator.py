@@ -10,7 +10,7 @@ import api.generator
 '''
 def c3d_threshold_func(qbegin, qend, tbegin, tend):
   ibegin = max(tbegin, qbegin)
-  iend = min(tbegin, qbegin)
+  iend = min(tend, qend)
   return  iend - ibegin >= 8
 
 
