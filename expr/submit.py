@@ -29,8 +29,9 @@ def tar_tst_videos():
   with open(lst_file) as f, tarfile.open(out_file, 'w:gz') as fout:
     for line in f:
       line = line.strip()
-      video_file = os.path.join(video_dir, line)
-      fout.add(video_file, line)
+      name, _ = os.path.splitext(line)
+      video_file = os.path.join(video_dir, name + '.avi')
+      fout.add(video_file, name + '.avi')
 
 
 if __name__ == '__main__':
