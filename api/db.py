@@ -1,7 +1,29 @@
 import os
-import bisect
+# import bisect
 
 import numpy as np
+from intervaltree import IntervalTree
+
+
+class Track(object):
+  def __init__(self, id, track, start_frame):
+    self._id = id
+    self._track = track
+    self._start_frame = start_frame
+
+  @property
+  def id(self):
+    return self._id
+
+  # np.array in shape (track_len, 4)
+  # 4 correspond to xmin, ymin, xmax, ymax
+  @property
+  def track(self):
+    return self._track
+
+  @property
+  def start_frame(self):
+    return self._start_frame
 
 
 class TrackDb(object):
@@ -12,8 +34,40 @@ class TrackDb(object):
 
     self._track_len = track_len
 
-    self._frame_box2trackletid = {}
-    start_frames = set()
+    # self._frame_box2trackletid = {}
+    # start_frames = set()
+    # with open(track_map_file) as f:
+    #   for line in f:
+    #     line = line.strip()
+    #     data = line.split(' ')
+    #     id = int(data[0])
+    #     if self._valid_trackletids is None or id in self._valid_trackletids:
+    #       fields = data[1].split('_')
+    #       start_frame = int(fields[0])
+    #       start_frames.add(start_frame)
+    #       boxid = int(fields[1])
+    #       key = '%d %d'%(start_frame, boxid)
+    #       self._frame_box2trackletid[key] = id
+
+    # if self._valid_trackletids is None:
+    #   self._valid_trackletids = set()
+    #   for key in self._frame_box2trackletid:
+    #     id = self._frame_box2trackletid[key]
+    #     self._valid_trackletids.add(id)
+
+    # self._start_frames = sorted(list(start_frames))
+
+    # self._tracks = []
+    # data = np.load(track_file)
+    # for start_frame in self._start_frames:
+    #   track = data['%010d'%start_frame]
+    #   track[:, :, 2] += track[:, :, 0]
+    #   track[:, :, 3] += track[:, :, 1]
+    #   track[:, :, 0] = np.maximum(track[:, :, 0], np.zeros(track.shape[:2]))
+    #   track[:, :, 1] = np.maximum(track[:, :, 1], np.zeros(track.shape[:2]))
+    #   self._tracks.append(track)
+
+    frame_box2trackid = {}
     with open(track_map_file) as f:
       for line in f:
         line = line.strip()
@@ -25,25 +79,30 @@ class TrackDb(object):
           start_frames.add(start_frame)
           boxid = int(fields[1])
           key = '%d %d'%(start_frame, boxid)
-          self._frame_box2trackletid[key] = id
+          frame_box2trackid[key] = id
 
     if self._valid_trackletids is None:
       self._valid_trackletids = set()
-      for key in self._frame_box2trackletid:
-        id = self._frame_box2trackletid[key]
+      for key in frame_box2trackid:
+        id = frame_box2trackid[key]
         self._valid_trackletids.add(id)
 
-    self._start_frames = sorted(list(start_frames))
-
-    self._tracks = []
+    self._index = IntervalTree()
     data = np.load(track_file)
-    for start_frame in self._start_frames:
-      track = data['%010d'%start_frame]
-      track[:, :, 2] += track[:, :, 0]
-      track[:, :, 3] += track[:, :, 1]
-      track[:, :, 0] = np.maximum(track[:, :, 0], np.zeros(track.shape[:2]))
-      track[:, :, 1] = np.maximum(track[:, :, 1], np.zeros(track.shape[:2]))
-      self._tracks.append(track)
+    for key in data:
+      start_frame = int(key)
+      tracks = data[key]
+      tracks[:, :, 2] += tracks[:, :, 0]
+      tracks[:, :, 3] += tracks[:, :, 1]
+      tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(track.shape[:2]))
+      tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(track.shape[:2]))
+      num_track = tracks.shape[0]
+      for i in range(num_track):
+        frame_box = '%d %d'%(start_frame, i)
+        if frame_box in frame_box2trackid:
+          trackid = frame_box2trackid[frame_box]
+          track = Track(trackid, tracks[i], start_frame)
+          self._index[start_frame:start_frame + track_len] = track
 
   # returns a set of ids (int)
   @property
@@ -55,34 +114,37 @@ class TrackDb(object):
   def track_len(self):
     return self._track_len
 
-  # returns a list of frame numbers sorted by time
-  @property
-  def start_frames(self):
-    return self._start_frames
+  # # returns a list of frame numbers sorted by time
+  # @property
+  # def start_frames(self):
+  #   return self._start_frames
 
-  # returns a list of tracks, the index corresponds to the return list of start_frames
-  # element i of the list is the tracklets begin at frame start_frames[i]
-  # the shape element i is (track_len, num_bracklet, 4), 4 corresponds to xywh
-  # refer to the query_by_frame for an example usage
-  @property
-  def tracks(self):
-    return self._tracks
+  # # returns a list of tracks, the index corresponds to the return list of start_frames
+  # # element i of the list is the tracklets begin at frame start_frames[i]
+  # # the shape element i is (track_len, num_bracklet, 4), 4 corresponds to xmin, ymin, xmax, ymax
+  # # refer to the query_by_frame for an example usage
+  # @property
+  # def tracks(self):
+  #   return self._tracks
 
-  # returns the map from '%d %d'%(start_frame, boxid) to the id (int) of tracklet
-  @property
-  def frame_box2trackletid(self):
-    return self._frame_box2trackletid
+  # # returns the map from '%d %d'%(start_frame, boxid) to the id (int) of tracklet
+  # @property
+  # def frame_box2trackletid(self):
+  #   return self._frame_box2trackletid
 
   # returns the tracklets whose time interval covers the input frame
   def query_by_frame(self, frame):
-    start_idx = bisect.bisect_right(self.start_frames, frame)-1
-    if start_idx != -1:
-      start_frame = self.start_frames[start_idx]
-      if frame - start_frame < self.track_len and frame >= start_frame:
-        tracks = self.tracks[start_idx]
-        return (start_frame, tracks)
-    else:
-      return (-1, None)
+    # start_idx = bisect.bisect_right(self.start_frames, frame)-1
+    # if start_idx != -1:
+    #   start_frame = self.start_frames[start_idx]
+    #   if frame - start_frame < self.track_len and frame >= start_frame:
+    #     tracks = self.tracks[start_idx]
+    #     return (start_frame, tracks)
+    # else:
+    #   return (-1, None)
+    results = self._index[frame]
+    results = [d.data for d in results]
+    return results
 
 
 class ClipDb(object):
@@ -176,30 +238,43 @@ class FtDb(object):
     return is_xy
 
 
-class C3DFtDb(FtDb):
+class InstantFtDb(FtDb):
+  pass
+
+
+class DurationFtDb(FtDb):
+  @property
+  def ft_duration(self):
+    return self._ft_duration
+
+
+class C3DFtDb(DurationFtDb):
   def __init__(self, ft_dir):
     self._ft_gap = 16
     self._chunk_gap = 10000
-    FtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
+    self._ft_duration = 16
+    DurationFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
-class PAFFtDb(FtDb):
+class PAFFtDb(InstantFtDb):
   def __init__(self, ft_dir):
     self._ft_gap = 5
     self._chunk_gap = 7500
-    FtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
+    InstantFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
-class VGG19FtDb(FtDb):
+class VGG19FtDb(InstantFtDb):
   def __init__(self, ft_dir):
     self._ft_gap = 5
     self._chunk_gap = 7500
-    FtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
+    InstantFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
 def get_vgg19_centers(shape, sample=1):
+  grid_h = 9
+  grid_w = 11
   centers = [
-    (32*sample*i + 31, 32*sample*j + 31) for i in range(shape[2]) for j in range(shape[3])
+    (64*i + 32, 64*j + 32) for i in range(grid_h) for j in range(grid_w)
   ]
   centers = np.array(centers)
 
@@ -210,7 +285,7 @@ def get_c3d_centers():
   grid_h = 36
   grid_w = 45
   centers = [
-    (16*i, 16*j) for i in range(grid_h) for j in range(grid_w)
+    (16*i + 8, 16*j + 8) for i in range(grid_h) for j in range(grid_w)
   ]
   centers = np.array(centers)
 

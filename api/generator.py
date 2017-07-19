@@ -5,7 +5,7 @@ import numpy as np
 
 
 # one pass of ftdb to generate features in the tracklets from trackdb
-def ft_in_track_generator(trackdb, ftdb, centers, chunk):
+def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
 
@@ -17,6 +17,74 @@ def ft_in_track_generator(trackdb, ftdb, centers, chunk):
     # update or insert new tracklets
     start_frame, tracks = trackdb.query_by_frame(frame)
     if start_frame != -1:
+      boxs = tracks[frame-start_frame, ::]
+      is_xy = ftdb.query_center_in_box(centers, boxs)
+      center_idxs, box_idxs = np.where(is_xy)
+      for center_idx, box_idx in zip(center_idxs, box_idxs):
+        key = '%d %d'%(start_frame, box_idx)
+        if key not in trackdb.frame_box2trackletid:
+          continue
+        trackletid = trackdb.frame_box2trackletid[key]
+        if trackletid not in cache:
+          cache[trackletid] = []
+          q.append((trackletid, start_frame))
+        r = center_idx/shape[3]
+        c = center_idx%shape[3]
+        cache[trackletid].append({
+          'ft': fts[f, :, r, c],
+          'frame': frame,
+          'center': centers[center_idx] 
+        })
+
+    # remove old tracklets
+    while len(q) > 0:
+      if q[0][1] + trackdb.track_len > frame:
+        break
+      d = q.pop()
+      trackletid = d[0]
+      _fts = cache[trackletid]
+      _copy_fts = {
+        'ft': np.array([d['ft'] for d in _fts]),
+        'frame': [d['frame'] for d in _fts],
+        'center': np.array([d['center'] for d in _fts])
+      } 
+      del cache[trackletid]
+      yield (trackletid, _copy_fts)
+
+  # remove rest tracklets
+  while len(q) > 0:
+    d = q.pop()
+    trackletid = d[0]
+    _fts = cache[trackletid]
+    _copy_fts = {
+      'ft': np.array([d['ft'] for d in _fts]),
+      'frame': [d['frame'] for d in _fts],
+      'center': np.array([d['center'] for d in _fts])
+    } 
+    del cache[trackletid]
+    yield (trackletid, _copy_fts)
+
+
+# one pass of ftdb to generate features in the tracklets from trackdb
+# for duration feature, we consider that the feature is counted as included in the tracklet 
+# if more than half the feature duration intersects with the tracklet time interval
+def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk):
+  ft_duration = ftdb.ft_duration
+  track_len = trackdb.track_len
+
+  fts = ftdb.load_chunk(chunk)
+  shape = fts.shape
+
+  cache = {}
+  q = deque()
+  for f in range(shape[0]):
+    frame = chunk + ftdb.ft_gap * f
+
+    # update or insert new tracklets
+    start_frame, tracks = trackdb.query_by_frame(frame)
+    _frame = frame + ft_duration
+    _start_frame, _tracks = trackdb.query_by_frame(_frame)
+    if start_frame != -1 and start_frame + track_len - frame >= ft_duration/2:
       boxs = tracks[frame-start_frame, ::]
       is_xy = ftdb.query_center_in_box(centers, boxs)
       center_idxs, box_idxs = np.where(is_xy)

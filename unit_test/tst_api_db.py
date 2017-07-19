@@ -70,9 +70,9 @@ def tst_track_db():
   #   if cnt == 10:
   #     break
 
-  start_frame, tracks = trackdb.query_by_frame(999)
-  print start_frame
-  print tracks.shape
+  tracks = trackdb.query_by_frame(999)
+  for track in tracks:
+    print track.id, track.start_frame
 
 
 def tst_clip_db():
@@ -83,5 +83,5 @@ if __name__ == '__main__':
   # tst_c3d_ftdb()
   # tst_paf_ftdb()
   # tst_vgg_ftdb()
-  # tst_track_db()
-  tst_clip_db()
+  tst_track_db()
+  # tst_clip_db()
