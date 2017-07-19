@@ -24,8 +24,6 @@ def tst_c3d_toi():
   c3d_root_dir = os.path.join(root_dir, 'c3d')
   video_name = 'LGW_20071107_E1_CAM3'
 
-  tiou_threshold = 0.5
-
   direction = 'forward'
   track_len = 25
   track_map_file = os.path.join(tracking_root_dir, '%s.%d.%s.map'%(video_name, track_len, direction))
@@ -48,5 +46,34 @@ def tst_c3d_toi():
       break
 
 
+def tst_vgg_toi():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  tracking_root_dir = os.path.join(root_dir, 'tracking', 'person')
+  vgg_root_dir = os.path.join(root_dir, 'raw_ft', 'vgg19_pool5')
+  video_name = 'LGW_20071107_E1_CAM2'
+
+  direction = 'forward'
+  track_len = 25
+  track_map_file = os.path.join(tracking_root_dir, '%s.%d.%s.map'%(video_name, track_len, direction))
+  track_file = os.path.join(tracking_root_dir, '%s.%d.%s.npz'%(video_name, track_len, direction))
+  track_db = api.db.TrackDb(track_map_file, track_file, track_len)
+
+  vgg_dir = os.path.join(vgg_root_dir, video_name)
+  vgg_db = api.db.VGG19FbDb(vgg_dir)
+
+  chunk_idx = 1
+  centers = api.db.get_vgg19_centers()
+  ft_in_track_generator = api.generator.instant_ft_in_track_generator(
+    track_db, vgg_db, centers, vgg_db.chunk_gap*chunk_idx)
+
+  cnt = 0
+  for ft_in_track in ft_in_track_generator:
+    print ft_in_track.id, ft_in_track.fts.shape, len(set(ft_in_track.frames))
+    cnt += 1
+    if cnt == 100:
+      break
+
+
 if __name__ == '__main__':
-  tst_c3d_toi()
+  # tst_c3d_toi()
+  tst_vgg_toi()

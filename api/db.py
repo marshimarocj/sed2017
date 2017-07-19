@@ -36,39 +36,6 @@ class TrackDb(object):
 
     self._track_len = track_len
 
-    # self._frame_box2trackletid = {}
-    # start_frames = set()
-    # with open(track_map_file) as f:
-    #   for line in f:
-    #     line = line.strip()
-    #     data = line.split(' ')
-    #     id = int(data[0])
-    #     if self._valid_trackletids is None or id in self._valid_trackletids:
-    #       fields = data[1].split('_')
-    #       start_frame = int(fields[0])
-    #       start_frames.add(start_frame)
-    #       boxid = int(fields[1])
-    #       key = '%d %d'%(start_frame, boxid)
-    #       self._frame_box2trackletid[key] = id
-
-    # if self._valid_trackletids is None:
-    #   self._valid_trackletids = set()
-    #   for key in self._frame_box2trackletid:
-    #     id = self._frame_box2trackletid[key]
-    #     self._valid_trackletids.add(id)
-
-    # self._start_frames = sorted(list(start_frames))
-
-    # self._tracks = []
-    # data = np.load(track_file)
-    # for start_frame in self._start_frames:
-    #   track = data['%010d'%start_frame]
-    #   track[:, :, 2] += track[:, :, 0]
-    #   track[:, :, 3] += track[:, :, 1]
-    #   track[:, :, 0] = np.maximum(track[:, :, 0], np.zeros(track.shape[:2]))
-    #   track[:, :, 1] = np.maximum(track[:, :, 1], np.zeros(track.shape[:2]))
-    #   self._tracks.append(track)
-
     frame_box2trackid = {}
     with open(track_map_file) as f:
       for line in f:
@@ -287,7 +254,7 @@ class VGG19FtDb(InstantFtDb):
     InstantFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
-def get_vgg19_centers(shape, sample=1):
+def get_vgg19_centers():
   grid_h = 9
   grid_w = 11
   centers = [
