@@ -7,14 +7,14 @@ import os
 
 '''expr
 '''
-def generate_dev08_script():
+def generate_08_script():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   data_dir = os.path.join(root_dir, 'video')
   lst_file = os.path.join(data_dir, 'video.lst')
   video_dir = '/data/'
   out_dir = '/data/preprocess'
   img_name = 'diva_preprocess_opencv3:latest'
-  out_file = 'preprocess.sh'
+  out_file = 'preprocess08.sh'
 
   with open(lst_file) as f, open(out_file, 'w') as fout:
     for line in f:
@@ -38,6 +38,10 @@ def generate_dev08_script():
         '--out_dir', out_dir
       ]
       fout.write(' '.join(cmd) + '\n')
+
+
+def generate_09_script():
+
 
 
 if __name__ == '__main__':
