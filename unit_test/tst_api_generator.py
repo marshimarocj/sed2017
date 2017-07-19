@@ -68,7 +68,10 @@ def tst_vgg_toi():
 
   cnt = 0
   for ft_in_track in ft_in_track_generator:
-    print ft_in_track.id, ft_in_track.fts.shape, len(set(ft_in_track.frames))
+    id = ft_in_track.id
+    track = track_db.trackid2track[id]
+    area = np.mean((track[:, 2] - track[:, 0]) * (track[:, 3] - track[:, 1]))
+    print ft_in_track.id, ft_in_track.fts.shape, len(set(ft_in_track.frames)), area
     cnt += 1
     if cnt == 100:
       break

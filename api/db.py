@@ -1,5 +1,4 @@
 import os
-# import bisect
 
 import numpy as np
 from intervaltree import IntervalTree
@@ -29,10 +28,10 @@ class Track(object):
 
 
 class TrackDb(object):
-  def __init__(self, track_map_file, track_file, track_len, valid_trackletids=None):
-    self._valid_trackletids = valid_trackletids
-    if self._valid_trackletids is not None:
-      self._valid_trackletids = set(self._valid_trackletids)
+  def __init__(self, track_map_file, track_file, track_len, valid_trackids=None):
+    # self._valid_trackids = valid_trackids
+    # if self._valid_trackids is not None:
+    #   self._valid_trackids = set(self._valid_trackids)
 
     self._track_len = track_len
 
@@ -42,19 +41,21 @@ class TrackDb(object):
         line = line.strip()
         data = line.split(' ')
         id = int(data[0])
-        if self._valid_trackletids is None or id in self._valid_trackletids:
+        # if self._valid_trackids is None or id in self._valid_trackids:
+        if valid_trackids is None or id in valid_trackids:
           fields = data[1].split('_')
           start_frame = int(fields[0])
           boxid = int(fields[1])
           key = '%d %d'%(start_frame, boxid)
           frame_box2trackid[key] = id
 
-    if self._valid_trackletids is None:
-      self._valid_trackletids = set()
-      for key in frame_box2trackid:
-        id = frame_box2trackid[key]
-        self._valid_trackletids.add(id)
+    # if self._valid_trackids is None:
+    #   self._valid_trackids = set()
+    #   for key in frame_box2trackid:
+    #     id = frame_box2trackid[key]
+    #     self._valid_trackids.add(id)
 
+    self._trackid2track = {}
     self._index = IntervalTree()
     data = np.load(track_file)
     for key in data:
@@ -70,51 +71,30 @@ class TrackDb(object):
         if frame_box in frame_box2trackid:
           trackid = frame_box2trackid[frame_box]
           track = Track(trackid, tracks[:, i, :], start_frame)
+          self._trackid2track[trackid] = track
           self._index[start_frame:start_frame + track_len] = track
 
-  # returns a set of ids (int)
-  @property
-  def valid_trackletids(self):
-    return self._valid_trackletids
+  # # returns a set of ids (int)
+  # @property
+  # def valid_trackids(self):
+  #   return self._valid_trackids
 
   # returns an int
   @property
   def track_len(self):
     return self._track_len
 
-  # # returns a list of frame numbers sorted by time
-  # @property
-  # def start_frames(self):
-  #   return self._start_frames
-
-  # # returns a list of tracks, the index corresponds to the return list of start_frames
-  # # element i of the list is the tracklets begin at frame start_frames[i]
-  # # the shape element i is (track_len, num_bracklet, 4), 4 corresponds to xmin, ymin, xmax, ymax
-  # # refer to the query_by_frame for an example usage
-  # @property
-  # def tracks(self):
-  #   return self._tracks
-
-  # # returns the map from '%d %d'%(start_frame, boxid) to the id (int) of tracklet
-  # @property
-  # def frame_box2trackletid(self):
-  #   return self._frame_box2trackletid
+  @property
+  def trackid2track(self):
+    return self._trackid2track
 
   # return list of Track objects whose time interval covers the input frame
   def query_by_frame(self, frame):
-    # start_idx = bisect.bisect_right(self.start_frames, frame)-1
-    # if start_idx != -1:
-    #   start_frame = self.start_frames[start_idx]
-    #   if frame - start_frame < self.track_len and frame >= start_frame:
-    #     tracks = self.tracks[start_idx]
-    #     return (start_frame, tracks)
-    # else:
-    #   return (-1, None)
     results = self._index[frame]
     results = [d.data for d in results]
     return results
 
-  # return list of Track objects whose intersects with query interval
+  # return list of Track objects who intersects with query interval
   # and pass threhold_func
   # threshold_func: (qbegin, qend, tbegin, tend) -> bool
   def query_by_time_interval(self, qbegin, qend, threshold_func):
@@ -222,6 +202,7 @@ class FtDb(object):
     return is_xy
 
 
+# just an alias
 class InstantFtDb(FtDb):
   pass
 
