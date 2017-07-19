@@ -8,10 +8,16 @@ import api.generator
 
 '''func
 '''
+def c3d_threshold_func(qbegin, qend, tbegin, tend):
+  ibegin = max(tbegin, qbegin)
+  iend = min(tbegin, qbegin)
+  return  iend - ibegin >= 8
 
 
 '''expr
 '''
+
+
 def tst_c3d_toi():
   root_dir = '/data1/jiac/sed' # uranus
   tracking_root_dir = os.path.join(root_dir, 'tracking')
@@ -32,7 +38,7 @@ def tst_c3d_toi():
   chunk_idx = 1
   centers = api.db.get_c3d_centers()
   ft_in_track_generator = api.generator.duration_ft_in_track_generator(
-    track_db, c3d_db, centers, c3d_db.chunk_gap*chunk_idx, tiou_threshold)
+    track_db, c3d_db, centers, c3d_db.chunk_gap*chunk_idx, c3d_threshold_func)
 
   cnt = 0
   for ft_in_track in ft_in_track_generator:

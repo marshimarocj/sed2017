@@ -112,12 +112,11 @@ def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
 
 
 # one pass of ftdb to generate features in the tracklets from trackdb
-# for duration feature, we consider that the feature is counted as included in the tracklet 
-# if more than half the feature duration intersects with the tracklet time interval
-def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold):
-  # ft_duration = ftdb.ft_duration
-  # track_len = trackdb.track_len
-
+# as for duration feature, the feature is counted as included in the tracklet 
+# only if two conditions are satisfied:
+# 1. the feature time interval intersects with the track interval
+# 2. the intersection pases threshold_func, refer to TrackDb.query_by_time_interval for threshold_func
+def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, threshold_func):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
 
@@ -127,28 +126,7 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
     frame = chunk + ftdb.ft_gap * f
 
     # update or insert new tracklets
-    # start_frame, tracks = trackdb.query_by_frame(frame)
-    # _frame = frame + ft_duration
-    # if start_frame != -1 and start_frame + track_len - frame >= ft_duration/2:
-    #   boxs = tracks[frame-start_frame, ::]
-    #   is_xy = ftdb.query_center_in_box(centers, boxs)
-    #   center_idxs, box_idxs = np.where(is_xy)
-    #   for center_idx, box_idx in zip(center_idxs, box_idxs):
-    #     key = '%d %d'%(start_frame, box_idx)
-    #     if key not in trackdb.frame_box2trackletid:
-    #       continue
-    #     trackletid = trackdb.frame_box2trackletid[key]
-    #     if trackletid not in cache:
-    #       cache[trackletid] = []
-    #       q.append((trackletid, start_frame))
-    #     r = center_idx/shape[3]
-    #     c = center_idx%shape[3]
-    #     cache[trackletid].append({
-    #       'ft': fts[f, :, r, c],
-    #       'frame': frame,
-    #       'center': centers[center_idx] 
-    #     })
-    tracks = trackdb.query_by_tiou_threshold(frame, frame + ftdb.ft_duration, tiou_threshold)
+    tracks = trackdb.query_by_time_interval(frame, frame + ftdb.ft_duration, threshold_func)
     for track in tracks:
       id = track.id
       if frame - track.start_frame >= track.track.shape[0]:
@@ -176,14 +154,8 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
       d = q.pop()
       id = d[0]
       _fts = cache[id]
-      # _copy_fts = {
-      #   'ft': np.array([d['ft'] for d in _fts]),
-      #   'frame': [d['frame'] for d in _fts],
-      #   'center': np.array([d['center'] for d in _fts])
-      # } 
       ft_in_track = FtInTrack(id, _fts)
       del cache[id]
-      # yield (trackletid, _copy_fts)
       yield ft_in_track
 
   # remove rest tracklets
@@ -191,14 +163,8 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
     d = q.pop()
     id = d[0]
     _fts = cache[id]
-    # _copy_fts = {
-    #   'ft': np.array([d['ft'] for d in _fts]),
-    #   'frame': [d['frame'] for d in _fts],
-    #   'center': np.array([d['center'] for d in _fts])
-    # } 
     ft_in_track = FtInTrack(id, _fts)
     del cache[id]
-    # yield (trackletid, _copy_fts)
     yield ft_in_track
 
 

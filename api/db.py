@@ -147,8 +147,10 @@ class TrackDb(object):
     results = [d.data for d in results]
     return results
 
-  # return list of Track objects whose tiou with the query interval (begin, end) >= tiou_threshold
-  def query_by_tiou_threshold(self, qbegin, qend, tiou_threshold):
+  # return list of Track objects whose intersects with query interval
+  # and pass threhold_func
+  # threshold_func: (qbegin, qend, tbegin, tend) -> bool
+  def query_by_time_interval(self, qbegin, qend, threshold_func):
     intersects = self._index[qbegin:qend]
     results = []
     for intersect in intersects:
@@ -156,13 +158,7 @@ class TrackDb(object):
       tbegin = track.start_frame
       tend = tbegin + self.track_len
 
-      ibegin = max(tbegin, qbegin)
-      iend = min(tend, qend)
-      ubegin = min(tbegin, qbegin)
-      uend = max(tend, qend)
-
-      tiou = (iend-ibegin) / float(uend-ubegin)
-      if tiou >= tiou_threshold:
+      if threshold_func(qbegin, qend, tbegin, tend):
         results.append(track)
 
     return results
