@@ -94,8 +94,8 @@ class TrackDb(object):
       tracks = data[key]
       tracks[:, :, 2] += tracks[:, :, 0]
       tracks[:, :, 3] += tracks[:, :, 1]
-      tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(track.shape[:2]))
-      tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(track.shape[:2]))
+      tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(tracks.shape[:2]))
+      tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(tracks.shape[:2]))
       num_track = tracks.shape[0]
       for i in range(num_track):
         frame_box = '%d %d'%(start_frame, i)
