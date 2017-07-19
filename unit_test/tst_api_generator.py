@@ -18,7 +18,7 @@ def tst_c3d_toi():
   c3d_root_dir = os.path.join(root_dir, 'c3d')
   video_name = 'LGW_20071107_E1_CAM3'
 
-  toi_threshold = 0.5
+  tiou_threshold = 0.5
 
   direction = 'forward'
   track_len = 25
