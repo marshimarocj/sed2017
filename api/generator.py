@@ -64,7 +64,7 @@ def instant_ft_in_track_generator(trackdb, ftdb, centers, chunk):
     for track in tracks:
       id = track.id
       box = track.track[frame-track.start_frame]
-      box = np.expand_dims(box, 0)
+      boxs = np.expand_dims(box, 0)
       is_xy = ftdb.query_center_in_box(centers, boxs)
       center_idxs, box_idxs = np.where(is_xy)
       for center_idx, box_idx in zip(center_idxs, box_idxs):
@@ -152,7 +152,7 @@ def duration_ft_in_track_generator(trackdb, ftdb, centers, chunk, tiou_threshold
     for track in tracks:
       id = track.id
       box = track.track[frame-track.start_frame]
-      box = np.expand_dims(box, 0)
+      boxs = np.expand_dims(box, 0)
       is_xy = ftdb.query_center_in_box(centers, boxs)
       center_idxs, box_idxs = np.where(is_xy)
       for center_idx, box_idx in zip(center_idxs, box_idxs):
