@@ -12,7 +12,7 @@ def missing_videos_in_preprocess():
   lst_file = os.path.join(root_dir, 'video2017.lst')
   preprocess_root_dir = os.path.join(root_dir, 'dev09_preprocess')
 
-  with open(lst_file):
+  with open(lst_file) as f:
     for line in f:
       line = line.strip()
       pos = line.find('.')
