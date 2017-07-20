@@ -177,6 +177,7 @@ def tst_c3d():
           break
 
   vid = np.array(vid, dtype=np.float32)
+  print vid.shape
   start_frame = 0
   end_frame = start_frame+16
   layer = 'conv5b'
