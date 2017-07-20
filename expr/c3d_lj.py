@@ -185,6 +185,7 @@ def tst_c3d():
   layer = 'conv5b'
   vid_feat=feat_extractor.extract_layer_feat(vid,start_frame,end_frame,layer)
   print vid_feat.shape
+  print np.sum(vid_feat == 0)
 
 
 if __name__ == '__main__':
