@@ -88,25 +88,6 @@ def get_int_model(model, layer):
   int_model.add(ZeroPadding3D(padding=(0, 1, 1), name='zeropad'))
   int_model.add(MaxPooling3D(pool_size=(2, 2, 2), strides=(2, 2, 2),
                          border_mode='valid', name='pool5'))
-  # if layer == 'pool5':
-  #     return int_model
-
-  # int_model.add(Flatten())
-  # # FC layers group
-  # int_model.add(Dense(4096, activation='relu', name='fc6',
-  #                         weights=model.layers[15].get_weights()))
-  # if layer == 'fc6':
-  #     return int_model
-  # int_model.add(Dropout(.5))
-  # int_model.add(Dense(4096, activation='relu', name='fc7',
-  #                         weights=model.layers[17].get_weights()))
-  # if layer == 'fc7':
-  #     return int_model
-  # int_model.add(Dropout(.5))
-  # int_model.add(Dense(487, activation='softmax', name='fc8',
-  #                         weights=model.layers[19].get_weights()))
-  # if layer == 'fc8':
-  #     return int_model
 
   return None
 
@@ -130,7 +111,6 @@ class C3dFeatureExtractor():
     self.model = model_from_json(open(self.model_json_filename, 'r').read())
     self.model.load_weights(self.model_weight_filename)
     print("[Info] Loading model weights -- DONE!")
-    # self.model.compile(loss='mean_squared_error', optimizer='sgd')
 
     # get activations for intermediate layers if needed
     self.int_model = get_int_model(model=self.model, layer=layer)
@@ -144,7 +124,7 @@ class C3dFeatureExtractor():
     self.gpu_clear_count+=1
     X = vid
     X -= self.mean_cube
-    feat = self.int_model.predict_on_batch(np.array([X]))
+    feat = self.int_model.predict_on_batch(np.array([X, X, X]))
     feat = feat[0, ...]
     if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
         K.clear_session()
@@ -169,14 +149,15 @@ def tst_c3d():
   vid = []
   frame_count = 0
   while True:
-      frame_count += 1
       # print "Frame:", frame_count
       ret, img = cap.read()
       # print img.shape
       if not ret:
           break
       vid.append(img)
-      if frame_count >= 16:
+
+      frame_count += 1
+      if frame_count == 16:
           break
 
   vid = np.array(vid, dtype=np.float32)
