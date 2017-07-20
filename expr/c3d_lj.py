@@ -9,6 +9,8 @@ from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Convolution3D, MaxPooling3D, ZeroPadding3D
 from keras import backend as K
 import scipy.sparse
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
 
 global backend
 backend = 'tf'
@@ -94,9 +96,6 @@ def get_int_model(model, layer):
 
 
 class C3dFeatureExtractor():
-  # #clear session in after 20 times calculation
-  # gpu_max_clear_limit=20;gpu_clear_count=0
-
   #the initialization function
   def __init__(self, model_weight_filename, model_json_filename, mean_cube_filename):
     self.model_weight_filename = model_weight_filename
@@ -122,17 +121,15 @@ class C3dFeatureExtractor():
 
   #extract feautres
   def extract_layer_feat(self,vid, start_frame, end_frame, layer='conv5b'):
-    # self.gpu_clear_count+=1
     X = vid
-    X[:16] -= self.mean_cube
-    X[16:] -= self.mean_cube
-    feat = self.int_model.predict_on_batch(np.array([X[:16], X[16:]]))
-    feat = [feat[0][0], feat[1][0]]
-    feat = np.concatenate(feat, axis=0)
-    # feat = feat[0, ...]
-    # if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
-    #     K.clear_session()
-    #     self.__load_model__()
+    # X[:16] -= self.mean_cube
+    # X[16:] -= self.mean_cube
+    X -= self.mean_cube
+    # feat = self.int_model.predict_on_batch(np.array([X[:16], X[16:]]))
+    # feat = [np.expand_dims(feat[0][0], 0), np.expand_dims(feat[1][0], 0)]
+    # feat = [np.expand_dims(feat[0][0], 0), np.expand_dims(feat[1][0], 0)]
+    feat = self.int_model.predict_on_batch(np.array([X]))
+    feat = [feat[0]]
     return feat
 
 
@@ -168,7 +165,9 @@ def tst_c3d():
   start_frame = 0
   end_frame = start_frame+32
   layer = 'conv5b'
-  vid_feat=feat_extractor.extract_layer_feat(vid,start_frame,end_frame,layer)
+  vid_feats = feat_extractor.extract_layer_feat(vid,start_frame,end_frame,layer)
+
+  vid_feats = np.concatenate(vid_feats)
   # print vid_feat.shape
   # print np.sum(vid_feat == 0)
   np.savez_compressed('/tmp/tmp.npz', vid_feat)
@@ -180,5 +179,65 @@ def tst_c3d():
   np.savez_compressed('/tmp/tmp_sparse.npz', keys=keys, values=values)
 
 
+def bat_c3d():
+  root_dir = '/data1/jiac/sed' # uranus_c3d
+  video_root_dir = os.path.join(root_dir, 'video', 'dev09')
+  lst_file = os.path.join(root_dir, 'video', 'dev09', 'video2017.lst')
+  out_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
+  model_dir = '/data1/jiac/sed/code/c3d-keras/models'
+  mean_file = os.path.join(model_dir, 'sed_16_576_720_mean.npy')
+  net_weight_file = os.path.join(model_dir, 'sports1M_weights_tf.h5')
+  net_json_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
+
+  config = tf.ConfigProto()
+  config.gpu_options.per_process_gpu_memory_fraction = 0.5
+  set_session(tf.Session(config=config))
+  layer = 'conv5b'
+
+  feat_extractor = C3dFeatureExtractor(
+    net_weight_file, net_json_file, mean_file)
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      names.append(name)
+
+  num_video = len(names)
+
+  chunk_gap = 10000
+
+  for i in range(0, num_video/4):
+    name = names[i]
+    video_file = os.path.join(video_root_dir, name + '.avi')
+
+    cap = skvideo.io.VideoCapture(video_file)
+    cnt = 0
+    imgs = []
+    fts = []
+    while True:
+      ret, img = cap.read()
+      if not ret:
+        break
+
+      cnt += 1
+      if cnt % 16 == 0:
+        imgs = np.array(imgs, dtype=np.float32)
+        ft = feat_extractor.extract_layer_feat(
+          imgs, 0, 16,layer)
+        fts.append(ft)
+        if cnt % chunk_gap == 0:
+          idx = cnt / chunk_gap
+          out_file = os.path.join(out_root_dir, name, '%d.npz'%idx)
+          np.savez_compressed(out_file, fts=fts)
+          del fts
+          fts = []
+        del imgs
+        imgs = []
+        print name, cnt
+
+
 if __name__ == '__main__':
-  tst_c3d()
+  # tst_c3d()
+  bat_c3d()
