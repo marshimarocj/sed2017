@@ -211,6 +211,7 @@ def bat_c3d():
   for i in range(0, num_video/4):
     name = names[i]
     video_file = os.path.join(video_root_dir, name + '.avi')
+    print video_file
 
     cap = skvideo.io.VideoCapture(video_file)
     cnt = 0
