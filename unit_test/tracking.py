@@ -64,7 +64,7 @@ def group_script():
           cmds.append(line)
 
       cnt += 1
-      if cnt % 6 == 0:
+      if cnt % 10 == 0:
         out_file = '%d.sh'%idx
         with open(out_file, 'w') as fout:
           for cmd in cmds:
@@ -74,5 +74,5 @@ def group_script():
 
 
 if __name__ == '__main__':
-  generate_script()
-  # group_script()
+  # generate_script()
+  group_script()
