@@ -155,7 +155,8 @@ class C3dFeatureExtractor():
 '''expr
 '''
 def tst_c3d():
-  model_dir = '/home/jiac/models/tensorflow/sed' # uranus
+  # model_dir = '/home/jiac/models/tensorflow/sed' # uranus
+  model_dir = '/data1/jiac/sed/code/c3d-keras/models'
   mean_file = os.path.join(model_dir, 'sed_16_576_720_mean.npy')
   net_weight_file = os.path.join(model_dir, 'sports1M_weights_tf.h5')
   net_json_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
