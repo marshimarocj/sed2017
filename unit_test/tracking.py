@@ -23,6 +23,9 @@ def generate_script():
       if not os.path.exists(clip_lst_file):
         # print videoname
         continue
+      out_dir = os.path.join(root_dir, 'tracking', videoname)
+      if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
       with open(clip_lst_file) as fclip, open(out_file, 'w') as fout:
         for line in fclip:
           clip = line.strip()
@@ -34,6 +37,7 @@ def generate_script():
             os.path.join('/data/dev09_preprocess', videoname, 'clip_6000_100', clip),
             os.path.join('/data/person_detect_0.8', videoname),
             os.path.join('/data/person_detect_0.8', videoname, '%s.frame_25.lst'%videoname),
+            os.path.join('/data/tracking', videoname)
             '--track_duration', '25',
           ]
           fout.write(' '.join(cmd) + '\n')
