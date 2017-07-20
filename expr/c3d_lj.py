@@ -171,11 +171,11 @@ def tst_c3d():
       frame_count += 1
       print "Frame:", frame_count
       ret, img = cap.read()
-      print img.shape
+      # print img.shape
       if not ret:
           break
       vid.append(img)
-      if frame_count >= 32:
+      if frame_count >= 16:
           break
 
   vid = np.array(vid, dtype=np.float32)
