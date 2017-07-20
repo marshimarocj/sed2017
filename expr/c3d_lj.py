@@ -129,7 +129,7 @@ class C3dFeatureExtractor():
     # feat = [np.expand_dims(feat[0][0], 0), np.expand_dims(feat[1][0], 0)]
     # feat = [np.expand_dims(feat[0][0], 0), np.expand_dims(feat[1][0], 0)]
     feat = self.int_model.predict_on_batch(np.array([X]))
-    feat = [feat[0]]
+    feat = feat[0][0] # the 2nd 0 is used to circumvent the tf issue
     return feat
 
 
