@@ -21,7 +21,7 @@ def generate_script():
       clip_lst_file = os.path.join(preprocess_dir, videoname, 'clip_6000_100.lst')
       out_file = os.path.join(out_dir, videoname + '.sh')
       with open(clip_lst_file) as fclip, open(out_file, 'w') as fout:
-        for line in f:
+        for line in fclip:
           clip = line.strip()
           cmd = [
             'docker', 'run', '--rm', '-it', 
