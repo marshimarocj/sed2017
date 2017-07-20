@@ -23,6 +23,7 @@ def generate_script():
       if not os.path.exists(clip_lst_file):
         # print videoname
         continue
+      print videoname
       out_dir = os.path.join(root_dir, 'tracking', videoname)
       if not os.path.exists(out_dir):
         os.mkdir(out_dir)
