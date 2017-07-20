@@ -43,5 +43,34 @@ def generate_script():
           fout.write(' '.join(cmd) + '\n')
 
 
+def group_script():
+  root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
+  video_lst_file = os.path.join(root_dir, '2017.refined.lst')
+
+  cnt = 0
+  cmds = []
+  idx = 0
+  with open(video_lst_file):
+    for line in f:
+      videoname = line.strip()
+      script_file = os.path.join(out_dir, videoname + '.sh')
+      if not os.path.exists(clip_lst_file):
+        continue
+      with open(script_file) as f:
+        for line in f:
+          line = line.strip()
+          cmds.append(line)
+
+      cnt += 1
+      if cnt % 6 == 0:
+        out_file = '%d.sh'%idx
+        with open(out_file, 'w') as fout:
+          for cmd in cmds:
+            fout.write(cmd + '\n')
+        idx += 1
+        cmds = []
+
+
 if __name__ == '__main__':
-  generate_script()
+  # generate_script()
+  group_script()
