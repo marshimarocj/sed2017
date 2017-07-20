@@ -38,7 +38,7 @@ def threshold_person_detect_result():
         os.mkdir(out_dir)
       out_lst_file = os.path.join(out_dir, name + '.frame_25.lst')
       with open(img_lst_file) as fimg, open(out_lst_file, 'w') as flst_out:
-        for line in f:
+        for line in fimg:
           line = line.strip()
           name, _ = os.path.splitext(line)
           src_file = os.path.join(person_detect_dir, line + '.txt')
