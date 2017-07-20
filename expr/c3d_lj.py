@@ -127,10 +127,12 @@ class C3dFeatureExtractor():
     X[:16] -= self.mean_cube
     X[16:] -= self.mean_cube
     feat = self.int_model.predict_on_batch(np.array([X[:16], X[16:]]))
-    feat = feat[0, ...]
-    if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
-        K.clear_session()
-        self.__load_model__()
+    feat = [feat[0][0], feat[1][0]]
+    feat = np.concatenate(feat, axis=0)
+    # feat = feat[0, ...]
+    # if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
+    #     K.clear_session()
+    #     self.__load_model__()
     return feat
 
 
