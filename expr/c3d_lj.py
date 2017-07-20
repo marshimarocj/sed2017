@@ -170,6 +170,7 @@ def tst_c3d():
       frame_count += 1
       print "Frame:", frame_count
       ret, img = cap.read()
+      print img.shape
       if not ret:
           break
       vid.append(img)
@@ -177,7 +178,6 @@ def tst_c3d():
           break
 
   vid = np.array(vid, dtype=np.float32)
-  print vid.shape
   start_frame = 0
   end_frame = start_frame+16
   layer = 'conv5b'
