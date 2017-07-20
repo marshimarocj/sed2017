@@ -46,6 +46,7 @@ def generate_script():
 def group_script():
   root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
   video_lst_file = os.path.join(root_dir, '2017.refined.lst')
+  script_dir = os.path.join(root_dir, 'script')
 
   cnt = 0
   cmds = []
@@ -53,7 +54,7 @@ def group_script():
   with open(video_lst_file) as flst:
     for line in flst:
       videoname = line.strip()
-      script_file = os.path.join(out_dir, videoname + '.sh')
+      script_file = os.path.join(script_dir, videoname + '.sh')
       if not os.path.exists(clip_lst_file):
         continue
       with open(script_file) as f:
