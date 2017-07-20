@@ -50,8 +50,8 @@ def group_script():
   cnt = 0
   cmds = []
   idx = 0
-  with open(video_lst_file):
-    for line in f:
+  with open(video_lst_file) as flst:
+    for line in flst:
       videoname = line.strip()
       script_file = os.path.join(out_dir, videoname + '.sh')
       if not os.path.exists(clip_lst_file):
