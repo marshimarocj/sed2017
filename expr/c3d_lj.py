@@ -206,7 +206,7 @@ def bat_c3d():
 
   num_video = len(names)
 
-  chunk_gap = 10000
+  chunk_gap = 2000
 
   for i in range(0, num_video/4):
     name = names[i]
@@ -230,7 +230,7 @@ def bat_c3d():
           imgs, 0, 16,layer)
         fts.append(ft)
         if cnt % chunk_gap == 0:
-          idx = cnt / chunk_gap
+          idx = cnt / chunk_gap -1
           out_file = os.path.join(out_root_dir, name, '%d.npz'%idx)
           np.savez_compressed(out_file, fts=fts)
           del fts
@@ -238,6 +238,10 @@ def bat_c3d():
         del imgs
         imgs = []
         print name, cnt
+    if len(fts) > 0:
+      idx = cnt / chunk_gap
+      out_file = os.path.join(out_root_dir, name, '%d.npz'%idx)
+      np.savez_compressed(out_file, fts=fts)
 
 
 if __name__ == '__main__':
