@@ -132,7 +132,7 @@ class C3dFeatureExtractor():
     # self.model.compile(loss='mean_squared_error', optimizer='sgd')
 
     # get activations for intermediate layers if needed
-    self.int_model = get_int_model(model=self.model, layer=layer, backend=self.backend)
+    self.int_model = get_int_model(model=self.model, layer=layer)
     print "int model type:",self.int_model
     #load the mean file
     self.mean_cube = np.load(self.mean_cube_filename)
