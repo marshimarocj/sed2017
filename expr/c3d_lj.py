@@ -124,7 +124,7 @@ class C3dFeatureExtractor():
     self.gpu_clear_count+=1
     X = vid
     X -= self.mean_cube
-    feat = self.int_model.predict_on_batch(np.array([X, X, X]))
+    feat = self.int_model.predict_on_batch(np.array([X, X]))
     feat = feat[0, ...]
     if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
         K.clear_session()
