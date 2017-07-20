@@ -8,6 +8,7 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Convolution3D, MaxPooling3D, ZeroPadding3D
 from keras import backend as K
+import scipy.sparse
 
 global backend
 backend = 'tf'
@@ -93,8 +94,8 @@ def get_int_model(model, layer):
 
 
 class C3dFeatureExtractor():
-  #clear session in after 20 times calculation
-  gpu_max_clear_limit=20;gpu_clear_count=0
+  # #clear session in after 20 times calculation
+  # gpu_max_clear_limit=20;gpu_clear_count=0
 
   #the initialization function
   def __init__(self, model_weight_filename, model_json_filename, mean_cube_filename):
@@ -121,10 +122,10 @@ class C3dFeatureExtractor():
 
   #extract feautres
   def extract_layer_feat(self,vid, start_frame, end_frame, layer='conv5b'):
-    self.gpu_clear_count+=1
+    # self.gpu_clear_count+=1
     X = vid
     X -= self.mean_cube
-    feat = self.int_model.predict_on_batch(np.array([X, X]))
+    feat = self.int_model.predict_on_batch(np.array([X[:16], X[16:]]))
     feat = feat[0, ...]
     if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
         K.clear_session()
@@ -157,16 +158,22 @@ def tst_c3d():
       vid.append(img)
 
       frame_count += 1
-      if frame_count == 16:
+      if frame_count == 32:
           break
 
   vid = np.array(vid, dtype=np.float32)
   start_frame = 0
-  end_frame = start_frame+16
+  end_frame = start_frame+32
   layer = 'conv5b'
   vid_feat=feat_extractor.extract_layer_feat(vid,start_frame,end_frame,layer)
-  print vid_feat.shape
-  print np.sum(vid_feat == 0)
+  # print vid_feat.shape
+  # print np.sum(vid_feat == 0)
+  np.savez_compressed('/tmp/tmp.npz', vid_feat)
+
+  dok = scipy.sparse.dok_matrix(vid_feat)
+  keys = dok.keys()
+  values = dok.values()
+  np.savez_compressed('/tmp/tmp_sparse.npz', keys=keys, values=values)
 
 
 if __name__ == '__main__':
