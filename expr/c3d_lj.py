@@ -206,7 +206,8 @@ def bat_c3d():
 
   num_video = len(names)
 
-  chunk_gap = 2000
+  # chunk_gap = 2000
+  chunk_gap = 10000
 
   for i in range(0, num_video/4):
     name = names[i]

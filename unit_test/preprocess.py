@@ -55,6 +55,10 @@ def missing_videos_in_preprocess():
         print name
 
 
+def get_25fps_lst_from_5fps_lst():
+  root_dir = '' # gpu1
+
+
 if __name__ == '__main__':
   # generate_dev08_script()
   missing_videos_in_preprocess()
