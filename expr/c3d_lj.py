@@ -169,7 +169,7 @@ def tst_c3d():
   frame_count = 0
   while True:
       frame_count += 1
-      print "Frame:", frame_count
+      # print "Frame:", frame_count
       ret, img = cap.read()
       # print img.shape
       if not ret:
