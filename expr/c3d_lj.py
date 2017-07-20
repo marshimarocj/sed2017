@@ -155,12 +155,9 @@ class C3dFeatureExtractor():
 '''
 def tst_c3d():
   model_dir = '/home/jiac/models/tensorflow/sed' # uranus
-  # mean_file = os.path.join(model_dir, 'sed_16_576_720_mean.npy')
-  # net_weight_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.h5')
-  # net_json_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
-  mean_file = '/data1/jiac/sed/code/c3d-keras/models/sed_16_576_720_mean.npy'
-  net_weight_file = '/data1/jiac/sed/code/c3d-keras/models/sed_sports1M_weights_tf.h5'
-  net_json_file = '/data1/jiac/sed/code/c3d-keras/models/sed_sports1M_weights_tf.json'
+  mean_file = os.path.join(model_dir, 'sed_16_576_720_mean.npy')
+  net_weight_file = os.path.join(model_dir, 'sports1M_weights_tf.h5')
+  net_json_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
   video_file = '/data1/jiac/sed/video/dev09/MCTTR0101a.mov.deint.avi'
 
   feat_extractor=C3dFeatureExtractor(net_weight_file, net_json_file, mean_file)
