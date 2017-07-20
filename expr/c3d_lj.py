@@ -124,7 +124,8 @@ class C3dFeatureExtractor():
   def extract_layer_feat(self,vid, start_frame, end_frame, layer='conv5b'):
     # self.gpu_clear_count+=1
     X = vid
-    X -= self.mean_cube
+    X[:16] -= self.mean_cube
+    x[16:] -= self.mean_cube
     feat = self.int_model.predict_on_batch(np.array([X[:16], X[16:]]))
     feat = feat[0, ...]
     if self.gpu_clear_count % self.gpu_max_clear_limit == 0:
