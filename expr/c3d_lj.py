@@ -16,7 +16,7 @@ backend = 'tf'
 '''func
 '''
 def get_int_model(model, layer):
-  input_shape=(16, 112, 112, 3) # l, h, w, c
+  input_shape=(16, 576, 720, 3) # l, h, w, c
 
   int_model = Sequential()
 
