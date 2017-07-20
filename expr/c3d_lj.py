@@ -118,7 +118,7 @@ class C3dFeatureExtractor():
   def __init__(self, model_weight_filename, model_json_filename, mean_cube_filename):
     self.model_weight_filename = model_weight_filename
     self.model_json_filename = model_json_filename
-    self.mean_cube_filename = mean_cube_filenam
+    self.mean_cube_filename = mean_cube_filename
     self.backend = 'tf'
     self.__load_model__()
 
