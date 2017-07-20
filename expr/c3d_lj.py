@@ -221,6 +221,7 @@ def bat_c3d():
       ret, img = cap.read()
       if not ret:
         break
+      imgs.append(img)
 
       cnt += 1
       if cnt % 16 == 0:
