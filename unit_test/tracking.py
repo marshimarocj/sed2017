@@ -73,5 +73,5 @@ def group_script():
 
 
 if __name__ == '__main__':
-  # generate_script()
-  group_script()
+  generate_script()
+  # group_script()
