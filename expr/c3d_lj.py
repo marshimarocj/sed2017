@@ -173,6 +173,7 @@ def tst_c3d():
   # print np.sum(vid_feat == 0)
   np.savez_compressed('/tmp/tmp.npz', vid_feat)
 
+  vid_feat = vid_feat.reshape((vid_feat.shape[0], -1))
   dok = scipy.sparse.dok_matrix(vid_feat)
   keys = dok.keys()
   values = dok.values()
