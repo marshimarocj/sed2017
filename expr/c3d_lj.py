@@ -87,25 +87,25 @@ def get_int_model(model, layer):
   int_model.add(ZeroPadding3D(padding=(0, 1, 1), name='zeropad'))
   int_model.add(MaxPooling3D(pool_size=(2, 2, 2), strides=(2, 2, 2),
                          border_mode='valid', name='pool5'))
-  if layer == 'pool5':
-      return int_model
+  # if layer == 'pool5':
+  #     return int_model
 
-  int_model.add(Flatten())
-  # FC layers group
-  int_model.add(Dense(4096, activation='relu', name='fc6',
-                          weights=model.layers[15].get_weights()))
-  if layer == 'fc6':
-      return int_model
-  int_model.add(Dropout(.5))
-  int_model.add(Dense(4096, activation='relu', name='fc7',
-                          weights=model.layers[17].get_weights()))
-  if layer == 'fc7':
-      return int_model
-  int_model.add(Dropout(.5))
-  int_model.add(Dense(487, activation='softmax', name='fc8',
-                          weights=model.layers[19].get_weights()))
-  if layer == 'fc8':
-      return int_model
+  # int_model.add(Flatten())
+  # # FC layers group
+  # int_model.add(Dense(4096, activation='relu', name='fc6',
+  #                         weights=model.layers[15].get_weights()))
+  # if layer == 'fc6':
+  #     return int_model
+  # int_model.add(Dropout(.5))
+  # int_model.add(Dense(4096, activation='relu', name='fc7',
+  #                         weights=model.layers[17].get_weights()))
+  # if layer == 'fc7':
+  #     return int_model
+  # int_model.add(Dropout(.5))
+  # int_model.add(Dense(487, activation='softmax', name='fc8',
+  #                         weights=model.layers[19].get_weights()))
+  # if layer == 'fc8':
+  #     return int_model
 
   return None
 
@@ -139,7 +139,7 @@ class C3dFeatureExtractor():
     self.model.compile(loss='mean_squared_error', optimizer='sgd')
 
     # get activations for intermediate layers if needed
-    self.int_model = c3d_model.get_int_model(model=self.model, layer=layer, backend=self.backend)
+    self.int_model = get_int_model(model=self.model, layer=layer, backend=self.backend)
     print "int model type:",self.int_model
     #load the mean file
     self.mean_cube = np.load(self.mean_cube_filename)
