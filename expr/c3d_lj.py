@@ -1,6 +1,7 @@
 import os
 
-import cv2
+# import cv2
+import skvideo.io
 import numpy as np
 from keras.models import model_from_json
 from keras.models import Sequential
@@ -163,7 +164,7 @@ def tst_c3d():
   feat_extractor=C3dFeatureExtractor(net_weight_file, net_json_file, mean_file)
   #load video and run
   print("[Info] Loading a sample video...")
-  cap = cv2.VideoCapture(video_file)
+  cap = skvideo.io.VideoCapture(video_file)
   vid = []
   frame_count = 0
   while True:
