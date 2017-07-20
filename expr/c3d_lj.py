@@ -123,8 +123,8 @@ class C3dFeatureExtractor():
   #clear session in after 20 times calculation
   gpu_max_clear_limit=20;gpu_clear_count=0
   #the initialization function
-  def __init__(self, model_weight, model_json_filename, mean_cube_filename):
-    self.model_weight = model_weight
+  def __init__(self, model_weight_filename, model_json_filename, mean_cube_filename):
+    self.model_weight_filename = model_weight_filename
     self.model_json_filename = model_json_filename
     self.mean_cube_filename = mean_cube_filename
     self.__load_model__()
