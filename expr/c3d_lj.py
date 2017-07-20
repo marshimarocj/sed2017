@@ -111,22 +111,15 @@ def get_int_model(model, layer):
 
 
 class C3dFeatureExtractor():
-  #define dim ordering and the backend as tensorflow
-  dim_ordering = "tf";backend = dim_ordering
-
-  #define model path
-  # model_dir = './models'
-  # model_weight_filename = os.path.join(model_dir, 'sports1M_weights_tf.h5')
-  # model_json_filename = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
-  # mean_cube_filename='models/sed_16_576_720_mean.npy'
-
   #clear session in after 20 times calculation
   gpu_max_clear_limit=20;gpu_clear_count=0
+
   #the initialization function
   def __init__(self, model_weight_filename, model_json_filename, mean_cube_filename):
     self.model_weight_filename = model_weight_filename
     self.model_json_filename = model_json_filename
-    self.mean_cube_filename = mean_cube_filename
+    self.mean_cube_filename = mean_cube_filenam
+    self.backend = 'tf'
     self.__load_model__()
 
   #load C3D models
@@ -136,7 +129,7 @@ class C3dFeatureExtractor():
     self.model = model_from_json(open(self.model_json_filename, 'r').read())
     self.model.load_weights(self.model_weight_filename)
     print("[Info] Loading model weights -- DONE!")
-    self.model.compile(loss='mean_squared_error', optimizer='sgd')
+    # self.model.compile(loss='mean_squared_error', optimizer='sgd')
 
     # get activations for intermediate layers if needed
     self.int_model = get_int_model(model=self.model, layer=layer, backend=self.backend)
@@ -162,9 +155,12 @@ class C3dFeatureExtractor():
 '''
 def tst_c3d():
   model_dir = '/home/jiac/models/tensorflow/sed' # uranus
-  mean_file = os.path.join(model_dir, 'sed_16_576_720_mean.npy')
-  net_weight_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.h5')
-  net_json_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
+  # mean_file = os.path.join(model_dir, 'sed_16_576_720_mean.npy')
+  # net_weight_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.h5')
+  # net_json_file = os.path.join(model_dir, 'sed_sports1M_weights_tf.json')
+  mean_file = '/data1/jiac/sed/code/c3d-keras/models/sed_16_576_720_mean.npy'
+  net_weight_file = '/data1/jiac/sed/code/c3d-keras/models/sed_sports1M_weights_tf.h5'
+  net_json_file = '/data1/jiac/sed/code/c3d-keras/models/sed_sports1M_weights_tf.json'
   video_file = '/data1/jiac/sed/video/dev09/MCTTR0101a.mov.deint.avi'
 
   feat_extractor=C3dFeatureExtractor(net_weight_file, net_json_file, mean_file)
