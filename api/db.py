@@ -27,6 +27,9 @@ class Track(object):
     return self._start_frame
 
 
+# Note: 
+# for simplicity, the bounding boxs in the the same track is of the same size at different frames
+# in return, the coordinate of the bounding boxs may be <0 or >= img_width/img_height
 class TrackDb(object):
   def __init__(self, track_map_file, track_file, track_len, valid_trackids=None):
     self._track_len = track_len
@@ -37,7 +40,6 @@ class TrackDb(object):
         line = line.strip()
         data = line.split(' ')
         id = int(data[0])
-        # if self._valid_trackids is None or id in self._valid_trackids:
         if valid_trackids is None or id in valid_trackids:
           fields = data[1].split('_')
           start_frame = int(fields[0])
@@ -53,8 +55,8 @@ class TrackDb(object):
       tracks = data[key]
       tracks[:, :, 2] += tracks[:, :, 0]
       tracks[:, :, 3] += tracks[:, :, 1]
-      tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(tracks.shape[:2]))
-      tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(tracks.shape[:2]))
+      # tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(tracks.shape[:2]))
+      # tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(tracks.shape[:2]))
       num_track = tracks.shape[1]
       for i in range(num_track):
         frame_box = '%d %d'%(start_frame, i)
@@ -127,8 +129,13 @@ class ClipDb(object):
   def clip_name2beg_end(self):
     return self._clip_name2beg_end
 
-  # return list of clipnames
-  def query_tracklet(self, start_frame, track_len):
+  @staticmethod
+  def get_beg_end_from_clip_name(clip_name):
+    data = clip_name.split('_')
+    return (int(data[1]), int(data[2]))
+
+  # return list of clipnames that contain the query track
+  def query_track(self, start_frame, track_len):
     clips = self._index[start_frame:start_frame + track_len]
     out = []
     for clip in clips:

@@ -73,6 +73,27 @@ def group_script():
         cmds = []
 
 
+def generate_25fps_lst_from_5fps_lst():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  preprocess_root_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
+
+  with open(video_lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find('.')
+      name = line[:pos]
+      src_lst_file = os.path.join(preprocess_root_dir, name, 'frame5.lst')
+      dst_lst_file = os.path.join(preprocess_root_dir, name, 'frame25.lst')
+      with open(src_lst_file) as f, open(dst_lst_file, 'w') as fout:
+        cnt = 0
+        for line in f:
+          if cnt % 5 == 0:
+            fout.write(line)
+          cnt += 1
+
+
 if __name__ == '__main__':
   # generate_script()
-  group_script()
+  # group_script()
+  generate_25fps_lst_from_5fps_lst()

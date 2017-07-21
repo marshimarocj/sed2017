@@ -37,7 +37,7 @@ def tst_c3d_toi():
 
   chunk_idx = 1
   centers = api.db.get_c3d_centers()
-  ft_in_track_generator = api.generator.duration_ft_in_track_generator(
+  ft_in_track_generator = api.generator.crop_duration_ft_in_track(
     track_db, c3d_db, centers, c3d_db.chunk_gap*chunk_idx, c3d_threshold_func)
 
   cnt = 0
@@ -65,7 +65,7 @@ def tst_vgg_toi():
 
   chunk_idx = 1
   centers = api.db.get_vgg19_centers()
-  ft_in_track_generator = api.generator.instant_ft_in_track_generator(
+  ft_in_track_generator = api.generator.crop_instant_ft_in_track(
     track_db, vgg_db, centers, vgg_db.chunk_gap*chunk_idx)
 
   cnt = 0
