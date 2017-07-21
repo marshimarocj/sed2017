@@ -129,7 +129,7 @@ class ClipDb(object):
 
   # return list of clipnames
   def query_tracklet(self, start_frame, track_len):
-    clips = self.index[start_frame:start_frame + track_len]
+    clips = self._index[start_frame:start_frame + track_len]
     out = []
     for clip in clips:
       clip_name = clip.data
