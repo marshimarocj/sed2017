@@ -30,7 +30,7 @@ def generate_script():
         # print videoname
         continue
       print videoname, out_file
-      out_dir = os.path.join(root_dir, 'tracking', videoname)
+      out_dir = os.path.join(root_dir, 'tst2017', 'tracking', videoname)
       if not os.path.exists(out_dir):
         os.mkdir(out_dir)
       with open(clip_lst_file) as fclip, open(out_file, 'w') as fout:
