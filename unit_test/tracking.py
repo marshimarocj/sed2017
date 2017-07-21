@@ -109,6 +109,6 @@ def generate_25fps_lst_from_5fps_lst():
 
 
 if __name__ == '__main__':
-  # generate_script()
-  group_script()
+  generate_script()
+  # group_script()
   # generate_25fps_lst_from_5fps_lst()
