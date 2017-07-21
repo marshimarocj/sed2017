@@ -8,10 +8,14 @@ import os
 '''expr
 '''
 def generate_script():
-  root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
-  video_lst_file = os.path.join(root_dir, '2017.refined.lst')
-  preprocess_dir = os.path.join(root_dir, 'dev09_preprocess')
-  script_dir = os.path.join(root_dir, 'script')
+  # root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
+  # video_lst_file = os.path.join(root_dir, '2017.refined.lst')
+  # preprocess_dir = os.path.join(root_dir, 'dev09_preprocess')
+  # script_dir = os.path.join(root_dir, 'script')
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  preprocess_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
+  script_dir = os.path.join(root_dir, 'tst2017', 'script')
 
   image_name = 'diva_tracking:v1'
 
@@ -94,6 +98,6 @@ def generate_25fps_lst_from_5fps_lst():
 
 
 if __name__ == '__main__':
-  # generate_script()
+  generate_script()
   # group_script()
-  generate_25fps_lst_from_5fps_lst()
+  # generate_25fps_lst_from_5fps_lst()
