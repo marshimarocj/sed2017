@@ -1,4 +1,5 @@
 import os
+import json
 
 
 '''func
@@ -73,7 +74,25 @@ def lnk_long_video_imgs_to_ease_tar():
       os.symlink(src_img_dir, dst_img_dir)
 
 
+def get_numframe_file():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_file = os.path.join(root_dir, 'tst2017', '2017.refined.lst')
+  preprocess_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
+
+  with open(lst_file) as f:
+    for line in f:
+      videoname = line.strip()
+      meta_file = os.path.join(preprocess_dir)
+      with open(meta_file) as f:
+        data = json.load(f)
+      total_frame = data['total_frame']
+      out_file = os.path.join(preprocess_dir, '%s.num_frame'%videoname)
+      with open(out_file, 'w') as fout:
+        fout.write('%d\n'%total_frame)
+
+
 if __name__ == '__main__':
   # missing_videos_in_preprocess()
   # lnk_short_video_imgs_to_ease_tar()
-  lnk_long_video_imgs_to_ease_tar()
+  # lnk_long_video_imgs_to_ease_tar()
+  get_numframe_file()
