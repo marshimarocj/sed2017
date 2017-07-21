@@ -22,6 +22,8 @@ def generate_script():
   with open(video_lst_file) as f:
     for line in f:
       videoname = line.strip()
+      pos = videoname.find('.')
+      videoname = videoname[:pos]
       clip_lst_file = os.path.join(preprocess_dir, videoname, 'clip_6000_100.lst')
       out_file = os.path.join(script_dir, videoname + '.sh')
       if not os.path.exists(clip_lst_file):
