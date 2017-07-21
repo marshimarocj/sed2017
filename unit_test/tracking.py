@@ -68,6 +68,8 @@ def group_script():
   with open(video_lst_file) as flst:
     for line in flst:
       videoname = line.strip()
+      pos = videoname.find('.')
+      videoname = videoname[:pos]
       script_file = os.path.join(script_dir, videoname + '.sh')
       if not os.path.exists(script_file):
         continue
