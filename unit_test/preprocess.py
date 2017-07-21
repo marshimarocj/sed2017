@@ -57,9 +57,7 @@ def lnk_long_video_imgs_to_ease_tar():
 
   with open(lst_file) as f:
     for line in f:
-      line = line.strip()
-      pos = line.find('.')
-      videoname = line[:pos]
+      videoname = line.strip()
 
       src_img_lst_file = os.path.join(preprocess_dir, videoname, 'frame_5.lst')
       if not os.path.exists(src_img_lst_file):
