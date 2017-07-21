@@ -24,5 +24,31 @@ def missing_videos_in_preprocess():
         fout.write(name + '.mov.deint.avi\n')
 
 
+def lnk_short_video_imgs_to_ease_tar():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  preprocess_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
+  out_root_dir = os.path.join(root_dir, 'tst2017', 'short_video_img')
+
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find('.')
+      videoname = line[:pos]
+      out_dir = os.path.join(out_root_dir, videoname)
+      if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
+      src_img_dir = os.path.join(preprocess_dir, videoname, 'frame_5')
+      dst_img_dir = os.path.join(out_dir, 'frame_5')
+      os.symlink(src_img_dir, dst_img_dir)
+      src_img_lst_file = os.path.join(preprocess_dir, videoname, 'frame_5.lst')
+      dst_img_lst_file = os.path.join(out_dir, 'frame_5.lst')
+      os.symlink(src_img_lst_file, dst_img_lst_file)
+      src_img_lst_file = os.path.join(preprocess_dir, videoname, 'frame_255.lst')
+      dst_img_lst_file = os.path.join(out_dir, 'frame_25.lst')
+      os.symlink(src_img_lst_file, dst_img_lst_file)
+
+
 if __name__ == '__main__':
-  missing_videos_in_preprocess()
+  # missing_videos_in_preprocess()
+  lnk_short_video_imgs_to_ease_tar()
