@@ -85,7 +85,7 @@ def get_numframe_file():
       meta_file = os.path.join(preprocess_dir, videoname, 'meta.json')
       with open(meta_file) as f:
         data = json.load(f)
-      total_frame = data['total_frame']
+      total_frame = data['total_frames']
       out_file = os.path.join(preprocess_dir, '%s.num_frame'%videoname)
       with open(out_file, 'w') as fout:
         fout.write('%d\n'%total_frame)
