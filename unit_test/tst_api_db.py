@@ -78,8 +78,8 @@ def tst_track_db():
 def tst_clip_db():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   video_name = 'LGW_20071101_E1_CAM1'
-  clip_dir = os.path.join(root_dir, video_name, 'clip_6000_100')
-  clip_lst_file = os.path.join(root_dir, video_name, 'clip_6000_100.lst')
+  clip_dir = os.path.join(root_dir, 'video', video_name, 'clip_6000_100')
+  clip_lst_file = os.path.join(root_dir, 'video', video_name, 'clip_6000_100.lst')
 
   clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
   clip_names = clip_db.query_tracklet(1000, 25)
