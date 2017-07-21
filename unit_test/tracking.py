@@ -83,8 +83,8 @@ def generate_25fps_lst_from_5fps_lst():
       line = line.strip()
       pos = line.find('.')
       name = line[:pos]
-      src_lst_file = os.path.join(preprocess_root_dir, name, 'frame5.lst')
-      dst_lst_file = os.path.join(preprocess_root_dir, name, 'frame25.lst')
+      src_lst_file = os.path.join(preprocess_root_dir, name, 'frame_5.lst')
+      dst_lst_file = os.path.join(preprocess_root_dir, name, 'frame_25.lst')
       with open(src_lst_file) as f, open(dst_lst_file, 'w') as fout:
         cnt = 0
         for line in f:
