@@ -48,7 +48,7 @@ def generate_script():
             os.path.join('/data/dev09/preprocess', videoname, 'clip_6000_100', clip),
             os.path.join('/data/tst2017/person_detect_0.8', videoname),
             os.path.join('/data/dev09/preprocess', videoname, 'frame_25.lst'),
-            os.path.join('/data/tracking', videoname),
+            os.path.join('/data/tst2017/tracking', videoname),
             '--track_duration', '25',
           ]
           fout.write(' '.join(cmd) + '\n')
