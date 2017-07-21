@@ -29,10 +29,6 @@ class Track(object):
 
 class TrackDb(object):
   def __init__(self, track_map_file, track_file, track_len, valid_trackids=None):
-    # self._valid_trackids = valid_trackids
-    # if self._valid_trackids is not None:
-    #   self._valid_trackids = set(self._valid_trackids)
-
     self._track_len = track_len
 
     frame_box2trackid = {}
@@ -48,12 +44,6 @@ class TrackDb(object):
           boxid = int(fields[1])
           key = '%d %d'%(start_frame, boxid)
           frame_box2trackid[key] = id
-
-    # if self._valid_trackids is None:
-    #   self._valid_trackids = set()
-    #   for key in frame_box2trackid:
-    #     id = frame_box2trackid[key]
-    #     self._valid_trackids.add(id)
 
     self._trackid2track = {}
     self._index = IntervalTree()
@@ -73,11 +63,6 @@ class TrackDb(object):
           track = Track(trackid, tracks[:, i, :], start_frame)
           self._trackid2track[trackid] = track
           self._index[start_frame:start_frame + track_len] = track
-
-  # # returns a set of ids (int)
-  # @property
-  # def valid_trackids(self):
-  #   return self._valid_trackids
 
   # returns an int
   @property
@@ -114,41 +99,51 @@ class TrackDb(object):
 class ClipDb(object):
   def __init__(self, clip_dir, clip_lst_file):
     self._clip_dir = clip_dir
-    self._beg_ends = []
+    # self._beg_ends = []
+    self._clip_name2beg_end = {}
+    self._index = IntervalTree()
+
     with open(clip_lst_file) as f:
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
-        frames = [int(d) for d in name.split('_')]
-        self._beg_ends.append((frames[0], frames[1]))
+        frames = [int(d) for d in name.split('_')[1:]]
+        self._clip_name2beg_end[name] = (frames[0], frames[1])
+        self._index[frames[0]:frames[1]] = name
+        # self._beg_ends.append((frames[0], frames[1]))
 
-    self._index = IntervalTree()
-    for i, beg_end in enumerate(self._beg_ends):
-      self._index[beg_end[0]:beg_end[1]] = i
+    # for i, beg_end in enumerate(self._beg_ends):
+    #   self._index[beg_end[0]:beg_end[1]] = i
+
+  # @property
+  # def index(self):
+  #   return self._index
+
+  # @property
+  # def beg_ends(self):
+  #   return self._beg_ends
 
   @property
-  def index(self):
-    return self._index
+  def clip_name2beg_end(self):
+    return self._clip_name2beg_end
 
-  @property
-  def beg_ends(self):
-    return self._beg_ends
-
+  # return list of clipnames
   def query_tracklet(self, start_frame, track_len):
     clips = self.index[start_frame:start_frame + track_len]
     out = []
     for clip in clips:
-      clip_idx = clip.data
-      out.append(self.beg_ends[clip_idx])
+      clip_name = clip.data
+      out.append(clip_name)
     return out
 
-  def query_clip(self, clip_name):
+  # return full path of clip file
+  def query_clip_file(self, clip_name):
     return os.path.join(self._clip_dir, clip_name + '.mp4')
 
 
 class FtDb(object):
   def __init__(self, ft_dir, ft_gap, chunk_gap):
-    self.ft_dir = ft_dir
+    self._ft_dir = ft_dir
     self._ft_gap = ft_gap
     self._chunk_gap = chunk_gap
 
@@ -175,11 +170,11 @@ class FtDb(object):
     return ft
 
   def load_chunk(self, chunk, overlap=False):
-    chunk_file = os.path.join(self.ft_dir, '%d.npz'%chunk)
+    chunk_file = os.path.join(self._ft_dir, '%d.npz'%chunk)
     fts = self._decompress_chunk(chunk_file)
 
     if overlap:
-      overlap_file = os.path.join(self.ft_dir, '%d.overlap.npz'%chunk)
+      overlap_file = os.path.join(self._ft_dir, '%d.overlap.npz'%chunk)
       overlap_fts = self._decompress_chunk(overlap_file)
       fts = np.concatenate([fts, overlap_fts], axis=0)
 

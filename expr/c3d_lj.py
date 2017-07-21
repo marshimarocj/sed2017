@@ -7,7 +7,7 @@ from keras.models import model_from_json
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Convolution3D, MaxPooling3D, ZeroPadding3D
-from keras import backend as K
+# from keras import backend as K
 import scipy.sparse
 import tensorflow as tf
 from keras.backend.tensorflow_backend import set_session
@@ -101,7 +101,7 @@ class C3dFeatureExtractor():
     self.model_weight_filename = model_weight_filename
     self.model_json_filename = model_json_filename
     self.mean_cube_filename = mean_cube_filename
-    self.backend = 'tf'
+    # self.backend = 'tf'
     self.__load_model__()
 
   #load C3D models
