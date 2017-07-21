@@ -82,7 +82,7 @@ def tst_clip_db():
   clip_lst_file = os.path.join(root_dir, 'video', 'preprocess', video_name, 'clip_6000_100.lst')
 
   clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
-  clip_names = clip_db.query_tracklet(1000, 25)
+  clip_names = clip_db.query_tracklet(6000, 25)
   for clip_name in clip_names:
     print clip_db.query_clip_file(clip_name)
 
