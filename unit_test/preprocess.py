@@ -82,7 +82,7 @@ def get_numframe_file():
   with open(lst_file) as f:
     for line in f:
       videoname = line.strip()
-      meta_file = os.path.join(preprocess_dir)
+      meta_file = os.path.join(preprocess_dir, videoname, 'meta.json')
       with open(meta_file) as f:
         data = json.load(f)
       total_frame = data['total_frame']
