@@ -54,7 +54,7 @@ def missing_videos_in_preprocess():
       # if not os.path.exists(preprocess_dir):
       #   print name
       if not os.path.exists(lst_file):
-        fout.write(name + '\n')
+        fout.write(name + '.mov.deint.avi\n')
 
 
 if __name__ == '__main__':
