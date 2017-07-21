@@ -55,9 +55,12 @@ def generate_script():
 
 
 def group_script():
-  root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
-  video_lst_file = os.path.join(root_dir, '2017.refined.lst')
-  script_dir = os.path.join(root_dir, 'script')
+  # root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
+  # video_lst_file = os.path.join(root_dir, '2017.refined.lst')
+  # script_dir = os.path.join(root_dir, 'script')
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  script_dir = os.path.join(root_dir, 'tst2017', 'script')
 
   cnt = 0
   cmds = []
@@ -74,7 +77,7 @@ def group_script():
           cmds.append(line)
 
       cnt += 1
-      if cnt % 10 == 0:
+      if cnt % 6 == 0:
         out_file = '%d.sh'%idx
         with open(out_file, 'w') as fout:
           for cmd in cmds:
@@ -104,6 +107,6 @@ def generate_25fps_lst_from_5fps_lst():
 
 
 if __name__ == '__main__':
-  generate_script()
-  # group_script()
+  # generate_script()
+  group_script()
   # generate_25fps_lst_from_5fps_lst()
