@@ -42,7 +42,7 @@ def generate_08_script():
 
 def missing_videos_in_preprocess():
   root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
-  lst_file = os.path.join(root_dir, 'refined.2017.lst')
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
   preprocess_root_dir = os.path.join(root_dir, 'dev09_preprocess')
   out_file = os.path.join(root_dir, 'dev09_preprocess.short.lst')
 
