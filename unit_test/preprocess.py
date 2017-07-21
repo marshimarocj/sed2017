@@ -44,7 +44,7 @@ def lnk_short_video_imgs_to_ease_tar():
       src_img_lst_file = os.path.join(preprocess_dir, videoname, 'frame_5.lst')
       dst_img_lst_file = os.path.join(out_dir, 'frame_5.lst')
       os.symlink(src_img_lst_file, dst_img_lst_file)
-      src_img_lst_file = os.path.join(preprocess_dir, videoname, 'frame_255.lst')
+      src_img_lst_file = os.path.join(preprocess_dir, videoname, 'frame_25.lst')
       dst_img_lst_file = os.path.join(out_dir, 'frame_25.lst')
       os.symlink(src_img_lst_file, dst_img_lst_file)
 
