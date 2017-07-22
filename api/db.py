@@ -33,6 +33,7 @@ class Track(object):
 class TrackDb(object):
   def __init__(self, track_map_file, track_file, track_len, valid_trackids=None):
     self._track_len = track_len
+    valid_trackids = set(valid_trackids)
 
     frame_box2trackid = {}
     with open(track_map_file) as f:
@@ -153,6 +154,12 @@ class FtDb(object):
     self._ft_dir = ft_dir
     self._ft_gap = ft_gap
     self._chunk_gap = chunk_gap
+    names = os.listdir(self._ft_dir)
+    chunks = []
+    for name in names:
+      name, _ = os.path.splitext(name)
+      chunks.append(int(name))
+    self._chunks = sorted(chunks)
 
   @property
   def ft_gap(self):
@@ -161,6 +168,10 @@ class FtDb(object):
   @property
   def chunk_gap(self):
     return self._chunk_gap
+
+  @property
+  def chunks(self):
+    return self._chunks
 
   @staticmethod
   def _decompress_chunk(file):

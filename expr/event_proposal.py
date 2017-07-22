@@ -9,7 +9,7 @@ import numpy as np
 
 '''expr
 '''
-def flow_dstrb_in_pos_events():
+def flow_dstrb_in_events():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin3
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
@@ -29,8 +29,10 @@ def flow_dstrb_in_pos_events():
         name, _ = os.path.splitext(line)
         names.append(name)
 
+  # direction = directions[0]
+  # track_len = track_lens[0]
   direction = directions[0]
-  track_len = track_lens[0]
+  track_len = track_lens[1]
 
   event2maxflow = {}
   for name in names:
@@ -68,4 +70,4 @@ def flow_dstrb_in_pos_events():
 
 
 if __name__ == '__main__':
-  flow_dstrb_in_pos_events()
+  flow_dstrb_in_events()

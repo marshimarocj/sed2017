@@ -118,7 +118,15 @@ def crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
 # only if two conditions are satisfied:
 # 1. the feature time interval intersects with the track interval
 # 2. the intersection pases threshold_func, refer to TrackDb.query_by_time_interval for threshold_func
-def crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
+def crop_duration_ft_in_track(trackdb, ftdb, centers, threshold_func):
+  chunks = ftdb.chunks
+  for chunk in chunks:
+    one_chunk_generator = _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func)
+    for ft_in_track in one_chunk_generator:
+      yield ft_in_track
+
+
+def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
 
