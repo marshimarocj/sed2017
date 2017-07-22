@@ -36,6 +36,8 @@ def flow_dstrb_in_pos_events():
   for name in names:
     track_label_file = os.path.join(track_label_dir, '%s.%d.%s.pos'%(name, track_len, direction))
     opticalflow_pool_file = os.path.join(opticalflow_pool_dir, '%s.%d.%s.npz'%(name, track_len, direction))
+    if not os.path.exists(opticalflow_pool_file):
+      contine
     print name
 
     id2event = {}
