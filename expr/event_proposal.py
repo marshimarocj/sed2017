@@ -32,7 +32,7 @@ def flow_dstrb_in_events():
   # direction = directions[0]
   # track_len = track_lens[0]
   direction = directions[0]
-  track_len = track_lens[1]
+  track_len = track_lens[2]
 
   event2maxflow = {}
   for name in names:
