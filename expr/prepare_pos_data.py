@@ -106,6 +106,8 @@ def generate_script():
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
+        if 'CAM4' in name:
+          continue
         names.append(name)
 
   num = len(names)
