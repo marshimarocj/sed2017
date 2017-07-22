@@ -62,7 +62,7 @@ def flow_dstrb_in_pos_events():
 
   for event in event2maxflow:
     maxflows = event2maxflow[event]
-    print event, np.mean(maxflows), np.median(maxflows), np.percentile(maxflows, 10), np.percentile(maxflows. 90)
+    print event, np.mean(maxflows), np.median(maxflows), np.percentile(maxflows, 10), np.percentile(maxflows, 90)
 
 
 if __name__ == '__main__':
