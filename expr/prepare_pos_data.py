@@ -12,12 +12,13 @@ import api.generator
 '''
 def load_track_label_file(file):
   id2event = {}
-  for line in f:
-    line = line.strip()
-    data = line.split(' ')
-    id = int(data[0])
-    event = data[1]
-    id2event[id] = event
+  with open(file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      id = int(data[0])
+      event = data[1]
+      id2event[id] = event
 
   return id2event
 
