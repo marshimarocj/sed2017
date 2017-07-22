@@ -68,7 +68,7 @@ def prepare_pos_c3d():
     c3d_db = api.db.C3DFtDb(ft_dir)
 
     pos_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
-      track_db, c3d_dt, c3d_centers, c3d_threshold_func)
+      track_db, c3d_db, c3d_centers, c3d_threshold_func)
     fts = []
     frames = []
     centers = []
