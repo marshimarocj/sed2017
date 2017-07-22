@@ -55,40 +55,42 @@ def prepare_pos_c3d():
   #       names.append(name)
 
   parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  args = parser.parse_args()
+  name = args.name
 
   c3d_centers = api.db.get_c3d_centers()
 
-  for name in names:
-    track_label_file = os.path.join(track_label_dir, '%s.%d.%s.pos'%(name, track_len, direction))
-    id2event = load_track_label_file(track_label_file)
-    pos_trackids = id2event.keys()
+  track_label_file = os.path.join(track_label_dir, '%s.%d.%s.pos'%(name, track_len, direction))
+  id2event = load_track_label_file(track_label_file)
+  pos_trackids = id2event.keys()
 
-    track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
-    track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
-    track_db = api.db.TrackDb(track_map_file, track_file, track_len, pos_trackids)
+  track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
+  track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
+  track_db = api.db.TrackDb(track_map_file, track_file, track_len, pos_trackids)
 
-    ft_dir = os.path.join(ft_root_dir, name)
-    c3d_db = api.db.C3DFtDb(ft_dir)
+  ft_dir = os.path.join(ft_root_dir, name)
+  c3d_db = api.db.C3DFtDb(ft_dir)
 
-    pos_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
-      track_db, c3d_db, c3d_centers, c3d_threshold_func)
-    fts = []
-    frames = []
-    centers = []
-    ids = []
-    for ft_in_track in pos_c3d_in_track_generator:
-      num = len(ft_in_track.frames)
-      fts.append(ft_in_track.fts)
-      frames.extend(ft_in_track.frames)
-      centers.append(ft_in_track.centers)
-      ids.extend(num*[ft_in_track.id])
+  pos_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
+    track_db, c3d_db, c3d_centers, c3d_threshold_func)
+  fts = []
+  frames = []
+  centers = []
+  ids = []
+  for ft_in_track in pos_c3d_in_track_generator:
+    num = len(ft_in_track.frames)
+    fts.append(ft_in_track.fts)
+    frames.extend(ft_in_track.frames)
+    centers.append(ft_in_track.centers)
+    ids.extend(num*[ft_in_track.id])
 
-    fts = np.concatenate(fts, 0)
-    frames = np.array(frames, dtype=np.int32)
-    centers = np.concatenate(centers, 0)
-    ids = np.array(ids, dtype=np.int32)
-    out_file = os.path.join(out_dir, name + '.npz')
-    np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
+  fts = np.concatenate(fts, 0)
+  frames = np.array(frames, dtype=np.int32)
+  centers = np.concatenate(centers, 0)
+  ids = np.array(ids, dtype=np.int32)
+  out_file = os.path.join(out_dir, name + '.npz')
+  np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
 def generate_script():
