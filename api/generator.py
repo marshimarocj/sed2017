@@ -121,6 +121,7 @@ def crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
 def crop_duration_ft_in_track(trackdb, ftdb, centers, threshold_func):
   chunks = ftdb.chunks
   for chunk in chunks:
+    print 'chunk:', chunk
     one_chunk_generator = _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func)
     for ft_in_track in one_chunk_generator:
       yield ft_in_track

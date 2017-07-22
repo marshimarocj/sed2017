@@ -46,9 +46,10 @@ def prepare_pos_c3d():
 
   names = []
   for lst_file in lst_files:
-    for line in f:
-      line = line.strip()
-      names.append(name)
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        names.append(name)
 
   c3d_centers = api.db.get_c3d_centers()
 
