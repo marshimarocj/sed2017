@@ -34,7 +34,7 @@ def flow_dstrb_in_pos_events():
 
   event2maxflow = {}
   for name in names:
-    track_label_file = os.path.join(track_label_dir, '%s.%d.%s.pos')
+    track_label_file = os.path.join(track_label_dir, '%s.%d.%s.pos'%(name, track_len, direction))
     opticalflow_pool_file = os.path.join(opticalflow_pool_dir, '%s.%d.%s.npz'%(name, track_len, direction))
     print name
 
