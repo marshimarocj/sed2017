@@ -50,7 +50,7 @@ def flow_dstrb_in_pos_events():
     data = np.load(opticalflow_pool_file)
     for key in data:
       id = int(key)
-      maxflow = data[key][0]
+      maxflow = float(data[key])
 
       if id in id2event:
         event = id2event[id]
