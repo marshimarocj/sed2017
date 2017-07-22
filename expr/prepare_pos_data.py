@@ -1,4 +1,5 @@
 import os
+import argparse
 import sys
 sys.path.append('../')
 
@@ -45,13 +46,15 @@ def prepare_pos_c3d():
   direction = 'forward'
   track_len = 25
 
-  names = []
-  for lst_file in lst_files:
-    with open(lst_file) as f:
-      for line in f:
-        line = line.strip()
-        name, _ = os.path.splitext(line)
-        names.append(name)
+  # names = []
+  # for lst_file in lst_files:
+  #   with open(lst_file) as f:
+  #     for line in f:
+  #       line = line.strip()
+  #       name, _ = os.path.splitext(line)
+  #       names.append(name)
+
+  parser = argparse.ArgumentParser()
 
   c3d_centers = api.db.get_c3d_centers()
 
@@ -88,5 +91,38 @@ def prepare_pos_c3d():
     np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
+def generate_script():
+  root_dir = '/data1/jiac/sed' # uranus
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+
+  num_process = 5
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        names.append(name)
+
+  num = len(names)
+  gap = (num + num_process - 1) / num_process
+
+  for i in range(0, num, gap):
+    idx = i/gap
+    out_file = 'prepare_pos_data.%d.sh'%idx
+    with open(out_file, 'w') as fout:
+      for j in range(i, min(i+gap, num)):
+        name = names[j]
+        cmd = [
+          'python', 'prepare_pos_data.py', name
+        ]
+        fout.write(' '.join(cmd) + '\n')
+
+
 if __name__ == '__main__':
-  prepare_pos_c3d()
+  # prepare_pos_c3d()
+  generate_script()
