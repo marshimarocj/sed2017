@@ -245,6 +245,27 @@ def bat_c3d():
       np.savez_compressed(out_file, fts=fts)
 
 
+def post_process():
+  root_dir = '/data1/jiac/sed'
+  lst_file = os.path.join(root_dir, 'video', 'dev09', '2017.refined.lst')
+  ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
+
+  chunk_gap = 10000
+
+  with open(lst_file) as f:
+    for line in f:
+      videoname = line.strip()
+      ft_dir = os.path.join(ft_root_dir, videoname)
+      names = os.listdir(ft_dir)
+      for name in names:
+        _name, _ = os.path.splitext(name)
+        src_file = os.path.join(ft_dir, name)
+        idx = int(_name)
+        dst_file = os.path.join(ft_dir, '%d.npz'%(idx*chunk_gap))
+        print src_file, dst_file
+
+
 if __name__ == '__main__':
   # tst_c3d()
-  bat_c3d()
+  # bat_c3d()
+  post_process()
