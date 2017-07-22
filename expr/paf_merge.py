@@ -49,7 +49,7 @@ def merge():
         videonames.append(name)
 
   for videoname in videonames:
-    paf_dirs = [os.path.join(paf_root_dir, videoname) for paf_root_dir, in paf_root_dirs]
+    paf_dirs = [os.path.join(paf_root_dir, videoname) for paf_root_dir in paf_root_dirs]
     out_dir = os.path.join(out_root_dir, videoname)
     if not os.path.exists(out_dir):
       os.mkdir(out_dir)
