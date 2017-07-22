@@ -59,7 +59,7 @@ def merge():
     for name in names:
       paf_file = os.path.join(paf_dirs[0], name)
       paf1 = np.load(paf_file)
-      paf_file = os.apth.join(paf_dirs[1], name)
+      paf_file = os.path.join(paf_dirs[1], name)
       paf1_5 = np.load(paf_file)
 
       num = paf1.shape[0]
