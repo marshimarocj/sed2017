@@ -74,14 +74,14 @@ def prepare_pos_c3d():
     centers = []
     ids = []
     for ft_in_track in pos_c3d_in_track_generator:
-      num = ft_in_track.frames.shape[0]
+      num = len(ft_in_track.frames)
       fts.append(ft_in_track.fts)
-      frames.append(ft_in_track.frames)
+      frames.extend(ft_in_track.frames)
       centers.append(ft_in_track.centers)
       ids.extend([num*ft_in_track.id])
 
     fts = np.concatenate(fts, 0)
-    frames = np.concatenate(frames, 0)
+    frames = np.array(frames, dtype=np.int32)
     centers = np.concatenate(centers, 0)
     ids = np.array(ids, dtype=np.int32)
     out_file = os.path.join(out_dir, name + '.npz')
