@@ -95,9 +95,12 @@ def lnk_to_solve_000001bug():
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # lst_file = os.path.join(root_dir, '2017.refined.lst')
   # img_root_dir = os.path.join(root_dir, 'image_per_5', 'tst2017')
-  root_dir = '/home/jiac/data3/sed' # gpu4
+  # root_dir = '/home/jiac/data3/sed' # gpu4
+  # lst_file = os.path.join(root_dir, '2017.refined.lst')
+  # img_root_dir = os.path.join(root_dir, 'tst2017', 'dev09_preprocess')
+  root_dir = '/home/jiac/sdb/jiac/data/sed' # gpu1
   lst_file = os.path.join(root_dir, '2017.refined.lst')
-  img_root_dir = os.path.join(root_dir, 'tst2017', 'dev09_preprocess')
+  img_root_dir = os.path.join(root_dir, 'tst2017_images_per_5')
 
   with open(lst_file) as f:
     for line in f:
