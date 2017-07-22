@@ -58,9 +58,9 @@ def merge():
     names = os.listdir(paf_dirs[0])
     for name in names:
       paf_file = os.path.join(paf_dirs[0], name)
-      paf1 = np.load(paf_file)
+      paf1 = np.load(paf_file)['fts']
       paf_file = os.path.join(paf_dirs[1], name)
-      paf1_5 = np.load(paf_file)
+      paf1_5 = np.load(paf_file)['fts']
 
       num = paf1.shape[0]
       paf_merge = np.zeros(paf1_5.shape, dtype=np.float32)
