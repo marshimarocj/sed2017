@@ -56,7 +56,7 @@ def flow_dstrb_in_pos_events():
         event = id2event[id]
       else:
         event = 'Background'
-      if event not event2maxflow:
+      if event not in event2maxflow:
         event2maxflow[event] = []
       event2maxflow[event].append(maxflow)
 
