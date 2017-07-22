@@ -78,7 +78,7 @@ def prepare_pos_c3d():
       fts.append(ft_in_track.fts)
       frames.extend(ft_in_track.frames)
       centers.append(ft_in_track.centers)
-      ids.extend([num*ft_in_track.id])
+      ids.extend(num*[ft_in_track.id])
 
     fts = np.concatenate(fts, 0)
     frames = np.array(frames, dtype=np.int32)
