@@ -1,4 +1,5 @@
 import os
+import shutil
 
 # import cv2
 import skvideo.io
@@ -263,7 +264,8 @@ def post_process():
         src_file = os.path.join(ft_dir, name)
         idx = int(_name)
         dst_file = os.path.join(ft_dir, '%d.npz'%(idx*chunk_gap))
-        print src_file, dst_file
+        # print src_file, dst_file
+        shutil.move(src_file, dst_file)
 
 
 if __name__ == '__main__':
