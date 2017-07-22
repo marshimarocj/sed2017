@@ -126,5 +126,5 @@ def generate_script():
 
 
 if __name__ == '__main__':
-  # prepare_pos_c3d()
-  generate_script()
+  prepare_pos_c3d()
+  # generate_script()
