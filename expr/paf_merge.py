@@ -67,6 +67,7 @@ def merge():
       for i in range(num):
         r_paf1 = resize_paf(paf1[i], dst_size)
         paf_merge[i] = (r_paf1 + paf1_5[i])/2.0
+      paf_merge[paf_merge < 1e-3] = 0
 
       out_file = os.path.join(out_dir, name)
       np.savez_compressed(out_file, fts=paf_merge)
