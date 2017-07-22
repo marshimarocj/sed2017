@@ -92,9 +92,12 @@ def get_numframe_file():
 
 
 def lnk_to_solve_000001bug():
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # lst_file = os.path.join(root_dir, '2017.refined.lst')
+  # img_root_dir = os.path.join(root_dir, 'image_per_5', 'tst2017')
+  root_dir = '/home/jiac/data3/sed' # gpu4
   lst_file = os.path.join(root_dir, '2017.refined.lst')
-  img_root_dir = os.path.join(root_dir, 'image_per_5', 'tst2017')
+  img_root_dir = os.path.join(root_dir, 'tst2017', 'dev09_preprocess')
 
   with open(lst_file) as f:
     for line in f:
