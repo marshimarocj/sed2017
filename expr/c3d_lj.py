@@ -255,6 +255,7 @@ def post_process():
   with open(lst_file) as f:
     for line in f:
       videoname = line.strip()
+      videoname += '.mov.deint'
       ft_dir = os.path.join(ft_root_dir, videoname)
       names = os.listdir(ft_dir)
       for name in names:
