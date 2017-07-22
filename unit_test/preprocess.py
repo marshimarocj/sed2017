@@ -91,8 +91,22 @@ def get_numframe_file():
         fout.write('%d\n'%total_frame)
 
 
+def lnk_to_solve_000001bug():
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
+  img_root_dir = os.path.join(root_dir, 'image_per_5', 'tst2017')
+
+  with open(lst_file) as f:
+    for line in f:
+      videoname = line.strip()
+      src_img_file = os.path.join(img_root_dir, videoname, 'frame_5', '000001.jpg')
+      dst_img_file = os.path.join(img_root_dir, videoname, 'frame_5', '000000.jpg')
+      os.symlink(src_img_file, dst_img_file)
+
+
 if __name__ == '__main__':
   # missing_videos_in_preprocess()
   # lnk_short_video_imgs_to_ease_tar()
   # lnk_long_video_imgs_to_ease_tar()
-  get_numframe_file()
+  # get_numframe_file()
+  lnk_to_solve_000001bug()
