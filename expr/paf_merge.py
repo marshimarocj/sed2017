@@ -13,7 +13,7 @@ def resize_paf(paf, dst_size):
     part = paf[i:i+3]
     num = part.shape[0]
     if num < 3:
-      part = np.concatenate([part, np.zeros((1, part.shape[1:]))], axis=0)
+      part = np.concatenate([part, np.zeros((1)+part.shape[1:])], axis=0)
     part = np.moveaxis(part, [0, 1, 2], [2, 0, 1])
     _part = cv2.resize(part, (dst_size))
     out.append(_part[:num])
