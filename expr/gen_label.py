@@ -130,7 +130,8 @@ def find_track_intersected_with_bbox():
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
-        names.append(name)
+        if 'CAM4' not in name:
+          names.append(name)
 
   for name in names:
     labels = video2labels[name]
@@ -164,9 +165,21 @@ def find_track_intersected_with_bbox():
             pseudo_pos_labels[track.id].riou = max(iou, pseudo_pos_labels[track.id].riou)
             pseudo_pos_labels[track.id].intersect_frames.append(frame)
 
+    out = []
+    for tid in pseudo_pos_labels:
+      pseudo_pos_label = pseudo_pos_labels[tid]
+      out.append({
+        'tid': pseudo_pos_label.tid,
+        'riou': pseudo_pos_label.riou,
+        'intersect_frames': pseudo_pos_label.intersect_frames,
+        'beg': pseudo_pos_label.beg,
+        'end': pseudo_pos_label.end,
+        'event': pseudo_pos_label.event
+      })
+
     out_file = os.path.join(out_dir, name + '.pkl')
     with open(out_file, 'w') as fout:
-      cPickle.dump(pseudo_pos_labels, fout)
+      cPickle.dump(out, fout)
 
 
 if __name__ == '__main__':
