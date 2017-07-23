@@ -39,7 +39,7 @@ def load_bboxs(file):
     data = json.load(f)
   for d in data:
     frame = d['begin'] + int(d['second_in_frame'])
-    video_name = 'LGW_%s_%s_%s'%(d['E'], d['date'], d['camera'])
+    video_name = 'LGW_%s_%s_%s'%(d['date'], d['E'], d['camera'])
     labels = d['label']
     event = d['event']
     beg = d['begin']
