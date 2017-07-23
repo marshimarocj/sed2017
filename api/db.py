@@ -33,7 +33,8 @@ class Track(object):
 class TrackDb(object):
   def __init__(self, track_map_file, track_file, track_len, valid_trackids=None):
     self._track_len = track_len
-    valid_trackids = set(valid_trackids)
+    if valid_trackids is not None:
+      valid_trackids = set(valid_trackids)
 
     frame_box2trackid = {}
     with open(track_map_file) as f:
