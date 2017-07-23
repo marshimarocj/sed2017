@@ -1,5 +1,6 @@
 import os
 import json
+import cPickle
 import sys
 sys.path.append('../')
 
@@ -19,12 +20,12 @@ class Label(object):
 
 class PseudoPosLabel(object):
   def __init__(self, tid, beg, end, event):
-  self.tid = tid
-  self.riou = 0.
-  self.intersect_frames = []
-  self.beg = beg
-  self.end = end
-  self.event = event
+    self.tid = tid
+    self.riou = 0.
+    self.intersect_frames = []
+    self.beg = beg
+    self.end = end
+    self.event = event
 
 
 def load_bboxs(file):
