@@ -72,7 +72,7 @@ def gen_groundtruth_threshold_func(track_len):
     ibegin = max(tbegin, qbegin)
     iend = min(tend, qend)
 
-    return iend-begin >= track_len/2
+    return iend-qbegin >= track_len/2
 
   return groundtruth_threshold_func
 
