@@ -41,7 +41,7 @@ def load_bboxs(file):
     frame = d['begin'] + int(d['second_in_frame'])
     video_name = 'LGW_%s_%s_%s'%(d['E'], d['date'], d['camera'])
     labels = d['label']
-    event = d['Event']
+    event = d['event']
     beg = d['begin']
     end = d['end']
     eventid = '%s_%d_%d_%s'%(video_name, beg, end, event)
