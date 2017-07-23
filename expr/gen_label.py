@@ -147,8 +147,8 @@ def find_track_intersected_with_bbox():
 
       num_box = len(label.boxs)
       for i in range(num_box):
-        lbox = labels.boxs[i]
-        frame = labels.frames[i]
+        lbox = label.boxs[i]
+        frame = label.frames[i]
         tracks = track_db.query_by_frame(frame)
         for track in tracks:
           if track.id not in interval_trackids:
