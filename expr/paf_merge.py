@@ -34,7 +34,8 @@ def merge():
     os.path.join(root_dir, 'paf', '1.0'),
     os.path.join(root_dir, 'paf', '1.5'),
   ]
-  out_root_dir = os.path.join(root_dir, 'paf', 'merge_1.0_1.5')
+  # out_root_dir = os.path.join(root_dir, 'paf', 'merge_1.0_1.5')
+  out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'paf', 'merge_1.0_1.5')
 
   dst_size = (135, 108)
 
