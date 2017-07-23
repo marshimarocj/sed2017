@@ -69,5 +69,15 @@ def flow_dstrb_in_events():
     print event, np.mean(maxflows), np.median(maxflows), np.percentile(maxflows, 10), np.percentile(maxflows, 90)
 
 
+def filter_out_proposals():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  
+  threshold = 6.
+
+
 if __name__ == '__main__':
   flow_dstrb_in_events()
