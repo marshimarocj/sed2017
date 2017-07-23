@@ -35,7 +35,7 @@ def load_bboxs(file):
   w = 720
 
   video2eventid2label = {}
-  with open(bbox_file) as f:
+  with open(file) as f:
     data = json.load(f)
   for d in data:
     frame = d['begin'] + int(d['second_in_frame'])
