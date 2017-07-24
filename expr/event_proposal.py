@@ -241,6 +241,8 @@ def correlation_between_opticalflow_and_boxsize():
   areas = []
   # for name in names[:-1]:
   for name in names[:10]:
+    print name
+
     label_file = os.path.join(label_dir, name + '.pkl')
     with open(label_file) as f:
       pseudo_pos_labels = cPickle.load(f)
