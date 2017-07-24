@@ -1,5 +1,6 @@
 import os
 import cPickle
+import argparse
 import sys
 sys.path.append('../')
 
@@ -76,34 +77,39 @@ def flow_dstrb_in_events():
 
 def normalize_opticalflow():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
-  ]
+  # lst_files = [
+  #   os.path.join(root_dir, 'dev08-1.lst'),
+  #   os.path.join(root_dir, 'eev08-1.lst'),
+  # ]
   pool_opticalflow_dir = os.path.join(root_dir, 'toi_max_opticalflow')
 
-  names = []
-  for lst_file in lst_files:
-    with open(lst_file) as f:
-      for line in f:
-        line = line.strip()
-        name, _ = os.path.splitext(line)
-        if 'CAM4' not in name:
-          names.append(name)
+  # names = []
+  # for lst_file in lst_files:
+  #   with open(lst_file) as f:
+  #     for line in f:
+  #       line = line.strip()
+  #       name, _ = os.path.splitext(line)
+  #       if 'CAM4' not in name:
+  #         names.append(name)
 
-  for name in names:
-    print name
-    
-    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npz')
-    data = np.load(pool_opticalflow_file)
-    num = len(data.keys())
-    max_val = np.zeros((num,), dtype=np.float32)
-    for key in data:
-      val = data[key]
-      id = int(key)
-      max_val[id] = val
-    out_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npy')
-    np.save(out_file, max_val)
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  args = parser.parse_args()
+  name = args.name
+
+  # for name in names:
+  #   print name
+
+  pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npz')
+  data = np.load(pool_opticalflow_file)
+  num = len(data.keys())
+  max_val = np.zeros((num,), dtype=np.float32)
+  for key in data:
+    val = data[key]
+    id = int(key)
+    max_val[id] = val
+  out_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npy')
+  np.save(out_file, max_val)
 
 
 def filter_out_proposals():
