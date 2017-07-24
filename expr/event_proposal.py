@@ -418,6 +418,10 @@ def intersect_backward_forward_tracks():
         new_trackid_from_backward_db.append(trackid)
 
     print name, len(new_trackid_from_backward_db), len(backward_track_db.trackid2track), len(forward_track_db.trackid2track)
+    out_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
+    with open(out_file, 'w') as fout:
+      for tid in new_trackid_from_backward_db:
+        fout.write('%d\n'%tid)
 
 
 if __name__ == '__main__':
