@@ -5,6 +5,7 @@ import sys
 sys.path.append('../')
 
 import numpy as np
+from scipy.stats import pearsonr
 
 import api.db
 
@@ -217,8 +218,62 @@ def filter_out_proposals():
     # print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
 
 
+def correlation_between_opticalflow_and_boxsize():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  pool_opticalflow_dir = os.path.join(root_dir, 'toi_max_opticalflow')
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  max_vals = []
+  areas = []
+  # for name in names[:-1]:
+  for name in names[:10]:
+    label_file = os.path.join(label_dir, name + '.pkl')
+    with open(label_file) as f:
+      pseudo_pos_labels = cPickle.load(f)
+    tid2label = {}
+    for pseudo_pos_label in pseudo_pos_labels:
+      tid = pseudo_pos_label['tid']
+      tid2label[tid] = pseudo_pos_label
+
+    track_file = os.path.join(track_dir, name + '.25.forward.npz')
+    track_map_file = os.path.join(track_dir, name + '.25.forward.map')
+    track_db = api.db.TrackDb(track_map_file, track_file, 25)
+
+    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npy')
+    data = np.load(pool_opticalflow_file)
+    for tid, max_val in enumerate(data):
+      if tid not in tid2label:
+        continue
+
+      label = tid2label[tid]
+      track = track_db.trackid2track[tid]
+      bboxs = track.track
+      area = np.mean((bboxs[:, 3] - bboxs[:, 1]) * (bboxs[:, 2] - bboxs[:, 0]))
+
+      max_vals.append(max_val)
+      areas.append(area)
+
+  coef, pval = pearsonr(areas, max_vals)
+  print coef, pval
+
+
 if __name__ == '__main__':
   # flow_dstrb_in_events()
-  filter_out_proposals()
+  # filter_out_proposals()
   # normalize_opticalflow()
   # gen_normalize_script()
+  correlation_between_opticalflow_and_boxsize()
