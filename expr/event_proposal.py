@@ -405,8 +405,8 @@ def intersect_backward_forward_tracks():
       start_bbox = track.track[0]
       end_bbox = track.track[-1]
 
-      start_forward_bboxs = np.array([d.tracks[0] for d in forward_tracks])
-      end_forward_bboxs = np.array([d.tracks[-1] for d in forward_tracks])
+      start_forward_bboxs = np.array([d.track[0] for d in forward_tracks])
+      end_forward_bboxs = np.array([d.track[-1] for d in forward_tracks])
 
       start_ious = calc_iou(start_bbox, start_forward_bboxs, True)
       end_ious = calc_iou(end_bbox, end_forward_bboxs, True)
