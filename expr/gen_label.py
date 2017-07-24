@@ -75,7 +75,7 @@ def gen_groundtruth_threshold_func(track_len):
     ibegin = max(tbegin, qbegin)
     iend = min(tend, qend)
 
-    return iend-qbegin >= track_len/2
+    return iend-qbegin >= min(track_len/2, qend - qbegin)
 
   return groundtruth_threshold_func
 
@@ -118,9 +118,10 @@ def find_track_intersected_with_bbox():
   ]
   out_dir = os.path.join(root_dir, 'pseudo_label')
 
-  # direction = 'forward'
-  direction = 'backward'
-  track_len = 25
+  direction = 'forward'
+  # direction = 'backward'
+  # track_len = 25
+  track_len = 50
   groundtruth_threshold_func = gen_groundtruth_threshold_func(track_len)
   iou_threshold = 0.5
 
@@ -319,7 +320,7 @@ def recall():
 
 
 if __name__ == '__main__':
-  # find_track_intersected_with_bbox()
-  recall()
+  find_track_intersected_with_bbox()
+  # recall()
   # normalize_match_name()
   # event_matched_tracks()
