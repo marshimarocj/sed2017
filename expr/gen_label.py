@@ -118,8 +118,8 @@ def find_track_intersected_with_bbox():
   ]
   out_dir = os.path.join(root_dir, 'pseudo_label')
 
-  direction = 'forward'
-  # direction = 'backward'
+  # direction = 'forward'
+  direction = 'backward'
   # track_len = 25
   track_len = 50
   groundtruth_threshold_func = gen_groundtruth_threshold_func(track_len)
