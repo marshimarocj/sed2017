@@ -75,22 +75,39 @@ def flow_dstrb_in_events():
     print event, np.mean(maxflows), np.median(maxflows), np.percentile(maxflows, 10), np.percentile(maxflows, 90)
 
 
+def gen_normalize_script():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+
+  num_process = 10
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  total = len(names)
+  gap = (total + num_process - 1) / num_process
+
+  for i in range(0, total, gap):
+    _names = names[i:i+gap]
+    out_file = '%d.sh'%(i/gap)
+    with open(out_file, 'w') as fout:
+      for name in _names:
+        cmd = ['python', 'event_proposal.py', name]
+        fout.write(' '.join(cmd) + '\n')
+
+
 def normalize_opticalflow():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  # lst_files = [
-  #   os.path.join(root_dir, 'dev08-1.lst'),
-  #   os.path.join(root_dir, 'eev08-1.lst'),
-  # ]
   pool_opticalflow_dir = os.path.join(root_dir, 'toi_max_opticalflow')
-
-  # names = []
-  # for lst_file in lst_files:
-  #   with open(lst_file) as f:
-  #     for line in f:
-  #       line = line.strip()
-  #       name, _ = os.path.splitext(line)
-  #       if 'CAM4' not in name:
-  #         names.append(name)
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
@@ -188,4 +205,5 @@ def filter_out_proposals():
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
-  normalize_opticalflow()
+  # normalize_opticalflow()
+  gen_normalize_script()
