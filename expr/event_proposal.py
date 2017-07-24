@@ -106,8 +106,8 @@ def gen_normalize_script():
 
 
 def normalize_opticalflow():
-  # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  root_dir = '/home/jiac/data/sed' # gpu4
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  # root_dir = '/home/jiac/data/sed' # gpu4
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
