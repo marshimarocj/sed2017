@@ -408,6 +408,7 @@ def intersect_backward_forward_tracks():
       start_forward_bboxs = np.array([d.track[0] for d in forward_tracks])
       end_forward_bboxs = np.array([d.track[-1] for d in forward_tracks])
 
+      print start_box.shape, start_forward_bboxs.shape
       start_ious = calc_iou(start_bbox, start_forward_bboxs, True)
       end_ious = calc_iou(end_bbox, end_forward_bboxs, True)
       is_duplicate = np.logical_and(start_ious >= threshold, end_ious >= threshold)
