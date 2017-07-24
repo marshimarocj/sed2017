@@ -401,6 +401,9 @@ def intersect_backward_forward_tracks():
       start_frame = track.start_frame
       end_frame = start_frame + backward_track_db.track_len
       forward_tracks = forward_track_db.query_by_time_interval(start_frame, end_frame, forward_backward_threshold)
+      if len(forward_tracks) == 0:
+        new_trackid_from_backward_db.append(trackid)
+        continue
 
       start_bbox = track.track[0]
       end_bbox = track.track[-1]
@@ -408,7 +411,6 @@ def intersect_backward_forward_tracks():
       start_forward_bboxs = np.array([d.track[0] for d in forward_tracks])
       end_forward_bboxs = np.array([d.track[-1] for d in forward_tracks])
 
-      print start_bbox.shape, start_forward_bboxs.shape
       start_ious = calc_iou(start_bbox, start_forward_bboxs, True)
       end_ious = calc_iou(end_bbox, end_forward_bboxs, True)
       is_duplicate = np.logical_and(start_ious >= threshold, end_ious >= threshold)
