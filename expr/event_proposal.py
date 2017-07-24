@@ -166,7 +166,7 @@ def filter_out_proposals():
 
   event2preserved = {}
   event2discarded = {}
-  for name in names:
+  for name in names[:-1]:
     print name
 
     label_file = os.path.join(label_dir, name + '.pkl')
@@ -177,7 +177,7 @@ def filter_out_proposals():
       tid = pseudo_pos_label['tid']
       tid2label[tid] = pseudo_pos_label
 
-    track_file = os.path.join(track_dir, name + '.25.forward.npz')
+    track_file = os.path.join(track_dir, name + '.25.forward.npy')
     track_map_file = os.path.join(track_dir, name + '.25.forward.map')
     track_db = api.db.TrackDb(track_map_file, track_file, 25)
 
