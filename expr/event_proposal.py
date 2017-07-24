@@ -74,6 +74,38 @@ def flow_dstrb_in_events():
     print event, np.mean(maxflows), np.median(maxflows), np.percentile(maxflows, 10), np.percentile(maxflows, 90)
 
 
+def normalize_opticalflow():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  pool_opticalflow_dir = os.path.join(root_dir, 'toi_max_opticalflow')
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  for name in names:
+    print name
+    
+    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npz')
+    data = np.load(pool_opticalflow_file)
+    num = len(data.keys())
+    max_val = np.zeros((num,), dtype=np.float32)
+    for key in data:
+      val = data[key]
+      id = int(key)
+      max_val[id] = val
+    out_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npy')
+    np.save(out_file, max_val)
+
+
 def filter_out_proposals():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin3
   lst_files = [
@@ -149,4 +181,5 @@ def filter_out_proposals():
 
 if __name__ == '__main__':
   # flow_dstrb_in_events()
-  filter_out_proposals()
+  # filter_out_proposals()
+  normalize_opticalflow()
