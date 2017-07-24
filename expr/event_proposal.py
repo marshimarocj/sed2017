@@ -218,6 +218,68 @@ def filter_out_proposals():
     # print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
 
 
+def event_recall_change_filter_out_proposals():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  pool_opticalflow_dir = os.path.join(root_dir, 'toi_max_opticalflow')
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
+  threshold = 3.
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  num_events = 0
+  num_recalled_events = 0
+  for name in names[:-1]:
+    print name
+
+    label_file = os.path.join(label_dir, name + '.pkl')
+    with open(label_file) as f:
+      pseudo_pos_labels = cPickle.load(f)
+    tid2label = {}
+    for pseudo_pos_label in pseudo_pos_labels:
+      tid = pseudo_pos_label['tid']
+      tid2label[tid] = pseudo_pos_label
+
+    track_file = os.path.join(track_dir, name + '.25.forward.npz')
+    track_map_file = os.path.join(track_dir, name + '.25.forward.map')
+    track_db = api.db.TrackDb(track_map_file, track_file, 25)
+
+    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npy')
+    data = np.load(pool_opticalflow_file)
+    events = set()
+    recalled_events = set()
+    for tid, max_val in enumerate(data):
+      if tid not in tid2label:
+        continue
+
+      label = tid2label[tid]
+      event = label['event']
+      beg = label['beg']
+      end = lable['end']
+      eventid = '%d_%d_%s'%(beg, end, event)
+      events.add(eventid)
+
+      if max_val >= threshold:
+        recalled_events.add(eventid)
+    num_events += len(events)
+    num_recalled_events += len(recalled_events)
+    print len(recalled_events), len(events)
+
+  print num_recalled_events, num_events
+
+
 def correlation_between_opticalflow_and_boxsize():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin3
   lst_files = [
@@ -276,6 +338,7 @@ def correlation_between_opticalflow_and_boxsize():
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
+  event_recall_change_filter_out_proposals()
   # normalize_opticalflow()
   # gen_normalize_script()
-  correlation_between_opticalflow_and_boxsize()
+  # correlation_between_opticalflow_and_boxsize()
