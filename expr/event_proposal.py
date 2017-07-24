@@ -98,6 +98,8 @@ def filter_out_proposals():
   event2preserved = {}
   event2discarded = {}
   for name in names:
+    print name
+
     label_file = os.path.join(label_dir, name + '.pkl')
     with open(label_file) as f:
       pseudo_pos_labels = cPickle.load(f)
