@@ -2,6 +2,7 @@ import os
 import json
 import cPickle
 import shutil
+import itertools
 import sys
 sys.path.append('../')
 
@@ -274,8 +275,9 @@ def recall():
   # directions = ['forward']
   # directions = ['backward']
   directions = ['forward', 'backward']
-  # track_len = 25
-  track_len = 50
+  # track_lens = [25]
+  # track_lens = [50]
+  track_lens = [25, 50]
 
   names = []
   for lst_file in lst_files:
@@ -304,7 +306,7 @@ def recall():
   for name in names:
     events = video2events[name]
     recalled_events = set()
-    for direction in directions:
+    for direction, track_len in itertools.product(directions, track_lens):
       file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
       with open(file) as f:
         pseudo_pos_labels = cPickle.load(f)
