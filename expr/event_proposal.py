@@ -385,11 +385,11 @@ def intersect_backward_forward_tracks():
           names.append(name)
 
   for name in names:
-    track_file = os.path.join(track_dir, '%s.%d.forward.pkl'%(name, track_len))
+    track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
     track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
     forward_track_db = api.db.TrackDb(track_file, track_map_file, track_len)
 
-    track_file = os.path.join(track_dir, '%s.%d.backward.pkl'%(name, track_len))
+    track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
     track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
     backward_track_db = api.db.TrackDb(track_file, track_map_file, track_len)
 
