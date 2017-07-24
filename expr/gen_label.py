@@ -311,7 +311,7 @@ def recall():
       recalled_events.add(eventid)
     total += len(events)
     hit += len(recalled_events)
-    print name, len(recalled_events) / float(len(recalled_events))
+    print name, len(recalled_events) / float(len(events))
   print hit / float(total), hit, total
 
 
