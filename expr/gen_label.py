@@ -262,6 +262,6 @@ def event_matched_tracks():
 
 
 if __name__ == '__main__':
-  find_track_intersected_with_bbox()
-  # normalize_match_name()
+  # find_track_intersected_with_bbox()
+  normalize_match_name()
   # event_matched_tracks()
