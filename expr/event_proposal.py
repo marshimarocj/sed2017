@@ -166,8 +166,8 @@ def filter_out_proposals():
 
   event2preserved = {}
   event2discarded = {}
-  # for name in names[:-1]:
-  for name in names[:10]:
+  for name in names[:-1]:
+  # for name in names[:10]:
     print name
 
     label_file = os.path.join(label_dir, name + '.pkl')
