@@ -177,11 +177,11 @@ def filter_out_proposals():
       tid = pseudo_pos_label['tid']
       tid2label[tid] = pseudo_pos_label
 
-    track_file = os.path.join(track_dir, name + '.25.forward.npy')
+    track_file = os.path.join(track_dir, name + '.25.forward.npz')
     track_map_file = os.path.join(track_dir, name + '.25.forward.map')
     track_db = api.db.TrackDb(track_map_file, track_file, 25)
 
-    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npz')
+    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npy')
     data = np.load(pool_opticalflow_file)
     for tid, max_val in enumerate(data):
       if tid not in tid2label:
