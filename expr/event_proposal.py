@@ -166,8 +166,8 @@ def filter_out_proposals():
 
   event2preserved = {}
   event2discarded = {}
-  for name in names[:-1]:
-  # for name in names[:10]:
+  # for name in names[:-1]:
+  for name in names[:10]:
     print name
 
     label_file = os.path.join(label_dir, name + '.pkl')
@@ -208,12 +208,12 @@ def filter_out_proposals():
   print 'preserved'
   for event in event2preserved:
     pos = event2preserved[event]
-    print np.histogram(pos)
+    print event, np.histogram(pos, range=(0, 1.))[0]
     # print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
   print 'discarded'
   for event in event2discarded:
     pos = event2discarded[event]
-    print np.histogram(pos)
+    print event, np.histogram(pos, range=(0, 1.))[0]
     # print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
 
 
