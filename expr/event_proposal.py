@@ -208,11 +208,13 @@ def filter_out_proposals():
   print 'preserved'
   for event in event2preserved:
     pos = event2preserved[event]
-    print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
+    print np.histogram(pos)
+    # print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
   print 'discarded'
   for event in event2discarded:
     pos = event2discarded[event]
-    print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
+    print np.histogram(pos)
+    # print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
 
 
 if __name__ == '__main__':
