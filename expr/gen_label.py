@@ -210,9 +210,9 @@ def event_matched_tracks():
       pseudo_pos_labels = cPickle.load(f)
     eventid2trackids = {}
     for pseudo_pos_label in pseudo_pos_labels:
-      tid = pseudo_pos_label.tid
-      beg = pseudo_pos_label.beg
-      end = pseudo_pos_label.end
+      tid = pseudo_pos_label['tid']
+      beg = pseudo_pos_label['beg']
+      end = pseudo_pos_label['end']
       event = pseudo_pos_label.event
       eventid = '%d_%d_%s'%(beg, end, event)
       if eventid not in eventid2trackids:
