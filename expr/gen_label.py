@@ -182,5 +182,56 @@ def find_track_intersected_with_bbox():
       cPickle.dump(out, fout)
 
 
+def event_matched_tracks():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  # track_dir = os.path.join(root_dir, 'tracking', 'person')
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+
+  direction = 'forward'
+  track_len = 25
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  event2num_tracks = {}
+  for name in names:
+    label_file = os.path.join(label_dir, '%s.pkl'%name)
+    with open(label_file) as f:
+      pseudo_pos_labels = cPickle.load(f)
+    eventid2trackids = {}
+    for pseudo_pos_label in pseudo_pos_labels:
+      tid = pseudo_pos_label.tid
+      beg = pseudo_pos_label.beg
+      end = pseudo_pos_label.end
+      event = pseudo_pos_label.event
+      eventid = '%d_%d_%s'%(beg, end, event)
+      if eventid not in eventid2trackids:
+        eventid2trackids[eventid] = []
+      eventid2trackids[eventid].append(tid)
+
+    for eventid in eventid2trackids:
+      data = eventid.split('_')
+      event = data[2]
+      num_track = len(eventid2trackids[eventid])
+      if event not in event2num_track:
+        event2num_tracks[event] = []
+      event2num_tracks[event].append(num_track)
+
+  for event in event2num_tracks:
+    num_tracks = event2num_tracks[event]
+    print event, np.mean(num_tracks), np.median(num_tracks), np.percentile(num_tracks, 10), np.percentile(num_tracks, 90)
+
+
 if __name__ == '__main__':
-  find_track_intersected_with_bbox()
+  # find_track_intersected_with_bbox()
+  event_matched_tracks()
