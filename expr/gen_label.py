@@ -213,7 +213,7 @@ def event_matched_tracks():
       tid = pseudo_pos_label['tid']
       beg = pseudo_pos_label['beg']
       end = pseudo_pos_label['end']
-      event = pseudo_pos_label.event
+      event = pseudo_pos_label['event']
       eventid = '%d_%d_%s'%(beg, end, event)
       if eventid not in eventid2trackids:
         eventid2trackids[eventid] = []
