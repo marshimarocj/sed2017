@@ -261,7 +261,62 @@ def event_matched_tracks():
     print event, np.mean(num_tracks), np.median(num_tracks), np.percentile(num_tracks, 10), np.percentile(num_tracks, 90)
 
 
+def recall():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  bbox_file = os.path.join(root_dir, 'box_label', 'train.label.json')
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+
+  direction = 'forward'
+  track_len = 25
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  with open(bbox_file) as f:
+    data = json.load(f)
+  video2events = {}
+  for d in data:
+    video = 'LGW_%s_%s_%s'%(d['date'], d['E'], d['camera'])
+    event = d['event']
+    beg = d['begin']
+    end = d['end']
+    eventid = '%s_%d_%d'%(event, beg, end)
+    if video not in video2events:
+      video2events[video] = set()
+    video2events[video].add(eventid)
+
+  total = 0
+  hit = 0
+  for name in names:
+    file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
+    with open(file) as f:
+      pseudo_pos_labels = cPickle.load(f)
+    events = video2events[name]
+    recalled_events = set()
+    for pseudo_pos_label in pseudo_pos_labels:
+      event = pseudo_pos_label['event']
+      beg = pseudo_pos_label['beg']
+      end = pseudo_pos_label['end']
+      eventid = '%s_%d_%d'%(event, beg, end)
+      recalled_events.add(eventid)
+    total += len(events)
+    hit += len(recalled_events)
+    print name, len(recalled_events) / float(len(recalled_events))
+  print hit / float(total), hit, total
+
+
 if __name__ == '__main__':
-  find_track_intersected_with_bbox()
+  # find_track_intersected_with_bbox()
+  recall()
   # normalize_match_name()
   # event_matched_tracks()
