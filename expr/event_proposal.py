@@ -183,9 +183,7 @@ def filter_out_proposals():
 
     pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npz')
     data = np.load(pool_opticalflow_file)
-    for key in data:
-      tid = int(key)
-      max_val = data[key]
+    for tid, max_val in enumerate(data):
       if tid not in tid2label:
         continue
 
@@ -218,6 +216,6 @@ def filter_out_proposals():
 
 if __name__ == '__main__':
   # flow_dstrb_in_events()
-  # filter_out_proposals()
-  normalize_opticalflow()
+  filter_out_proposals()
+  # normalize_opticalflow()
   # gen_normalize_script()
