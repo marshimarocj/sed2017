@@ -12,6 +12,34 @@ import api.db
 
 '''func
 '''
+def forward_backward_threshold(qbegin, qend, tbegin, tend):
+  return (qbegin == tbegin) and (qend == tend)
+
+
+def calc_iou(box_lhs, boxs, union_or_min=False):
+  xmin = np.maximum(box_lhs[0], boxs[:,0])
+  ymin = np.maximum(box_lhs[1], boxs[:,1])
+  xmax = np.minimum(box_lhs[2], boxs[:,2])
+  ymax = np.minimum(box_lhs[3], boxs[:,3])
+  intersect_width = xmax - xmin
+  intersect_height = ymax - ymin
+  is_intersect = np.logical_and(intersect_width > 0, intersect_height > 0)
+  area_intersect = np.where(is_intersect, 
+    intersect_width * intersect_height, np.zeros(intersect_width.shape))
+  area = (box_lhs[2] - box_lhs[0]) * (box_lhs[3] - box_lhs[1])
+  areas = (boxs[:, 3] - boxs[:, 1])*(boxs[:, 2] - boxs[:, 0])
+
+  if area == 0:
+    iou = np.zeros(area_intersect.shape)
+  else:
+    if union_or_min:
+      iou = area_intersect / (float(area) + areas - area_intersect)
+    else:
+      iou = area_intersect / \
+        np.where(np.minimum(float(area), areas) == 0, 
+          1, np.minimum(float(area), areas))
+
+  return iou
 
 
 '''expr
@@ -336,10 +364,64 @@ def correlation_between_opticalflow_and_boxsize():
   print coef, pval
 
 
+def intersect_backward_forward_tracks():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
+  track_len = 25
+  threshold = 0.5
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  for name in names:
+    track_file = os.path.join(label_dir, '%s.%d.forward.pkl'%(name, track_len))
+    track_map_file = os.path.join(label_dir, '%s.%d.forward.map'%(name, track_len))
+    forward_track_db = api.db.TrackDb(track_file, track_map_file, track_len)
+
+    track_file = os.path.join(label_dir, '%s.%d.backward.pkl'%(name, track_len))
+    track_map_file = os.path.join(label_dir, '%s.%d.backward.map'%(name, track_len))
+    backward_track_db = api.db.TrackDb(track_file, track_map_file, track_len)
+
+    backward_tracks = backward_track_db.trackid2track
+
+    new_trackid_from_backward_db = []
+    for trackid in backward_tracks:
+      track = backward_trackids[trackid]
+      start_frame = track.start_frame
+      end_frame = start_frame + backward_track_db.track_len
+      forward_tracks = forward_track_db.query_by_time_interval(start_frame, end_frame, forward_backward_threshold)
+
+      start_bbox = track.track[0]
+      end_bbox = track.track[-1]
+
+      start_forward_bboxs = np.array([d.tracks[0] for d in forward_tracks])
+      end_forward_bboxs = np.array([d.tracks[-1] for d in forward_tracks])
+
+      start_ious = calc_iou(start_bbox, start_forward_bboxs, True)
+      end_ious = calc_iou(end_bbox, end_forward_bboxs, True)
+      is_duplicate = np.logical_and(start_ious >= threshold, end_ious >= threshold)
+      if np.sum(is_duplicate) == 0:
+        new_trackid_from_backward_db.append(trackid)
+
+    print name, len(new_trackid_from_backward_db), len(backward_track_db.trackid2track), len(forward_track_db.trackid2track)
+
+
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
-  event_recall_change_filter_out_proposals()
+  # event_recall_change_filter_out_proposals()
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
+  intersect_backward_forward_tracks()
