@@ -267,7 +267,7 @@ def event_recall_change_filter_out_proposals():
       label = tid2label[tid]
       event = label['event']
       beg = label['beg']
-      end = lable['end']
+      end = label['end']
       eventid = '%d_%d_%s'%(beg, end, event)
       events.add(eventid)
 
