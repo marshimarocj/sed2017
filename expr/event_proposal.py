@@ -205,5 +205,5 @@ def filter_out_proposals():
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
-  # normalize_opticalflow()
-  gen_normalize_script()
+  normalize_opticalflow()
+  # gen_normalize_script()
