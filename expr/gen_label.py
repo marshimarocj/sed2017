@@ -206,8 +206,8 @@ def normalize_match_name():
   for name in names:
     src_file = os.path.join(label_dir, '%s.pkl'%name)
     dst_file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
-    print src_file, dst_file
-    # shutil.move(src_file, dst_file)
+    # print src_file, dst_file
+    shutil.move(src_file, dst_file)
 
 
 def event_matched_tracks():
