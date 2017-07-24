@@ -118,7 +118,8 @@ def find_track_intersected_with_bbox():
   ]
   out_dir = os.path.join(root_dir, 'pseudo_label')
 
-  direction = 'forward'
+  # direction = 'forward'
+  direction = 'backward'
   track_len = 25
   groundtruth_threshold_func = gen_groundtruth_threshold_func(track_len)
   iou_threshold = 0.5
@@ -178,7 +179,7 @@ def find_track_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, name + '.pkl')
+    out_file = os.path.join(out_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -261,6 +262,6 @@ def event_matched_tracks():
 
 
 if __name__ == '__main__':
-  # find_track_intersected_with_bbox()
-  normalize_match_name()
+  find_track_intersected_with_bbox()
+  # normalize_match_name()
   # event_matched_tracks()
