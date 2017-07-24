@@ -271,10 +271,11 @@ def recall():
   ]
   label_dir = os.path.join(root_dir, 'pseudo_label')
 
-  # direction = 'forward'
+  direction = 'forward'
   # direction = 'backward'
-  directions = ['forward', 'backward']
-  track_len = 25
+  # directions = ['forward', 'backward']
+  # track_len = 25
+  track_len = 50
 
   names = []
   for lst_file in lst_files:
@@ -320,7 +321,7 @@ def recall():
 
 
 if __name__ == '__main__':
-  find_track_intersected_with_bbox()
-  # recall()
+  # find_track_intersected_with_bbox()
+  recall()
   # normalize_match_name()
   # event_matched_tracks()
