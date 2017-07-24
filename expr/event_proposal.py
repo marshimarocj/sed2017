@@ -153,7 +153,7 @@ def filter_out_proposals():
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  threshold = 6.
+  threshold = 3.
 
   names = []
   for lst_file in lst_files:
@@ -166,8 +166,8 @@ def filter_out_proposals():
 
   event2preserved = {}
   event2discarded = {}
-  for name in names[:-1]:
-  # for name in names[:10]:
+  # for name in names[:-1]:
+  for name in names[:10]:
     print name
 
     label_file = os.path.join(label_dir, name + '.pkl')
