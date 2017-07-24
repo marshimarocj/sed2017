@@ -271,7 +271,8 @@ def recall():
   label_dir = os.path.join(root_dir, 'pseudo_label')
 
   # direction = 'forward'
-  direction = 'backward'
+  # direction = 'backward'
+  directions = ['forward', 'backward']
   track_len = 25
 
   names = []
@@ -299,17 +300,18 @@ def recall():
   total = 0
   hit = 0
   for name in names:
-    file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
-    with open(file) as f:
-      pseudo_pos_labels = cPickle.load(f)
     events = video2events[name]
     recalled_events = set()
-    for pseudo_pos_label in pseudo_pos_labels:
-      event = pseudo_pos_label['event']
-      beg = pseudo_pos_label['beg']
-      end = pseudo_pos_label['end']
-      eventid = '%s_%d_%d'%(event, beg, end)
-      recalled_events.add(eventid)
+    for direction in directions:
+      file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
+      with open(file) as f:
+        pseudo_pos_labels = cPickle.load(f)
+      for pseudo_pos_label in pseudo_pos_labels:
+        event = pseudo_pos_label['event']
+        beg = pseudo_pos_label['beg']
+        end = pseudo_pos_label['end']
+        eventid = '%s_%d_%d'%(event, beg, end)
+        recalled_events.add(eventid)
     total += len(events)
     hit += len(recalled_events)
     print name, len(recalled_events) / float(len(events))
