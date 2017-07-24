@@ -239,8 +239,8 @@ def correlation_between_opticalflow_and_boxsize():
 
   max_vals = []
   areas = []
-  # for name in names[:-1]:
-  for name in names[:10]:
+  for name in names[:-1]:
+  # for name in names[:10]:
     print name
 
     label_file = os.path.join(label_dir, name + '.pkl')
