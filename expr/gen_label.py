@@ -271,8 +271,8 @@ def recall():
   ]
   label_dir = os.path.join(root_dir, 'pseudo_label')
 
-  direction = 'forward'
-  # direction = 'backward'
+  # direction = 'forward'
+  direction = 'backward'
   # directions = ['forward', 'backward']
   # track_len = 25
   track_len = 50
