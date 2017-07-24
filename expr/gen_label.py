@@ -1,6 +1,7 @@
 import os
 import json
 import cPickle
+import shutil
 import sys
 sys.path.append('../')
 
@@ -182,6 +183,33 @@ def find_track_intersected_with_bbox():
       cPickle.dump(out, fout)
 
 
+def normalize_match_name():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+
+  direction = 'forward'
+  track_len = 25
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  for name in names:
+    src_file = os.path.join(label_dir, '%s.pkl'%name)
+    dst_file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
+    print src_file, dst_file
+    # shutil.move(src_file, dst_file)
+
+
 def event_matched_tracks():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   # track_dir = os.path.join(root_dir, 'tracking', 'person')
@@ -234,4 +262,5 @@ def event_matched_tracks():
 
 if __name__ == '__main__':
   # find_track_intersected_with_bbox()
-  event_matched_tracks()
+  normalize_match_name()
+  # event_matched_tracks()

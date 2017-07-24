@@ -228,8 +228,8 @@ def event_recall_change_filter_out_proposals():
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  # threshold = 3.
-  threshold = 6.
+  threshold = 3.
+  # threshold = 6.
 
   names = []
   for lst_file in lst_files:
