@@ -1,6 +1,10 @@
 import os
+import sys
+sys.path.append('../')
 
 import numpy as np
+
+import api.db
 
 
 '''func
@@ -75,9 +79,71 @@ def filter_out_proposals():
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  
+  pool_opticalflow_dir = os.path.join(root_dir, 'toi_max_opticalflow')
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
   threshold = 6.
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  event2preserved = {}
+  event2discarded = {}
+  for name in names:
+    label_file = os.path.join(label_dir, name + '.pkl')
+    with open(label_file) as f:
+      pseudo_pos_labels = cPickle.load(f)
+    tid2label = {}
+    for pseudo_pos_label in pseudo_pos_labels:
+      tid = pseudo_pos_label['tid']
+      tid2label[tid] = pseudo_pos_label
+
+    track_file = os.path.join(track_dir, name + '.25.forward.npz')
+    track_map_file = os.path.join(track_dir, name + '.25.forward.map')
+    track_db = api.db.TrackDb(track_map_file, track_file, 25)
+
+    pool_opticalflow_file = os.path.join(pool_opticalflow_dir, name + '.25.forward.npz')
+    data = np.load(pool_opticalflow_file)
+    for key in data:
+      tid = int(key)
+      max_val = data[key]
+      if tid not in tid2label:
+        continue
+
+      label = tid2label[tid]
+      event = label['event']
+      beg = label['beg']
+      end = label['end']
+      track = track_db.trackid2track[tid]
+      center_frame = track.start_frame + 25/2
+      pos = (center_frame - beg) / float(end-beg)
+
+      if max_val >= threshold:
+        if event not in event2preserved:
+          event2preserved[event] = []
+        event2preserved[event].append(pos)
+      else:
+        if event not in event2discarded:
+          event2discarded[event] = []
+        event2discarded[event].append(pos)
+
+  print 'preserved'
+  for event in event2preserved:
+    pos = event2perserved[event]
+    print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
+  print 'discarded'
+  for event in event2discarded:
+    pos = event2discarded[event]
+    print event, np.mean(pos), np.median(pos), np.percentile(pos, 10), np.percentile(pos, 90)
 
 
 if __name__ == '__main__':
-  flow_dstrb_in_events()
+  # flow_dstrb_in_events()
+  filter_out_proposals()
