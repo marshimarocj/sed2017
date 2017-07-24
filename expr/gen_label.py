@@ -223,7 +223,7 @@ def event_matched_tracks():
       data = eventid.split('_')
       event = data[2]
       num_track = len(eventid2trackids[eventid])
-      if event not in event2num_track:
+      if event not in event2num_tracks:
         event2num_tracks[event] = []
       event2num_tracks[event].append(num_track)
 
