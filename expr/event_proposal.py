@@ -551,6 +551,16 @@ def pad_proposal_to_square():
   ]
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
+  threshold = 0.5
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('direction', type=str)
+  parser.add_argument('track_len', type=int)
+  args = parser.parse_args()
+
+  direction = parser.direction
+  track_len = parser.track_len
+
   names = []
   for lst_file in lst_files:
     with open(lst_file) as f:
@@ -561,34 +571,53 @@ def pad_proposal_to_square():
         name, _ = os.path.splitext(line)
         names.append(name)
 
-  directions = ['forward', 'backward']
-  track_lens = [25, 50]
+  # directions = ['forward', 'backward']
+  # track_lens = [25, 50]
 
-  for direction, track_len in itertools.product(directions, track_lens):
-    for name in names:
-      track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
-      track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
-      db_file = os.path.join(track_dir, '%s.%d.%s.square.npz'%(name, track_len, direction))
-      print name
+  # for direction, track_len in itertools.product(directions, track_lens):
+  for name in names:
+    track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
+    track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
+    db_file = os.path.join(track_dir, '%s.%d.%s.square.npz'%(name, track_len, direction))
+    print name
 
-      track_db = api.db.TrackDb()
-      track_db.load_v0(track_map_file, track_file)
+    track_db = api.db.TrackDb()
+    track_db.load_v0(track_map_file, track_file)
 
-      for tid in track_db.trackid2track:
-        track = track_db.trackid2track[tid]
-        bboxs = track.track
-        for i in range(bboxs.shape[0]):
-          w = bboxs[i, 2] - bboxs[i, 0]
-          h = bboxs[i, 3] - bboxs[i, 1]
-          if w > h:
-            c = (bboxs[i, 3] + bboxs[i, 1])/2
-            bboxs[i, 1] = c - w/2
-            bboxs[i, 3] = bboxs[i, 1] + w
-          else:
-            c = (bboxs[i, 2] + bboxs[i, 0])/2
-            bboxs[i, 0] = c - h/2
-            bboxs[i, 2] = bboxs[i, 0] + h
-      track_db.save(db_file)
+    square_track_db = api.db.TrackDb()
+    for tid in track_db.trackid2track:
+      track = track_db.trackid2track[tid]
+      bboxs = track.track
+      track_len = track.track_len
+      for i in range(track_len):
+        w = bboxs[i, 2] - bboxs[i, 0]
+        h = bboxs[i, 3] - bboxs[i, 1]
+        if w > h:
+          c = (bboxs[i, 3] + bboxs[i, 1])/2
+          bboxs[i, 1] = c - w/2
+          bboxs[i, 3] = bboxs[i, 1] + w
+        else:
+          c = (bboxs[i, 2] + bboxs[i, 0])/2
+          bboxs[i, 0] = c - h/2
+          bboxs[i, 2] = bboxs[i, 0] + h
+
+      start_frame = track.start_frame
+      end_frame = track.start_frame + track.track_len
+      tracks = square_track_db.query_by_time_interval(start_frame, end_frame, forward_backward_threshold)
+
+      start_bbox = track.track[0]
+      end_bbox = track.track[-1]
+
+      start_bboxs = np.array([d.track[0] for d in tracks])
+      end_bboxs = np.array([d.track[-1] for d in tracks])
+
+      start_ious = calc_iou(start_bbox, start_bboxs, True)
+      end_ious = calc_iou(end_bbox, end_bboxs, True)
+      is_duplicate = np.logical_and(start_ious >= threshold, end_ious >= threshold)
+      if np.sum(is_duplicate) == 0:
+        square_track_db.add_track(track)
+
+    square_track_db.save(db_file)
 
 
 if __name__ == '__main__':
