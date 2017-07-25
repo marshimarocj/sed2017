@@ -84,7 +84,7 @@ class TrackDb(object):
     ids = data['ids']
     start_frames = data['start_frames']
 
-    num = tracks.shape[0]
+    num = track_boxs.shape[0]
     for i in range(num):
       track_box = track_boxs[i]
       id = ids[i]
