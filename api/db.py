@@ -75,11 +75,11 @@ class TrackDb(object):
           # self._index[start_frame:start_frame + track_len] = track
           self.add_track(trackid, track)
 
-  def load(self, file, valid_trackids=None):
+  def load(self, db_file, valid_trackids=None):
     if valid_trackids is not None:
       valid_trackids = set(valid_trackids)
 
-    data = np.load(file)
+    data = np.load(db_file)
     track_boxs = data['tracks']
     ids = data['ids']
     start_frames = data['start_frames']
