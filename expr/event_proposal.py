@@ -415,7 +415,7 @@ def intersect_backward_forward_tracks():
     for trackid in backward_tracks:
       track = backward_tracks[trackid]
       start_frame = track.start_frame
-      end_frame = start_frame + backward_track_db.track_len
+      end_frame = start_frame + track.track_len
       forward_tracks = forward_track_db.query_by_time_interval(start_frame, end_frame, forward_backward_threshold)
       if len(forward_tracks) == 0:
         new_trackid_from_backward_db.append(trackid)
