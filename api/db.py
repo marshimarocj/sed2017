@@ -89,8 +89,9 @@ class TrackDb(object):
       track_box = track_boxs[i]
       id = ids[i]
       start_frame = start_frames[i]
-      track = Track(id, track_box, start_frame)
-      self.add_track(id, track)
+      if valid_trackids is None or id in valid_trackids:
+        track = Track(id, track_box, start_frame)
+        self.add_track(id, track)
 
   # # returns an int
   # @property

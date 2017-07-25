@@ -67,11 +67,9 @@ def prepare_pos_c3d():
   id2event = load_pos_track_label_file(track_label_file)
   pos_trackids = id2event.keys()
 
-  track_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
-  track_map_file = os.path.join(track_dir, '%s.%d.forward.backward.map'%(name, track_len))
-  # track_db = api.db.TrackDb(track_map_file, track_file, track_len, pos_trackids)
+  db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
   track_db = api.db.TrackDb()
-  track_db.load_v0(track_map_file, track_file, pos_trackids)
+  track_db.load(track_map_file, track_file, pos_trackids)
 
   ft_dir = os.path.join(ft_root_dir, name)
   c3d_db = api.db.C3DFtDb(ft_dir)
