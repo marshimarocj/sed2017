@@ -392,9 +392,58 @@ def recall():
   print hit / float(total), hit, total
 
 
+def generate_pos_neg_lst():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
+  track_len = 25
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  for name in names:
+    label_file = os.path.join(label_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
+    out_file = os.path.join(label_dir, '%s.%d.forward.backward.pos'%(name, track_len))
+    with open(label_file) as f:
+      pseudo_pos_labels = cPickle.load(f)
+    with open(out_file, 'w') as fout:
+      for label in pseudo_pos_labels:
+        tid = label['tid']
+        event = label['event']
+        fout.write('%d %s\n'%(tid, event))
+
+    label_file = os.path.join(label_dir, '%s.%d.forward.backward.frame.pkl'%(name, track_len))
+    tids = set()
+    with open(label_file) as f:
+      for label in pseudo_pos_labels:
+        tid = label['tid']
+        tids.add(tid)
+
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    track_db = api.db.TrackDb()
+    track_db.load(db_file)
+    out_file = os.path.join(label_dir, '%s.%d.forward.backward.neg'%(name, track_len))
+    with open(out_file, 'w') as fout:
+      for tid in track_db.trackid2track:
+        if tid not in tids:
+          fout.write('%d\n'%tid)
+
+
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
-  find_track_frame_intersected_with_bbox()
+  # find_track_frame_intersected_with_bbox()
+  generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
