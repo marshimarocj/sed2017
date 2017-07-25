@@ -109,7 +109,7 @@ def calc_iou(box_lhs, boxs, union_or_min=False):
 
 '''expr
 '''
-def find_track_intersected_with_bbox():
+def find_track_interval_intersected_with_bbox():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   bbox_file = os.path.join(root_dir, 'box_label', 'train.label.json')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
@@ -185,6 +185,73 @@ def find_track_intersected_with_bbox():
       })
 
     out_file = os.path.join(out_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
+    with open(out_file, 'w') as fout:
+      cPickle.dump(out, fout)
+
+
+def find_track_frame_intersected_with_bbox():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  bbox_file = os.path.join(root_dir, 'box_label', 'train.label.json')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  out_dir = os.path.join(root_dir, 'pseudo_label')
+
+  # track_len = 25
+  track_len = 50
+  iou_threshold = 0.5
+
+  video2labels = load_bboxs(bbox_file)
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  for name in names:
+    labels = video2labels[name]
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    print name
+
+    track_db = api.db.TrackDb()
+    track_db.load(db_file)
+
+    pseudo_pos_labels = {}
+    for label in labels:
+      num_box = len(label.boxs)
+      for i in range(num_box):
+        lbox = label.boxs[i]
+        frame = label.frames[i]
+        tracks = track_db.query_by_frame(frame)
+        for track in tracks:
+          tbox = track.track[frame - track.start_frame]
+          tboxs = np.expand_dims(tbox, 0)
+          iou = calc_iou(lbox, tboxs)
+          if iou >= iou_threshold:
+            if track.id not in pseudo_pos_labels:
+              pseudo_pos_labels[track.id] = PseudoPosLabel(track.id, label.beg, label.end, label.event)
+            pseudo_pos_labels[track.id].riou = max(iou, pseudo_pos_labels[track.id].riou)
+            pseudo_pos_labels[track.id].intersect_frames.append(frame)
+
+    out = []
+    for tid in pseudo_pos_labels:
+      pseudo_pos_label = pseudo_pos_labels[tid]
+      out.append({
+        'tid': pseudo_pos_label.tid,
+        'riou': pseudo_pos_label.riou,
+        'intersect_frames': pseudo_pos_label.intersect_frames,
+        'beg': pseudo_pos_label.beg,
+        'end': pseudo_pos_label.end,
+        'event': pseudo_pos_label.event
+      })
+
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.frame.pkl'%(name, track_len))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -326,7 +393,8 @@ def recall():
 
 
 if __name__ == '__main__':
-  find_track_intersected_with_bbox()
+  # find_track_interval_intersected_with_bbox()
+  find_track_frame_intersected_with_bbox()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
