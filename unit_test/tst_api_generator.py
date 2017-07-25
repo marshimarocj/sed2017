@@ -128,7 +128,7 @@ def tst_viz_tracklet():
     os.mkdir(out_dir)
   for trackid, imgs in crop_clip_in_track_generator:
     event = id2event[trackid]
-    out_file = os.path.join(out_dir, '%s.%d.mp4'%(event, id))
+    out_file = os.path.join(out_dir, '%s.%d.mp4'%(event, trackid))
     print out_file
 
     shape = imgs[0].shape
