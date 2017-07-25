@@ -461,7 +461,7 @@ def merge_track_db():
     merge_track_db = forward_track_db
     base_trackid = len(merge_track_db.trackid2track)
 
-    diff_file = os.path.join(track_dir, '%s.%d.backward.diff')
+    diff_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
     with open(diff_file) as f:
       for i, line in enumerate(f):
         line = line.strip()
