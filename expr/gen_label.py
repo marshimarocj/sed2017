@@ -81,7 +81,7 @@ def gen_groundtruth_threshold_func(track_len):
   return groundtruth_threshold_func
 
 
-def calc_iou(box_lhs, boxs, union_or_min=False):
+def calc_iou(box_lhs, boxs, union_or_right=False):
   xmin = np.maximum(box_lhs[0], boxs[:,0])
   ymin = np.maximum(box_lhs[1], boxs[:,1])
   xmax = np.minimum(box_lhs[2], boxs[:,2])
@@ -100,9 +100,12 @@ def calc_iou(box_lhs, boxs, union_or_min=False):
     if union_or_min:
       iou = area_intersect / (float(area) + areas - area_intersect)
     else:
+      # iou = area_intersect / \
+      #   np.where(np.minimum(float(area), areas) == 0, 
+      #     1, np.minimum(float(area), areas))
       iou = area_intersect / \
-        np.where(np.minimum(float(area), areas) == 0, 
-          1, np.minimum(float(area), areas))
+        np.where(areas == 0, 
+          1, areas)
 
   return iou
 
@@ -141,7 +144,8 @@ def find_track_interval_intersected_with_bbox():
     labels = video2labels[name]
     # track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
     # track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
-    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     print name
 
     # track_db = api.db.TrackDb(track_map_file, track_file, track_len)
@@ -184,7 +188,8 @@ def find_track_interval_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
+    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.interval.pkl'%(name, track_len))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -444,9 +449,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  # find_track_interval_intersected_with_bbox()
+  find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
-  generate_pos_neg_lst()
+  # generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
