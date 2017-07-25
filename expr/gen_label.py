@@ -120,9 +120,9 @@ def find_track_intersected_with_bbox():
   out_dir = os.path.join(root_dir, 'pseudo_label')
 
   # direction = 'forward'
-  direction = 'backward'
-  # track_len = 25
-  track_len = 50
+  # direction = 'backward'
+  track_len = 25
+  # track_len = 50
   groundtruth_threshold_func = gen_groundtruth_threshold_func(track_len)
   iou_threshold = 0.5
 
@@ -139,11 +139,14 @@ def find_track_intersected_with_bbox():
 
   for name in names:
     labels = video2labels[name]
-    track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
-    track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
+    # track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
+    # track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
     print name
 
-    track_db = api.db.TrackDb(track_map_file, track_file, track_len)
+    # track_db = api.db.TrackDb(track_map_file, track_file, track_len)
+    track_db = api.db.TrackDb()
+    track_db.load(db_file)
 
     pseudo_pos_labels = {}
     for label in labels:
@@ -181,7 +184,7 @@ def find_track_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -323,7 +326,7 @@ def recall():
 
 
 if __name__ == '__main__':
-  # find_track_intersected_with_bbox()
-  recall()
+  find_track_intersected_with_bbox()
+  # recall()
   # normalize_match_name()
   # event_matched_tracks()
