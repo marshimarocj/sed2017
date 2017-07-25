@@ -462,7 +462,7 @@ def intersect_25_50_tracks():
     tracks_25 = track_25_db.trackid2track
 
     new_trackid_from_25 = []
-    for trackid in tracks:
+    for trackid in tracks_25:
       track = tracks_25[trackid]
       start_frame = track.start_frame
       end_frame = start_frame + track.track_len
