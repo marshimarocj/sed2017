@@ -135,7 +135,7 @@ def tst_viz_tracklet():
     # fourcc = cv2.VideoWriter_fourcc('H', '2', '6', '4')
     fourcc = cv2.cv.CV_FOURCC('H', '2', '6', '4')
     writer = cv2.VideoWriter(out_file, fourcc, 25, (shape[1], shape[0]))
-    for img in imags:
+    for img in imgs:
       writer.write(img)
     writer.release()
 
