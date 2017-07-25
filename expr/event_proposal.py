@@ -465,20 +465,27 @@ def merge_track_db():
   for name in names:
     print name
 
-    track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
-    track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
+    # track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
+    # track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
+    # forward_track_db = api.db.TrackDb()
+    # forward_track_db.load_v0(track_map_file, track_file)
+    db_file = os.path.join(track_dir, '%s.%d.forward.square.npz'%(name, track_len))
     forward_track_db = api.db.TrackDb()
-    forward_track_db.load_v0(track_map_file, track_file)
+    forward_track_db.load(db_file)
 
-    track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
-    track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
+    # track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
+    # track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
+    # backward_track_db = api.db.TrackDb()
+    # backward_track_db.load_v0(track_map_file, track_file)
+    db_file = os.path.join(track_dir, '%s.%d.backward.square.npz'%(name, track_len))
     backward_track_db = api.db.TrackDb()
-    backward_track_db.load_v0(track_map_file, track_file)
+    backward_track_db.load(db_file)
 
     merge_track_db = forward_track_db
     base_trackid = max(merge_track_db.trackid2track.keys()) + 1
 
-    diff_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
+    # diff_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
+    diff_file = os.path.join(track_dir, '%s.%d.backward.square.diff'%(name, track_len))
     with open(diff_file) as f:
       for i, line in enumerate(f):
         line = line.strip()
@@ -487,7 +494,8 @@ def merge_track_db():
         nid = base_trackid + i
         merge_track_db.add_track(nid, track)
 
-    out_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    # out_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    out_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     merge_track_db.save(out_file)
 
 
@@ -584,6 +592,6 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  intersect_backward_forward_tracks()
-  # merge_track_db()
+  # intersect_backward_forward_tracks()
+  merge_track_db()
   # pad_proposal_to_square()
