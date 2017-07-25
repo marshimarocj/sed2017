@@ -382,7 +382,7 @@ def recall():
   for name in names:
     events = video2events[name]
     recalled_events = set()
-    for direction, track_len in itertools.product(directions, track_lens):
+    for track_len in track_lens:
       file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.interval.pkl'%(name, track_len))
       with open(file) as f:
         pseudo_pos_labels = cPickle.load(f)
