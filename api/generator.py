@@ -246,7 +246,7 @@ def crop_clip_in_track(clipdb, trackdb):
           end_frame = track.start_frame + track.track_len
           heapq.heappush(pq, (end_frame, id))
 
-        _img = np.zeros((box[3]-box[1], box[2]-box[0]), dtype=np.uint8)
+        _img = np.zeros((box[3]-box[1], box[2]-box[0], 3), dtype=np.uint8)
         rstart = -box[1] if box[1] < 0 else 0
         rend = box[3] - _img.shape[0] if box[3] > _img.shape[0] else box[3]-box[1]
         cstart = -box[0] if box[0] < 0 else 0
