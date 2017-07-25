@@ -452,12 +452,12 @@ def merge_track_db():
     track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
     track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
     forward_track_db = api.db.TrackDb()
-    forward_track_db.load(track_map_file, track_file)
+    forward_track_db.load_v0(track_map_file, track_file)
 
     track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
     track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
     backward_track_db = api.db.TrackDb()
-    backward_track_db.load(track_map_file, track_file)
+    backward_track_db.load_v0(track_map_file, track_file)
 
     merge_track_db = forward_track_db
     base_trackid = max(merge_track_db.trackid2track.keys()) + 1
