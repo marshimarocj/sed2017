@@ -433,7 +433,8 @@ def merge_track_db():
   ]
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  track_len = 50
+  # track_len = 50
+  track_len = 25
   threshold = 0.5
 
   names = []
@@ -459,7 +460,7 @@ def merge_track_db():
     backward_track_db.load(track_map_file, track_file)
 
     merge_track_db = forward_track_db
-    base_trackid = len(merge_track_db.trackid2track)
+    base_trackid = max(merge_track_db.trackid2track.keys()) + 1
 
     diff_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
     with open(diff_file) as f:
@@ -467,7 +468,8 @@ def merge_track_db():
         line = line.strip()
         id = int(line)
         track = backward_track_db.trackid2track[id]
-        merge_track_db.add_track(id, track)
+        nid = base_trackid + i
+        merge_track_db.add_track(nid, track)
 
     out_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
     merge_track_db.save(out_file)
