@@ -433,8 +433,8 @@ def merge_track_db():
   ]
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  # track_len = 50
-  track_len = 25
+  track_len = 50
+  # track_len = 25
   threshold = 0.5
 
   names = []
