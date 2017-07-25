@@ -11,15 +11,18 @@ import api.generator
 
 '''func
 '''
-def load_track_label_file(file):
+def load_pos_track_label_file(file):
+  valid_events = set(['CellToEar', 'Embrace', 'Pointing', 'PersonRuns'])
   id2event = {}
   with open(file) as f:
     for line in f:
       line = line.strip()
       data = line.split(' ')
-      id = int(data[0])
       event = data[1]
-      id2event[id] = event
+      if event in valid_events:
+        id = int(data[0])
+        event = data[1]
+        id2event[id] = event
 
   return id2event
 
@@ -38,12 +41,11 @@ def prepare_pos_c3d():
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  track_label_dir = os.path.join(root_dir, 'tracklet_label')
+  track_label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
   ft_root_dir = os.path.join(root_dir, 'c3d')
-  out_dir = os.path.join(root_dir, 'c3d', 'pos')
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
 
-  direction = 'forward'
   track_len = 25
 
   # names = []
@@ -61,13 +63,15 @@ def prepare_pos_c3d():
 
   c3d_centers = api.db.get_c3d_centers()
 
-  track_label_file = os.path.join(track_label_dir, '%s.%d.%s.pos'%(name, track_len, direction))
-  id2event = load_track_label_file(track_label_file)
+  track_label_file = os.path.join(track_label_dir, '%s.%d.forward.backward.pos'%(name, track_len))
+  id2event = load_pos_track_label_file(track_label_file)
   pos_trackids = id2event.keys()
 
-  track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
-  track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
-  track_db = api.db.TrackDb(track_map_file, track_file, track_len, pos_trackids)
+  track_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+  track_map_file = os.path.join(track_dir, '%s.%d.forward.backward.map'%(name, track_len))
+  # track_db = api.db.TrackDb(track_map_file, track_file, track_len, pos_trackids)
+  track_db = api.db.TrackDb()
+  track_db.load_v0(track_map_file, track_file, pos_trackids)
 
   ft_dir = os.path.join(ft_root_dir, name)
   c3d_db = api.db.C3DFtDb(ft_dir)
@@ -89,7 +93,7 @@ def prepare_pos_c3d():
   frames = np.array(frames, dtype=np.int32)
   centers = np.concatenate(centers, 0)
   ids = np.array(ids, dtype=np.int32)
-  out_file = os.path.join(out_dir, name + '.npz')
+  out_file = os.path.join(out_dir, '%s.%d.forward.backward.pos.npz'%(name, track_len))
   np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
