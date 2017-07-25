@@ -393,13 +393,21 @@ def intersect_backward_forward_tracks():
           names.append(name)
 
   for name in names:
-    track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
-    track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
-    forward_track_db = api.db.TrackDb(track_map_file, track_file, track_len)
+    # track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
+    # track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
+    # forward_track_db = api.db.TrackDb()
+    # forward_track_db.load_v0(track_map_file, track_file)
+    db_file = os.path.join(track_dir, '%s.%d.forward.square.npz'%(name, track_len))
+    forward_track_db = api.db.TrackDb()
+    forward_track_db.load(db_file)
 
-    track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
-    track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
-    backward_track_db = api.db.TrackDb(track_map_file, track_file, track_len)
+    # track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
+    # track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
+    # backward_track_db = api.db.TrackDb()
+    # backward_track_db.load_v0(track_map_file, track_file)
+    db_file = os.path.join(track_dir, '%s.%d.backward.square.npz'%(name, track_len))
+    backward_track_db = api.db.TrackDb()
+    backward_track_db.load(db_file)
 
     backward_tracks = backward_track_db.trackid2track
 
@@ -426,71 +434,11 @@ def intersect_backward_forward_tracks():
         new_trackid_from_backward_db.append(trackid)
 
     print name, len(new_trackid_from_backward_db), len(backward_track_db.trackid2track), len(forward_track_db.trackid2track)
-    out_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
+    # out_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
+    out_file = os.path.join(track_dir, '%s.%d.backward.square.diff'%(name, track_len))
     with open(out_file, 'w') as fout:
       for tid in new_trackid_from_backward_db:
         fout.write('%d\n'%tid)
-
-
-# def intersect_25_50_tracks():
-#   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-#   lst_files = [
-#     os.path.join(root_dir, 'dev08-1.lst'),
-#     os.path.join(root_dir, 'eev08-1.lst'),
-#   ]
-#   track_dir = os.path.join(root_dir, 'tracking', 'person')
-
-#   threshold = 0.5
-
-#   names = []
-#   for lst_file in lst_files:
-#     with open(lst_file) as f:
-#       for line in f:
-#         line = line.strip()
-#         name, _ = os.path.splitext(line)
-#         if 'CAM4' not in name:
-#           names.append(name)
-
-#   for name in names:
-#     db_file = os.path.join(track_dir, '%s.50.forward.backward.npz'%name)
-#     track_50_db = api.db.TrackDb()
-#     track_50_db.load(db_file)
-
-#     db_file = os.path.join(track_dir, '%s.25.forward.backward.npz'%name)
-#     track_25_db = api.db.TrackDb()
-#     track_25_db.load(db_file)
-
-#     tracks_25 = track_25_db.trackid2track
-
-#     new_trackid_from_25 = []
-#     for trackid in tracks_25:
-#       track = tracks_25[trackid]
-#       start_frame = track.start_frame
-#       end_frame = start_frame + track.track_len
-#       tracks_50 = track_50_db.query_by_time_interval(start_frame, end_frame, threshold_25_50)
-#       if len(tracks_50) == 0:
-#         new_trackid_from_25.append(trackid)
-#         continue
-
-#       start_bbox = track.track[0]
-#       end_bbox = track.track[-1]
-
-#       start_50_bboxs = np.array(
-#         [d.track[track.start_frame - d.start_frame] for d in tracks_50])
-#       end_50_bboxs = np.array(
-#         [d.track[track.start_frame - d.start_frame + 24] for d in tracks_50])
-
-#       start_ious = calc_iou(start_bbox, start_50_bboxs, True)
-#       end_ious = calc_iou(end_bbox, end_50_bboxs, True)
-#       is_duplicate = np.logical_and(start_ious >= threshold, end_ious >= threshold)
-#       if np.sum(is_duplicate) == 0:
-#         new_trackid_from_25.append(trackid)
-
-#     print name, len(new_trackid_from_25), len(tracks_25), len(track_50_db.trackid2track)
-#     out_file = os.path.join(track_dir, '%s.forward.backward.25.diff'%name)
-#     with open(out_file, 'w') as fout:
-#       for tid in new_trackid_from_25:
-#         fout.write('%d\n'%tid)
 
 
 def merge_track_db():
@@ -636,7 +584,6 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  # intersect_backward_forward_tracks()
-  # intersect_25_50_tracks()
-  pad_proposal_to_square()
+  intersect_backward_forward_tracks()
   # merge_track_db()
+  # pad_proposal_to_square()
