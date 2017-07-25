@@ -69,7 +69,7 @@ def prepare_pos_c3d():
 
   db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
   track_db = api.db.TrackDb()
-  track_db.load(track_map_file, track_file, pos_trackids)
+  track_db.load(db_file, pos_trackids)
 
   ft_dir = os.path.join(ft_root_dir, name)
   c3d_db = api.db.C3DFtDb(ft_dir)
