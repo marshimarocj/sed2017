@@ -3,6 +3,7 @@ import sys
 sys.path.append('../')
 
 import numpy as np
+import cv2
 
 import api.db
 import api.generator
@@ -14,6 +15,22 @@ def c3d_threshold_func(qbegin, qend, tbegin, tend):
   ibegin = max(tbegin, qbegin)
   iend = min(tend, qend)
   return  iend - ibegin >= 8
+
+
+def load_pos_track_label_file(file):
+  valid_events = set(['CellToEar', 'Embrace', 'Pointing', 'PersonRuns'])
+  id2event = {}
+  with open(file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      event = data[1]
+      if event in valid_events:
+        id = int(data[0])
+        event = data[1]
+        id2event[id] = event
+
+  return id2event
 
 
 '''expr
@@ -83,6 +100,46 @@ def tst_opticalflow_toi():
   pass
 
 
+def tst_viz_tracklet():
+  root_dir = '/usr0/home/jiac/data/sed' #aladdin1
+  preprocess_dir = os.path.join(root_dir, 'video', 'preprocess')
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+  out_root_dir = os.path.join(root_dir, 'viz_pos')
+
+  video_name = 'LGW_20071101_E1_CAM1'
+
+  clip_dir = os.path.join(preprocess_dir, video_name, 'clip_6000_100')
+  clip_lst_file = os.path.join(preprocess_dir, video_name, 'clip_6000_100.lst')
+  clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
+
+  label_file = os.path.join(label_dir, '%s.50.forward.backward.pos'%video_name)
+  id2event = load_pos_track_label_file(label_file)
+  pos_ids = id2event.keys()
+
+  track_db_file = os.path.join(track_dir, '%s.50.forward.backward.npz'%video_name)
+  track_db = api.db.TrackDb()
+  track_db.load(track_db_file, valid_trackids=pos_ids)
+
+  crop_clip_in_track_generator = api.generator.crop_clip_in_track(clip_db, track_db)
+
+  out_dir = os.path.join(out_root_dir, video_name)
+  if not os.path.exists(out_dir):
+    os.mkdir(out_dir)
+  for trackid, imgs in crop_clip_in_track_generator:
+    event = id2event[trackid]
+    out_file = os.path.join(out_dir, '%s.%d.mp4'%(event, id))
+    print out_file
+
+    shape = imgs[0].shape
+    fourcc = cv2.VideoWriter_fourcc('H', '2', '6', '4')
+    writer = cv2.VideoWriter(out_file, fourcc, 25, (shape[1], shape[0]))
+    for img in imags:
+      writer.write(img)
+    writer.release()
+
+
 if __name__ == '__main__':
   # tst_c3d_toi()
-  tst_vgg_toi()
+  # tst_vgg_toi()
+  tst_viz_tracklet()

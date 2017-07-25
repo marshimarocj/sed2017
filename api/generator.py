@@ -121,7 +121,8 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
         if id not in cache:
           cache[id] = []
           # q.append((id, track.start_frame))
-          heapq.heappush(pq, (track.start_frame + track.track_len, id))
+          end_frame = track.start_frame + track.track_len
+          heapq.heappush(pq, (end_frame, id))
         r = center_idx/shape[3]
         c = center_idx%shape[3]
         cache[id].append({
