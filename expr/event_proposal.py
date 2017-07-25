@@ -604,6 +604,9 @@ def pad_proposal_to_square():
       start_frame = track.start_frame
       end_frame = track.start_frame + track.track_len
       tracks = square_track_db.query_by_time_interval(start_frame, end_frame, forward_backward_threshold)
+      if len(tracks) == 0:
+        square_track_db.add_track(track)
+        continue
 
       start_bbox = track.track[0]
       end_bbox = track.track[-1]
