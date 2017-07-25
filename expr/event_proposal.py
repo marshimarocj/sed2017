@@ -584,6 +584,8 @@ def pad_proposal_to_square():
     track_db = api.db.TrackDb()
     track_db.load_v0(track_map_file, track_file)
 
+    print len(track_db.trackid2track)
+
     square_track_db = api.db.TrackDb()
     id = 0
     for tid in track_db.trackid2track:
@@ -623,6 +625,7 @@ def pad_proposal_to_square():
         square_track_db.add_track(id, track)
         id += 1
 
+    print len(square_track_db.trackid2track)
     square_track_db.save(db_file)
 
 
