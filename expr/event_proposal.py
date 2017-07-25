@@ -475,9 +475,9 @@ def intersect_25_50_tracks():
       end_bbox = track.track[-1]
 
       start_50_bboxs = np.array(
-        [d.track[d.start_frame - track.start_frame] for d in tracks_50])
+        [d.track[track.start_frame - d.start_frame] for d in tracks_50])
       end_50_bboxs = np.array(
-        [d.track[d.start_frame - track.start_frame + 24] for d in tracks_50])
+        [d.track[track.start_frame - d.start_frame + 24] for d in tracks_50])
 
       start_ious = calc_iou(start_bbox, start_50_bboxs, True)
       end_ious = calc_iou(end_bbox, end_50_bboxs, True)
