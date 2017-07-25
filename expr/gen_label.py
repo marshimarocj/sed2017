@@ -128,8 +128,8 @@ def find_track_interval_intersected_with_bbox():
   # track_len = 25
   track_len = 50
   groundtruth_threshold_func = gen_groundtruth_threshold_func(track_len)
-  iou_threshold = 0.5
-  # iou_threshold = 0.75
+  # iou_threshold = 0.5
+  iou_threshold = 0.75
 
   video2labels = load_bboxs(bbox_file)
 
@@ -190,7 +190,7 @@ def find_track_interval_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.1f.interval.pkl'%(name, track_len, iou_threshold))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.2f.interval.pkl'%(name, track_len, iou_threshold))
     # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.2f.interval.pkl'%(name, track_len, iou_threshold))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
@@ -452,9 +452,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  # find_track_interval_intersected_with_bbox()
+  find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  recall()
+  # recall()
   # normalize_match_name()
   # event_matched_tracks()
