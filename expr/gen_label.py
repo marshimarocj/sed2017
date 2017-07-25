@@ -452,9 +452,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  find_track_interval_intersected_with_bbox()
+  # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  # recall()
+  recall()
   # normalize_match_name()
   # event_matched_tracks()
