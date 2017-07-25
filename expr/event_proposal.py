@@ -466,7 +466,7 @@ def merge_track_db():
       for i, line in enumerate(f):
         line = line.strip()
         id = int(line)
-        track = backward_track_db.trackid2track(id)
+        track = backward_track_db.trackid2track[id]
         merge_track_db.add_track(id, track)
 
     out_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
