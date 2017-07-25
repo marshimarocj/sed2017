@@ -101,7 +101,8 @@ def tst_opticalflow_toi():
 
 
 def tst_viz_tracklet():
-  root_dir = '/usr0/home/jiac/data/sed' #aladdin1
+  # root_dir = '/usr0/home/jiac/data/sed' #aladdin1
+  root_dir = '/data'
   preprocess_dir = os.path.join(root_dir, 'video', 'preprocess')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
