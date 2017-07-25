@@ -401,7 +401,8 @@ def generate_pos_neg_lst():
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  track_len = 25
+  # track_len = 25
+  track_len = 50
 
   names = []
   for lst_file in lst_files:
@@ -413,6 +414,8 @@ def generate_pos_neg_lst():
           names.append(name)
 
   for name in names:
+    print name
+
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
     out_file = os.path.join(label_dir, '%s.%d.forward.backward.pos'%(name, track_len))
     with open(label_file) as f:
