@@ -181,7 +181,7 @@ def crop_clip_in_track(clipdb, trackdb):
   trackid2track = trackdb.trackid2track
   for trackid in trackid2track:
     track = trackid2track[trackid]
-    clip_names = clipdb.query_track(track.start_frame, trackdb.track_len)
+    clip_names = clipdb.query_track(track.start_frame, track.track_len)
     for clip_name in clip_names:
       if clip_name not in clip_name2trackids:
         clip_name2trackids[clip_name] = []
@@ -208,7 +208,8 @@ def crop_clip_in_track(clipdb, trackdb):
     frame = base_frame
 
     cache = {}
-    q = deque()
+    # q = deque()
+    pq = []
     while True:
       ret, img = cap.read()
       if ret == 0:
@@ -241,7 +242,9 @@ def crop_clip_in_track(clipdb, trackdb):
 
         if id not in cache:
           cache[id] = []
-          q.append((id, track.start_frame))
+          # q.append((id, track.start_frame))
+          end_frame = track.start_frame + track.track_len
+          heapq.heappush(pq, (end_frame, id))
 
         _img = np.zeros((box[3]-box[1], box[2]-box[0]), dtype=np.uint8)
         rstart = -box[1] if box[1] < 0 else 0
@@ -253,11 +256,15 @@ def crop_clip_in_track(clipdb, trackdb):
         cache[id].append(_img)
 
       # remove old tracklets
-      while len(q) > 0:
-        if q[0][1] + trackdb.track_len > frame:
+      # while len(q) > 0:
+      while len(pq) > 0:
+        # if q[0][1] + trackdb.track_len > frame:
+        if pq[0][0] > frame:
           break
-        d = q.pop()
-        trackid = d[0]
+        # d = q.pop()
+        # trackid = d[0]
+        d = heapq.heappop(pq)
+        trackid = d[1]
         imgs = cache[trackid]
         del cache[trackid]
         yield (trackid, imgs)
@@ -265,9 +272,12 @@ def crop_clip_in_track(clipdb, trackdb):
       frame += 1
 
     # remove rest tracklets
-    while len(q) > 0:
-      d = q.pop()
-      trackid = d[0]
+    # while len(q) > 0:
+    while len(pq) > 0:
+      # d = q.pop()
+      # trackid = d[0]
+      d = heapq.heappop(pq)
+      trackid = d[1]
       imgs = cache[trackid]
       del cache[trackid]
       yield (trackid, imgs)
