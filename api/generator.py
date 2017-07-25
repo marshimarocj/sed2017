@@ -197,7 +197,7 @@ def crop_clip_in_track(clipdb, trackdb):
   #   cap = cv2.VideoCapture(clip_file)
   #   frame = base_frame
   for clip_name in clip_name2trackids:
-    clip_file = clipdb.query_clip(clip_name)
+    clip_file = clipdb.query_clip_file(clip_name)
     trackids = clip_name2trackids[clip_name]
     trackids = set(trackids)
 
