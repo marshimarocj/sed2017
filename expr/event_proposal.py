@@ -558,8 +558,8 @@ def pad_proposal_to_square():
   parser.add_argument('track_len', type=int)
   args = parser.parse_args()
 
-  direction = parser.direction
-  track_len = parser.track_len
+  direction = args.direction
+  track_len = args.track_len
 
   names = []
   for lst_file in lst_files:
