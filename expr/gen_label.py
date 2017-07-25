@@ -350,10 +350,10 @@ def recall():
 
   # directions = ['forward']
   # directions = ['backward']
-  directions = ['forward', 'backward']
+  # directions = ['forward', 'backward']
   # track_lens = [25]
-  # track_lens = [50]
-  track_lens = [25, 50]
+  track_lens = [50]
+  # track_lens = [25, 50]
 
   names = []
   for lst_file in lst_files:
@@ -383,7 +383,7 @@ def recall():
     events = video2events[name]
     recalled_events = set()
     for direction, track_len in itertools.product(directions, track_lens):
-      file = os.path.join(label_dir, '%s.%d.%s.pkl'%(name, track_len, direction))
+      file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.interval.pkl'%(name, track_len))
       with open(file) as f:
         pseudo_pos_labels = cPickle.load(f)
       for pseudo_pos_label in pseudo_pos_labels:
@@ -450,9 +450,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  find_track_interval_intersected_with_bbox()
+  # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  # recall()
+  recall()
   # normalize_match_name()
   # event_matched_tracks()
