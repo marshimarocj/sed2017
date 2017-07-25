@@ -393,6 +393,10 @@ def intersect_backward_forward_tracks():
           names.append(name)
 
   for name in names:
+    out_file = os.path.join(track_dir, '%s.%d.backward.square.diff'%(name, track_len))
+    if os.path.exists(out_file):
+      continue
+
     # track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
     # track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
     # forward_track_db = api.db.TrackDb()
@@ -435,7 +439,7 @@ def intersect_backward_forward_tracks():
 
     print name, len(new_trackid_from_backward_db), len(backward_track_db.trackid2track), len(forward_track_db.trackid2track)
     # out_file = os.path.join(track_dir, '%s.%d.backward.diff'%(name, track_len))
-    out_file = os.path.join(track_dir, '%s.%d.backward.square.diff'%(name, track_len))
+    # out_file = os.path.join(track_dir, '%s.%d.backward.square.diff'%(name, track_len))
     with open(out_file, 'w') as fout:
       for tid in new_trackid_from_backward_db:
         fout.write('%d\n'%tid)
@@ -592,6 +596,6 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  # intersect_backward_forward_tracks()
-  merge_track_db()
+  intersect_backward_forward_tracks()
+  # merge_track_db()
   # pad_proposal_to_square()
