@@ -199,8 +199,8 @@ def find_track_frame_intersected_with_bbox():
   ]
   out_dir = os.path.join(root_dir, 'pseudo_label')
 
-  # track_len = 25
-  track_len = 50
+  track_len = 25
+  # track_len = 50
   iou_threshold = 0.5
 
   video2labels = load_bboxs(bbox_file)
