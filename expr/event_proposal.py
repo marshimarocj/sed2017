@@ -585,6 +585,7 @@ def pad_proposal_to_square():
     track_db.load_v0(track_map_file, track_file)
 
     square_track_db = api.db.TrackDb()
+    id = 0
     for tid in track_db.trackid2track:
       track = track_db.trackid2track[tid]
       bboxs = track.track
@@ -605,7 +606,8 @@ def pad_proposal_to_square():
       end_frame = track.start_frame + track.track_len
       tracks = square_track_db.query_by_time_interval(start_frame, end_frame, forward_backward_threshold)
       if len(tracks) == 0:
-        square_track_db.add_track(track)
+        square_track_db.add_track(id, track)
+        id += 1
         continue
 
       start_bbox = track.track[0]
@@ -618,7 +620,8 @@ def pad_proposal_to_square():
       end_ious = calc_iou(end_bbox, end_bboxs, True)
       is_duplicate = np.logical_and(start_ious >= threshold, end_ious >= threshold)
       if np.sum(is_duplicate) == 0:
-        square_track_db.add_track(track)
+        square_track_db.add_track(id, track)
+        id += 1
 
     square_track_db.save(db_file)
 
