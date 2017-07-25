@@ -146,8 +146,8 @@ def find_track_interval_intersected_with_bbox():
     labels = video2labels[name]
     # track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
     # track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
-    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
-    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
+    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     print name
 
     # track_db = api.db.TrackDb(track_map_file, track_file, track_len)
@@ -190,8 +190,8 @@ def find_track_interval_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.2f.interval.pkl'%(name, track_len, iou_threshold))
-    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.2f.interval.pkl'%(name, track_len, iou_threshold))
+    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.2f.interval.pkl'%(name, track_len, iou_threshold))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.1f.interval.pkl'%(name, track_len, iou_threshold))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -384,10 +384,10 @@ def recall():
     events = video2events[name]
     recalled_events = set()
     for track_len in track_lens:
-      # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.interval.pkl'%(name, track_len))
+      file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.interval.pkl'%(name, track_len))
       # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
       # file = os.path.join(label_dir, '%s.%d.forward.backward.0.5.interval.pkl'%(name, track_len))
-      file = os.path.join(label_dir, '%s.%d.forward.backward.0.75.interval.pkl'%(name, track_len))
+      # file = os.path.join(label_dir, '%s.%d.forward.backward.0.75.interval.pkl'%(name, track_len))
       with open(file) as f:
         pseudo_pos_labels = cPickle.load(f)
       for pseudo_pos_label in pseudo_pos_labels:
@@ -454,9 +454,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  # find_track_interval_intersected_with_bbox()
+  find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  recall()
+  # recall()
   # normalize_match_name()
   # event_matched_tracks()
