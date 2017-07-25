@@ -385,7 +385,8 @@ def recall():
     recalled_events = set()
     for track_len in track_lens:
       # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.interval.pkl'%(name, track_len))
-      file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
+      # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
+      file = os.path.join(label_dir, '%s.%d.forward.backward.0.5.interval.pkl'%(name, track_len))
       with open(file) as f:
         pseudo_pos_labels = cPickle.load(f)
       for pseudo_pos_label in pseudo_pos_labels:
@@ -452,9 +453,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  find_track_interval_intersected_with_bbox()
+  # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  # recall()
+  recall()
   # normalize_match_name()
   # event_matched_tracks()
