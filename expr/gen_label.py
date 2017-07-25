@@ -81,7 +81,7 @@ def gen_groundtruth_threshold_func(track_len):
   return groundtruth_threshold_func
 
 
-def calc_iou(box_lhs, boxs, union_or_right=False):
+def calc_iou(box_lhs, boxs, union_or_left=False):
   xmin = np.maximum(box_lhs[0], boxs[:,0])
   ymin = np.maximum(box_lhs[1], boxs[:,1])
   xmax = np.minimum(box_lhs[2], boxs[:,2])
@@ -105,8 +105,8 @@ def calc_iou(box_lhs, boxs, union_or_right=False):
       #   np.where(np.minimum(float(area), areas) == 0, 
       #     1, np.minimum(float(area), areas))
       iou = area_intersect / \
-        np.where(areas == 0, 
-          1, areas)
+        np.where(float(area) == 0, 
+          1, float(area))
 
   return iou
 
