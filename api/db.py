@@ -80,7 +80,7 @@ class TrackDb(object):
   # def track_len(self):
   #   return self._track_len
 
-  def add_track(id, track):
+  def add_track(self, id, track):
     self._trackid2track[id] = track
     start_frame = track.start_frame
     end_frame = track.start_frame + track.track_len
