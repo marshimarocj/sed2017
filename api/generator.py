@@ -37,7 +37,8 @@ def crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
   shape = fts.shape
 
   cache = {}
-  q = deque()
+  # q = deque()
+  pq = []
   for f in range(shape[0]):
     frame = chunk + ftdb.ft_gap * f
 
@@ -52,7 +53,9 @@ def crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
           cache[id] = []
-          q.append((id, track.start_frame))
+          # q.append((id, track.start_frame))
+          end_frame = track.start_frame + track.track_len
+          heapq.heappush(pq, (end_frame, id))
         r = center_idx/shape[3]
         c = center_idx%shape[3]
         cache[id].append({
@@ -62,20 +65,27 @@ def crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
         })
 
     # remove old tracklets
-    while len(q) > 0:
-      if q[0][1] + trackdb.track_len > frame:
+    # while len(q) > 0:
+    while len(pq) > 0:
+      # if q[0][1] + trackdb.track_len > frame:
+      if pa[0][0] > frame:
         break
-      d = q.pop()
-      id = d[0]
+      # d = q.pop()
+      # id = d[0]
+      d = heapq.heappop(pq)
+      id = d[1]
       _fts = cache[id]
       ft_in_track = FtInTrack(id, _fts)
       del cache[id]
       yield ft_in_track
 
   # remove rest tracklets
-  while len(q) > 0:
-    d = q.pop()
-    id = d[0]
+  # while len(q) > 0:
+  while len(pq) > 0:
+    # d = q.pop()
+    # id = d[0]
+    d = heapq.heappop(pq)
+    id = d[1]
     _fts = cache[id]
     ft_in_track = FtInTrack(id, _fts)
     del cache[id]
@@ -161,22 +171,6 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
 
 # it's a generator
 def crop_clip_in_track(clipdb, trackdb):
-  # clip2trackletids = {}
-  # for start_frame in trackdb.start_frames:
-  #   clips = clipdb.query_tracklet(start_frame, trackdb.track_len)
-  #   _, tracks = trackdb.query_by_frame(start_frame)
-  #   trackletids = []
-  #   for i, track in enumerate(tracks):
-  #     frame_box = '%d %d'%(start_frame, i)
-  #     if frame_box in trackdb.frame_box2trackletid:
-  #       trackletid = trackdb.frame_box2trackletid[frame_box]
-  #       trackletids.append(trackletid)
-  #   for clip in clips:
-  #     clip_name = '%d %d'%(clip[0], clip[1])
-  #     if clip_name not in clip2track_idxs:
-  #       clip2trackletids[clip_name] = []
-  #     clip2trackletids[clip_name].extend(trackletids)
-
   clip_name2trackids = {}
   trackid2track = trackdb.trackid2track
   for trackid in trackid2track:
@@ -187,49 +181,21 @@ def crop_clip_in_track(clipdb, trackdb):
         clip_name2trackids[clip_name] = []
       clip_name2trackids[clip_name].append(trackid)
 
-  # for clip_name in clip2track_idxs:
-  #   clip_file = clipdb.query_clip(clip_name)
-  #   trackletids = clip2track_idxs[clip_name]
-  #   trackletids = set(trackletids)
-
-  #   pos = clip_name.find('_')
-  #   base_frame = int(clip_name[:pos])
-  #   cap = cv2.VideoCapture(clip_file)
-  #   frame = base_frame
   for clip_name in clip_name2trackids:
     clip_file = clipdb.query_clip_file(clip_name)
     trackids = clip_name2trackids[clip_name]
     trackids = set(trackids)
 
-    # data = clip_name.split('_')
-    # base_frame = int(data[1])
     base_frame, _ = clipdb.get_beg_end_from_clip_name(clip_name)
     cap = cv2.VideoCapture(clip_file)
     frame = base_frame
 
     cache = {}
-    # q = deque()
     pq = []
     while True:
       ret, img = cap.read()
       if ret == 0:
         break
-
-      # # update or insert new tracklets
-      # start_frame, tracks = trackdb.query_by_frame(frame)
-      # if start_frame != -1:
-      #   boxs = tracks[frame-start_frame, ::]
-      #   for box_idx, box in enumerate(boxs):
-      #     key = '%d %d'%(start_frame, box_idx)
-      #     if key not in trackdb.frame_box2trackletid:
-      #       continue
-      #     trackletid = trackdb.frame_box2trackletid[key]
-      #     if trackletid in trackletids:
-      #       if trackletid not in cache:
-      #         cache[trackletid] = []
-      #         q.append((trackletid, start_frame))
-
-      #       cache[trackletid].append(img[box[1]:box[3], box[0]:box[2]])
 
       # update or insert new tracklets
       tracks = trackdb.query_by_frame(frame)
@@ -242,7 +208,6 @@ def crop_clip_in_track(clipdb, trackdb):
 
         if id not in cache:
           cache[id] = []
-          # q.append((id, track.start_frame))
           end_frame = track.start_frame + track.track_len
           heapq.heappush(pq, (end_frame, id))
 
@@ -251,20 +216,14 @@ def crop_clip_in_track(clipdb, trackdb):
         rend = img.shape[0] - box[1] if box[3] > img.shape[0] else box[3]-box[1]
         cstart = -box[0] if box[0] < 0 else 0
         cend = img.shape[1] - box[0] if box[2] > img.shape[1] else box[2]-box[0]
-        # print rstart, rend, box[1], box[3]
-        # print cstart, cend, box[0], box[2]
         _img[rstart:rend, cstart:cend] = img[max(box[1], 0):box[3], max(box[0], 0):box[2]]
 
         cache[id].append(_img)
 
       # remove old tracklets
-      # while len(q) > 0:
       while len(pq) > 0:
-        # if q[0][1] + trackdb.track_len > frame:
         if pq[0][0] > frame:
           break
-        # d = q.pop()
-        # trackid = d[0]
         d = heapq.heappop(pq)
         trackid = d[1]
         imgs = cache[trackid]
@@ -274,10 +233,7 @@ def crop_clip_in_track(clipdb, trackdb):
       frame += 1
 
     # remove rest tracklets
-    # while len(q) > 0:
     while len(pq) > 0:
-      # d = q.pop()
-      # trackid = d[0]
       d = heapq.heappop(pq)
       trackid = d[1]
       imgs = cache[trackid]

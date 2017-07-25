@@ -1,6 +1,7 @@
 import os
 import cPickle
 import argparse
+import itertools
 import sys
 sys.path.append('../')
 
@@ -542,6 +543,54 @@ def merge_track_db():
     merge_track_db.save(out_file)
 
 
+def pad_proposal_to_square():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        if 'CAM4' in line:
+          continue
+        name, _ = os.path.splitext(line)
+        names.append(name)
+
+  directions = ['forward', 'backward']
+  track_lens = [25, 50]
+
+  for direction, track_len in itertools.product(directions, track_lens):
+    for name in names:
+      track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
+      track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
+      db_file = os.path.join(track_dir, '%s.%d.%s.square.npz'%(name, track_len, direction))
+      print name
+
+      track_db = api.db.TrackDb()
+      track_db.load_v0(track_map_file, track_file)
+
+      for tid in track_db.trackid2track:
+        track = track_db.trackid2track[tid]
+        bboxs = track.track
+        for i in range(bboxs.shape[0]):
+          w = bboxs[i, 2] - bboxs[i, 0]
+          h = bboxs[i, 3] - bboxs[i, 1]
+          if w > h:
+            c = (bboxs[i, 3] + bboxs[i, 1])/2
+            bboxs[i, 1] = c - w/2
+            bboxs[i, 3] = bboxs[i, 1] + w
+          else:
+            c = (bboxs[i, 2] + bboxs[i, 0])/2
+            bboxs[i, 0] = c - h/2
+            bboxs[i, 2] = bboxs[i, 0] + h
+      track_db.save(db_file)
+
+
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
@@ -550,5 +599,6 @@ if __name__ == '__main__':
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
   # intersect_backward_forward_tracks()
-  intersect_25_50_tracks()
+  # intersect_25_50_tracks()
+  pad_proposal_to_square()
   # merge_track_db()
