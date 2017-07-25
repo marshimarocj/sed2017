@@ -21,18 +21,26 @@ class Track(object):
   def track(self):
     return self._track
 
+  @property
+  def track_len(self):
+    return self._track.shape[0]
+
   # start frame of the track
   @property
   def start_frame(self):
     return self._start_frame
 
 
-# Note: 
+# Note:
 # for simplicity, the bounding boxs in the the same track is of the same size at different frames
 # in return, the coordinate of the bounding boxs may be <0 or >= img_width/img_height
 class TrackDb(object):
-  def __init__(self, track_map_file, track_file, track_len, valid_trackids=None):
-    self._track_len = track_len
+  def __init__(self):
+    self._trackid2track = {}
+    self._index = IntervalTree()
+
+  def load(self, track_map_file, track_file, valid_trackids=None):
+    # self._track_len = track_len
     if valid_trackids is not None:
       valid_trackids = set(valid_trackids)
 
@@ -49,29 +57,45 @@ class TrackDb(object):
           key = '%d %d'%(start_frame, boxid)
           frame_box2trackid[key] = id
 
-    self._trackid2track = {}
-    self._index = IntervalTree()
+    # self._trackid2track = {}
+    # self._index = IntervalTree()
     data = np.load(track_file)
     for key in data:
       start_frame = int(key)
       tracks = data[key]
       tracks[:, :, 2] += tracks[:, :, 0]
       tracks[:, :, 3] += tracks[:, :, 1]
-      # tracks[:, :, 0] = np.maximum(tracks[:, :, 0], np.zeros(tracks.shape[:2]))
-      # tracks[:, :, 1] = np.maximum(tracks[:, :, 1], np.zeros(tracks.shape[:2]))
       num_track = tracks.shape[1]
       for i in range(num_track):
         frame_box = '%d %d'%(start_frame, i)
         if frame_box in frame_box2trackid:
           trackid = frame_box2trackid[frame_box]
           track = Track(trackid, tracks[:, i, :], start_frame)
-          self._trackid2track[trackid] = track
-          self._index[start_frame:start_frame + track_len] = track
+          # self._trackid2track[trackid] = track
+          # self._index[start_frame:start_frame + track_len] = track
+          self.add_track(trackid, track)
 
-  # returns an int
-  @property
-  def track_len(self):
-    return self._track_len
+  # # returns an int
+  # @property
+  # def track_len(self):
+  #   return self._track_len
+
+  def add_track(id, track):
+    self._trackid2track[id] = track
+    start_frame = track.start_frame
+    end_frame = track.start_frame + track.track_len
+    self._index[start_frame:end_frame] = track
+
+  def save(self, outfile):
+    tracks = []
+    start_frames = []
+    ids = []
+    for tid in self._trackid2track:
+      track = self._trackid2track[tid]
+      tracks.append(track.track)
+      start_frames.append(track.start_frame)
+      ids.append(track.id)
+    np.savez_compressed(outfile, tracks=tracks, start_frames=start_frames, ids=ids)
 
   @property
   def trackid2track(self):
@@ -92,7 +116,7 @@ class TrackDb(object):
     for intersect in intersects:
       track = intersect.data
       tbegin = track.start_frame
-      tend = tbegin + self.track_len
+      tend = tbegin + track.track_len
 
       if threshold_func(qbegin, qend, tbegin, tend):
         results.append(track)

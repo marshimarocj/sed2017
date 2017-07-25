@@ -425,6 +425,54 @@ def intersect_backward_forward_tracks():
         fout.write('%d\n'%tid)
 
 
+def merge_track_db():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+
+  track_len = 50
+  threshold = 0.5
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  for name in names:
+    print name
+
+    track_file = os.path.join(track_dir, '%s.%d.forward.npz'%(name, track_len))
+    track_map_file = os.path.join(track_dir, '%s.%d.forward.map'%(name, track_len))
+    forward_track_db = api.db.TrackDb()
+    forward_track_db.load(track_map_file, track_file)
+
+    track_file = os.path.join(track_dir, '%s.%d.backward.npz'%(name, track_len))
+    track_map_file = os.path.join(track_dir, '%s.%d.backward.map'%(name, track_len))
+    backward_track_db = api.db.TrackDb()
+    backward_track_db.load(track_map_file, track_file)
+
+    merge_track_db = forward_track_db
+    base_trackid = len(merge_track_db.trackid2track)
+
+    diff_file = os.path.join(track_dir, '%s.%d.backward.diff')
+    with open(diff_file) as f:
+      for i, line in enumerate(f):
+        line = line.strip()
+        id = int(line)
+        track = backward_track_db.trackid2track(id)
+        merge_track_db.add_track(id, track)
+
+    out_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    merge_track_db.save(out_file)
+
+
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
@@ -432,4 +480,5 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  intersect_backward_forward_tracks()
+  # intersect_backward_forward_tracks()
+  merge_track_db()
