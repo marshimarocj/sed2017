@@ -39,7 +39,7 @@ class TrackDb(object):
     self._trackid2track = {}
     self._index = IntervalTree()
 
-  def load(self, track_map_file, track_file, valid_trackids=None):
+  def load_v0(self, track_map_file, track_file, valid_trackids=None):
     # self._track_len = track_len
     if valid_trackids is not None:
       valid_trackids = set(valid_trackids)
@@ -74,6 +74,23 @@ class TrackDb(object):
           # self._trackid2track[trackid] = track
           # self._index[start_frame:start_frame + track_len] = track
           self.add_track(trackid, track)
+
+  def load(self, file, valid_trackids=None):
+    if valid_trackids is not None:
+      valid_trackids = set(valid_trackids)
+
+    data = np.load(file)
+    track_boxs = data['tracks']
+    ids = data['ids']
+    start_frames = data['start_frames']
+
+    num = tracks.shape[0]
+    for i in range(num):
+      track_box = track_boxs[i]
+      id = ids[i]
+      start_frame = start_frames[i]
+      track = Track(id, track_box, start_frame)
+      self.add_track(id, track)
 
   # # returns an int
   # @property
