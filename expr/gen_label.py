@@ -191,7 +191,7 @@ def find_track_interval_intersected_with_bbox():
       })
 
     # out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.2f.interval.pkl'%(name, track_len, iou_threshold))
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.1f.interval.pkl'%(name, track_len, iou_threshold))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.2f.interval.pkl'%(name, track_len, iou_threshold))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
