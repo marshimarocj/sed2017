@@ -320,7 +320,8 @@ def prepare_neg_vgg19():
 
 if __name__ == '__main__':
   # prepare_pos_c3d()
-  generate_script()
+  # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_c3d()
+  prepare_neg_vgg19()
