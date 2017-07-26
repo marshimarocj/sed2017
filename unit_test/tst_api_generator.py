@@ -149,7 +149,8 @@ def tst_viz_tracklet():
         if 'CAM4' not in name:
           video_names.append(name)
 
-  for video_name in video_names:
+  # for video_name in video_names:
+  for video_name in video_names[1:]:
     clip_dir = os.path.join(preprocess_dir, video_name, 'clip_6000_100')
     clip_lst_file = os.path.join(preprocess_dir, video_name, 'clip_6000_100.lst')
     clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
@@ -184,5 +185,5 @@ def tst_viz_tracklet():
 if __name__ == '__main__':
   # tst_c3d_toi()
   # tst_vgg_toi()
-  gen_script()
-  # tst_viz_tracklet()
+  # gen_script()
+  tst_viz_tracklet()
