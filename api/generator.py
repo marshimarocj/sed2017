@@ -214,11 +214,13 @@ def crop_clip_in_track(clipdb, trackdb):
 
         _img = np.zeros((box[3]-box[1], box[2]-box[0], 3), dtype=np.uint8)
         rstart = -box[1] if box[1] < 0 else 0
+        # guard agains box[1] >= img.shape[0]
         rend = max(img.shape[0] - box[1], 0) if box[3] > img.shape[0] else box[3]-box[1]
         cstart = -box[0] if box[0] < 0 else 0
+        # guard against box[0] >= img.shape[1]
         cend = max(img.shape[1] - box[0], 0) if box[2] > img.shape[1] else box[2]-box[0]
-        print box
-        print rstart, rend, cstart, cend
+        # print box
+        # print rstart, rend, cstart, cend
         _img[rstart:rend, cstart:cend] = img[max(box[1], 0):box[3], max(box[0], 0):box[2]]
 
         cache[id].append(_img)
