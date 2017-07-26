@@ -182,8 +182,8 @@ def prepare_neg_c3d():
 
 
 def generate_script():
-  # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/home/jiac/data2/sed' # gpu9
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
