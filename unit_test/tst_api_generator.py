@@ -118,9 +118,9 @@ def gen_script():
 
   num_process = 10
   gap = (len(video_names) + num_process - 1) / num_process
-  for i in range(0, len(video_names), num_process):
-    out_file = '%d.sh'%(i/num_process)
-    _names = video_names[i:i+num_process]
+  for i in range(0, len(video_names), gap):
+    out_file = '%d.sh'%(i/gap)
+    _names = video_names[i:i+gap]
     with open(out_file, 'w') as fout:
       for name in _names:
         cmd = ['python', 'tst_api_generator.py', name]
