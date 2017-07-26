@@ -386,8 +386,8 @@ def recall():
     for track_len in track_lens:
       # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.interval.pkl'%(name, track_len))
       # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
-      file = os.path.join(label_dir, '%s.%d.forward.backward.0.50.interval.pkl'%(name, track_len))
-      # file = os.path.join(label_dir, '%s.%d.forward.backward.0.75.interval.pkl'%(name, track_len))
+      # file = os.path.join(label_dir, '%s.%d.forward.backward.0.50.interval.pkl'%(name, track_len))
+      file = os.path.join(label_dir, '%s.%d.forward.backward.0.75.interval.pkl'%(name, track_len))
       with open(file) as f:
         pseudo_pos_labels = cPickle.load(f)
       for pseudo_pos_label in pseudo_pos_labels:
