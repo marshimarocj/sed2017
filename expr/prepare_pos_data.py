@@ -37,16 +37,17 @@ def c3d_threshold_func(qbegin, qend, tbegin, tend):
 '''
 def prepare_pos_c3d():
   root_dir = '/data1/jiac/sed' # uranus
-  lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
-  ]
+  # lst_files = [
+  #   os.path.join(root_dir, 'dev08-1.lst'),
+  #   os.path.join(root_dir, 'eev08-1.lst'),
+  # ]
   track_label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
   ft_root_dir = os.path.join(root_dir, 'c3d')
   out_dir = os.path.join(root_dir, 'c3d', 'track_group')
 
-  track_len = 25
+  # track_len = 25
+  track_len = 50
 
   # names = []
   # for lst_file in lst_files:
@@ -63,11 +64,11 @@ def prepare_pos_c3d():
 
   c3d_centers = api.db.get_c3d_centers()
 
-  track_label_file = os.path.join(track_label_dir, '%s.%d.forward.backward.pos'%(name, track_len))
+  track_label_file = os.path.join(track_label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
   id2event = load_pos_track_label_file(track_label_file)
   pos_trackids = id2event.keys()
 
-  db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+  db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
   track_db = api.db.TrackDb()
   track_db.load(db_file, pos_trackids)
 
@@ -91,7 +92,7 @@ def prepare_pos_c3d():
   frames = np.array(frames, dtype=np.int32)
   centers = np.concatenate(centers, 0)
   ids = np.array(ids, dtype=np.int32)
-  out_file = os.path.join(out_dir, '%s.%d.forward.backward.pos.npz'%(name, track_len))
+  out_file = os.path.join(pos_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
   np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 

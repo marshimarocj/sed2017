@@ -417,8 +417,8 @@ def generate_pos_neg_lst():
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  # track_len = 25
-  track_len = 50
+  track_len = 25
+  # track_len = 50
 
   names = []
   for lst_file in lst_files:
@@ -462,7 +462,7 @@ def generate_pos_neg_lst():
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
-  # generate_pos_neg_lst()
+  generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
-  event_matched_tracks()
+  # event_matched_tracks()
