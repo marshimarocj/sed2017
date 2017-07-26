@@ -92,7 +92,7 @@ def prepare_pos_c3d():
   frames = np.array(frames, dtype=np.int32)
   centers = np.concatenate(centers, 0)
   ids = np.array(ids, dtype=np.int32)
-  out_file = os.path.join(pos_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+  out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
   np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
