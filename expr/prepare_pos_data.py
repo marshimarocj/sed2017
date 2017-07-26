@@ -184,5 +184,5 @@ def prepare_pos_vgg19():
 
 if __name__ == '__main__':
   # prepare_pos_c3d()
-  generate_script()
-  # prepare_pos_vgg19()
+  # generate_script()
+  prepare_pos_vgg19()
