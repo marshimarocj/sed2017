@@ -1,4 +1,5 @@
 import os
+import argparse
 import sys
 sys.path.append('../')
 
@@ -140,50 +141,55 @@ def tst_viz_tracklet():
   out_root_dir = os.path.join(root_dir, 'viz_pos')
 
   # video_name = 'LGW_20071101_E1_CAM1'
-  video_names = []
-  for lst_file in lst_files:
-    with open(lst_file) as f:
-      for line in f:
-        line = line.strip()
-        name, _ = os.path.splitext(line)
-        if 'CAM4' not in name:
-          video_names.append(name)
+  # video_names = []
+  # for lst_file in lst_files:
+  #   with open(lst_file) as f:
+  #     for line in f:
+  #       line = line.strip()
+  #       name, _ = os.path.splitext(line)
+  #       if 'CAM4' not in name:
+  #         video_names.append(name)
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  args = parser.parse_args()
+  video_name = parser.name
 
   # for video_name in video_names:
-  for video_name in video_names[1:2]:
-    clip_dir = os.path.join(preprocess_dir, video_name, 'clip_6000_100')
-    clip_lst_file = os.path.join(preprocess_dir, video_name, 'clip_6000_100.lst')
-    clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
+  # for video_name in video_names[1:2]:
+  clip_dir = os.path.join(preprocess_dir, video_name, 'clip_6000_100')
+  clip_lst_file = os.path.join(preprocess_dir, video_name, 'clip_6000_100.lst')
+  clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
 
-    label_file = os.path.join(label_dir, '%s.50.forward.backward.square.0.75.pos'%video_name)
-    id2event = load_pos_track_label_file(label_file)
-    pos_ids = id2event.keys()
+  label_file = os.path.join(label_dir, '%s.50.forward.backward.square.0.75.pos'%video_name)
+  id2event = load_pos_track_label_file(label_file)
+  pos_ids = id2event.keys()
 
-    track_db_file = os.path.join(track_dir, '%s.50.forward.backward.square.npz'%video_name)
-    track_db = api.db.TrackDb()
-    track_db.load(track_db_file, valid_trackids=pos_ids)
+  track_db_file = os.path.join(track_dir, '%s.50.forward.backward.square.npz'%video_name)
+  track_db = api.db.TrackDb()
+  track_db.load(track_db_file, valid_trackids=pos_ids)
 
-    crop_clip_in_track_generator = api.generator.crop_clip_in_track(clip_db, track_db)
+  crop_clip_in_track_generator = api.generator.crop_clip_in_track(clip_db, track_db)
 
-    out_dir = os.path.join(out_root_dir, video_name)
-    if not os.path.exists(out_dir):
-      os.mkdir(out_dir)
-    for trackid, imgs in crop_clip_in_track_generator:
-      event = id2event[trackid]
-      out_file = os.path.join(out_dir, '%s.%d.mp4'%(event, trackid))
-      print out_file
+  out_dir = os.path.join(out_root_dir, video_name)
+  if not os.path.exists(out_dir):
+    os.mkdir(out_dir)
+  for trackid, imgs in crop_clip_in_track_generator:
+    event = id2event[trackid]
+    out_file = os.path.join(out_dir, '%s.%d.mp4'%(event, trackid))
+    print out_file
 
-      shape = imgs[0].shape
-      fourcc = cv2.VideoWriter_fourcc('H', '2', '6', '4')
-      # fourcc = cv2.cv.CV_FOURCC('H', '2', '6', '4')
-      writer = cv2.VideoWriter(out_file, fourcc, 25, (shape[1], shape[0]))
-      for img in imgs:
-        writer.write(img)
-      writer.release()
+    shape = imgs[0].shape
+    fourcc = cv2.VideoWriter_fourcc('H', '2', '6', '4')
+    # fourcc = cv2.cv.CV_FOURCC('H', '2', '6', '4')
+    writer = cv2.VideoWriter(out_file, fourcc, 25, (shape[1], shape[0]))
+    for img in imgs:
+      writer.write(img)
+    writer.release()
 
 
 if __name__ == '__main__':
   # tst_c3d_toi()
   # tst_vgg_toi()
-  gen_script()
-  # tst_viz_tracklet()
+  # gen_script()
+  tst_viz_tracklet()
