@@ -134,10 +134,10 @@ def tst_viz_tracklet():
   preprocess_dir = os.path.join(root_dir, 'video', 'preprocess')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
-  lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
-  ]
+  # lst_files = [
+  #   os.path.join(root_dir, 'dev08-1.lst'),
+  #   os.path.join(root_dir, 'eev08-1.lst'),
+  # ]
   out_root_dir = os.path.join(root_dir, 'viz_pos')
 
   # video_name = 'LGW_20071101_E1_CAM1'
@@ -191,5 +191,5 @@ def tst_viz_tracklet():
 if __name__ == '__main__':
   # tst_c3d_toi()
   # tst_vgg_toi()
-  gen_script()
-  # tst_viz_tracklet()
+  # gen_script()
+  tst_viz_tracklet()
