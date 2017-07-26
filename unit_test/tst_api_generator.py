@@ -114,11 +114,11 @@ def tst_viz_tracklet():
   clip_lst_file = os.path.join(preprocess_dir, video_name, 'clip_6000_100.lst')
   clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
 
-  label_file = os.path.join(label_dir, '%s.50.forward.backward.pos'%video_name)
+  label_file = os.path.join(label_dir, '%s.50.forward.backward.square.0.75.pos'%video_name)
   id2event = load_pos_track_label_file(label_file)
   pos_ids = id2event.keys()
 
-  track_db_file = os.path.join(track_dir, '%s.50.forward.backward.npz'%video_name)
+  track_db_file = os.path.join(track_dir, '%s.50.forward.backward.square.npz'%video_name)
   track_db = api.db.TrackDb()
   track_db.load(track_db_file, valid_trackids=pos_ids)
 
