@@ -153,7 +153,7 @@ def tst_viz_tracklet():
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
   args = parser.parse_args()
-  video_name = parser.name
+  video_name = args.name
 
   # for video_name in video_names:
   # for video_name in video_names[1:2]:
