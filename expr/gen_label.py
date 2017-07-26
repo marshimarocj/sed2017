@@ -221,8 +221,9 @@ def find_track_frame_intersected_with_bbox():
         if 'CAM4' not in name:
           names.append(name)
 
-  names = ['LGW_20071112_E1_CAM2']
-  for name in names:
+  # names = ['LGW_20071112_E1_CAM2']
+  # for name in names:
+  for name in names[17:]:
     labels = video2labels[name]
     # db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
     db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
