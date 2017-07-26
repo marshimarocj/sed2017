@@ -46,8 +46,8 @@ def prepare_pos_c3d():
   ft_root_dir = os.path.join(root_dir, 'c3d')
   out_dir = os.path.join(root_dir, 'c3d', 'track_group')
 
-  # track_len = 25
-  track_len = 50
+  track_len = 25
+  # track_len = 50
 
   # names = []
   # for lst_file in lst_files:
@@ -128,6 +128,10 @@ def generate_script():
           'python', 'prepare_pos_data.py', name
         ]
         fout.write(' '.join(cmd) + '\n')
+
+
+def prepare_pos_vgg19():
+  root_dir = '' # gpu9
 
 
 if __name__ == '__main__':
