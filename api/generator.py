@@ -77,7 +77,7 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
     # while len(q) > 0:
     while len(pq) > 0:
       # if q[0][1] + trackdb.track_len > frame:
-      if pa[0][0] > frame:
+      if pq[0][0] > frame:
         break
       # d = q.pop()
       # id = d[0]
