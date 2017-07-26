@@ -206,8 +206,8 @@ def find_track_frame_intersected_with_bbox():
   ]
   out_dir = os.path.join(root_dir, 'pseudo_label')
 
-  track_len = 25
-  # track_len = 50
+  # track_len = 25
+  track_len = 50
   iou_threshold = 0.5
 
   video2labels = load_bboxs(bbox_file)
@@ -223,7 +223,8 @@ def find_track_frame_intersected_with_bbox():
 
   for name in names:
     labels = video2labels[name]
-    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     print name
 
     track_db = api.db.TrackDb()
@@ -258,7 +259,8 @@ def find_track_frame_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.frame.pkl'%(name, track_len))
+    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.frame.pkl'%(name, track_len))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.2f.frame.pkl'%(name, track_len, iou_threshold))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -455,8 +457,8 @@ def generate_pos_neg_lst():
 
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
-  # find_track_frame_intersected_with_bbox()
+  find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  recall()
+  # recall()
   # normalize_match_name()
   # event_matched_tracks()
