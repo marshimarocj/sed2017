@@ -98,7 +98,7 @@ def calc_iou(box_lhs, boxs, union_or_left=False):
     iou = np.zeros(area_intersect.shape)
   else:
     # if union_or_min:
-    if union_or_right:
+    if union_or_left:
       iou = area_intersect / (float(area) + areas - area_intersect)
     else:
       # iou = area_intersect / \
