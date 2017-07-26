@@ -47,7 +47,8 @@ def prepare_pos_c3d():
   out_dir = os.path.join(root_dir, 'c3d', 'track_group')
 
   # track_len = 25
-  track_len = 50
+  # track_len = 50
+  track_lens = [25, 50]
 
   # names = []
   # for lst_file in lst_files:
@@ -64,36 +65,37 @@ def prepare_pos_c3d():
 
   c3d_centers = api.db.get_c3d_centers()
 
-  track_label_file = os.path.join(track_label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
-  id2event = load_pos_track_label_file(track_label_file)
-  pos_trackids = id2event.keys()
+  for track_len in track_lens:
+    track_label_file = os.path.join(track_label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
+    id2event = load_pos_track_label_file(track_label_file)
+    pos_trackids = id2event.keys()
 
-  db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
-  track_db = api.db.TrackDb()
-  track_db.load(db_file, pos_trackids)
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
+    track_db = api.db.TrackDb()
+    track_db.load(db_file, pos_trackids)
 
-  ft_dir = os.path.join(ft_root_dir, name)
-  c3d_db = api.db.C3DFtDb(ft_dir)
+    ft_dir = os.path.join(ft_root_dir, name)
+    c3d_db = api.db.C3DFtDb(ft_dir)
 
-  pos_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
-    track_db, c3d_db, c3d_centers, c3d_threshold_func)
-  fts = []
-  frames = []
-  centers = []
-  ids = []
-  for ft_in_track in pos_c3d_in_track_generator:
-    num = len(ft_in_track.frames)
-    fts.append(ft_in_track.fts)
-    frames.extend(ft_in_track.frames)
-    centers.append(ft_in_track.centers)
-    ids.extend(num*[ft_in_track.id])
+    pos_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
+      track_db, c3d_db, c3d_centers, c3d_threshold_func)
+    fts = []
+    frames = []
+    centers = []
+    ids = []
+    for ft_in_track in pos_c3d_in_track_generator:
+      num = len(ft_in_track.frames)
+      fts.append(ft_in_track.fts)
+      frames.extend(ft_in_track.frames)
+      centers.append(ft_in_track.centers)
+      ids.extend(num*[ft_in_track.id])
 
-  fts = np.concatenate(fts, 0)
-  frames = np.array(frames, dtype=np.int32)
-  centers = np.concatenate(centers, 0)
-  ids = np.array(ids, dtype=np.int32)
-  out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
-  np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
+    fts = np.concatenate(fts, 0)
+    frames = np.array(frames, dtype=np.int32)
+    centers = np.concatenate(centers, 0)
+    ids = np.array(ids, dtype=np.int32)
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+    np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
 def generate_script():
@@ -103,7 +105,7 @@ def generate_script():
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
 
-  num_process = 5
+  num_process = 10
 
   names = []
   for lst_file in lst_files:
@@ -135,5 +137,5 @@ def prepare_pos_vgg19():
 
 
 if __name__ == '__main__':
-  prepare_pos_c3d()
-  # generate_script()
+  # prepare_pos_c3d()
+  generate_script()
