@@ -191,5 +191,5 @@ def tst_viz_tracklet():
 if __name__ == '__main__':
   # tst_c3d_toi()
   # tst_vgg_toi()
-  # gen_script()
-  tst_viz_tracklet()
+  gen_script()
+  # tst_viz_tracklet()

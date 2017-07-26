@@ -29,9 +29,8 @@ class FtInTrack(object):
     return self._centers
 
 
-# it's a generator
+# it's a generator and yields FtInTrack object
 # one pass of ftdb to generate features in the tracklets from trackdb
-# this is a generator and yield FtInTrack object
 def crop_instant_ft_in_track(trackdb, ftdb, centers):
   chunks = ftdb.chunks
   for chunk in chunks:
@@ -46,7 +45,6 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
   shape = fts.shape
 
   cache = {}
-  # q = deque()
   pq = []
   for f in range(shape[0]):
     frame = chunk + ftdb.ft_gap * f
@@ -62,7 +60,6 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
           cache[id] = []
-          # q.append((id, track.start_frame))
           end_frame = track.start_frame + track.track_len
           heapq.heappush(pq, (end_frame, id))
         r = center_idx/shape[3]
@@ -74,13 +71,9 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
         })
 
     # remove old tracklets
-    # while len(q) > 0:
     while len(pq) > 0:
-      # if q[0][1] + trackdb.track_len > frame:
       if pq[0][0] > frame:
         break
-      # d = q.pop()
-      # id = d[0]
       d = heapq.heappop(pq)
       id = d[1]
       _fts = cache[id]
@@ -89,10 +82,7 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
       yield ft_in_track
 
   # remove rest tracklets
-  # while len(q) > 0:
   while len(pq) > 0:
-    # d = q.pop()
-    # id = d[0]
     d = heapq.heappop(pq)
     id = d[1]
     _fts = cache[id]
@@ -101,7 +91,7 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
     yield ft_in_track
 
 
-# it's a generator
+# it's a generator and yields FtInTrack object
 # one pass of ftdb to generate features in the tracklets from trackdb
 # as for duration feature, the feature is counted as included in the tracklet 
 # only if two conditions are satisfied:
@@ -121,7 +111,6 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
   shape = fts.shape
 
   cache = {}
-  # q = deque()
   pq = []
   for f in range(shape[0]):
     frame = chunk + ftdb.ft_gap * f
@@ -139,7 +128,6 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
           cache[id] = []
-          # q.append((id, track.start_frame))
           end_frame = track.start_frame + track.track_len
           heapq.heappush(pq, (end_frame, id))
         r = center_idx/shape[3]
@@ -151,13 +139,9 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
         })
 
     # remove old tracklets
-    # while len(q) > 0:
     while len(pq) > 0:
-      # if q[0][1] + trackdb.track_len > frame:
       if pq[0][0] > frame:
         break
-      # d = q.pop()
-      # id = d[0]
       d = heapq.heappop(pq)
       id = d[1]
       _fts = cache[id]
@@ -166,10 +150,7 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
       yield ft_in_track
 
   # remove rest tracklets
-  # while len(q) > 0:
   while len(pq) > 0:
-    # d = q.pop()
-    # id = d[0]
     d = heapq.heappop(pq)
     id = d[1]
     _fts = cache[id]
@@ -178,7 +159,7 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
     yield ft_in_track
 
 
-# it's a generator
+# it's a generator and yields (trackid, imgs)
 def crop_clip_in_track(clipdb, trackdb):
   clip_name2trackids = {}
   trackid2track = trackdb.trackid2track

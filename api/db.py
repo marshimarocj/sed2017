@@ -291,6 +291,102 @@ class VGG19FtDb(InstantFtDb):
     InstantFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
+class FtCenters(object):
+  def __init__(self, grid_y, grid_x, stride_y, stride_x, offset_y, offset_x):
+    self._grid_y = grid_y
+    self._grid_x = grid_x
+    self._stride_y = stride_y
+    self._stride_x = stride_x
+    self._offset_y = offset_y
+    self._offset_x = offset_x
+
+    self._centers = [
+      (stride_y*y + offset_y, stride_x*x + offset_x) for y in range(grid_y) for x in range(grid_x)
+    ]
+    self._centers = np.array(self._centers)
+
+  @property
+  def centers(self):
+    return self._centers
+
+  def center_in_box(self, boxs):
+    # say there are m centers and n boxs
+    # this is a trick to generate (m,n) comparison efficiently with numpy
+    is_x = np.logical_and(
+      np.expand_dims(self._centers[:, 0], 1) >= np.expand_dims(boxs[:, 1], 0), 
+      np.expand_dims(self._centers[:, 0], 1) < np.expand_dims(boxs[:, 3], 0)
+    )
+    is_y = np.logical_and(
+      np.expand_dims(self._centers[:, 1], 1) >= np.expand_dims(boxs[:, 0], 0), 
+      np.expand_dims(self._centers[:, 1], 1) < np.expand_dims(boxs[:, 2], 0)
+    )
+    is_xy = np.logical_and(is_x, is_y)
+
+    return is_xy
+
+  # https://en.wikipedia.org/wiki/Bilinear_interpolation
+  def interpolate_on_grid_in_box(self, box, grid_y, grid_x):
+    w = box[2] - box[0]
+    h = box[3] - box[1]
+    w_gap = w / grid_x
+    h_gap = h / grid_y
+
+    center_idxs = [] # nw, ne, sw, se, 4 nearest centers could be the same
+    xy_coefs = [] # 
+    for y in range(grid_y):
+      for x in range(grid_x):
+        gy = y*h_gap + h_gap/2 + box[1]
+        gx = x*w_gap + w_gap/2 + box[0]
+        idx = (gy - self._offset_y) / float(self._stride_y)
+        sidx = floor(idx)
+        nidx = ceil(idx)
+        idx = (gx - self._offset_x) / float(self._stride_x)
+        widx = floor(idx)
+        eidx = ceil(idx)
+        
+        center_idxs.append([
+          nidx * self._grid_x + widx,
+          nidx * self._grid_x + eidx,
+          sidx * self._grid_x + widx,
+          sidx * self._grid_x + eidx,
+        ])
+
+        if nidx != sidx and widx != edix:
+          xy_coef = [
+            wid * self._stride_x + self._offset_x - gx,
+            gx - eid * self._stride_x - self._offset_x,
+            nid * self._stride_y + self._offset_y - gy,
+            gy - sid * self._stride_y - self._offset_y,
+          ]
+          denominator = (nidx-sidx)*self._stride_y * (eidx-widx)*self._stride_x
+          xy_coef = [d / denominator for d in xy_coef]
+        elif nidx == sidx and widx != eidx:
+          xy_coef = [
+            wid * self._stride_x + self._offset_x - gx,
+            gx - eid * self._stride_x - self._offset_x,
+            1,
+            0
+          ]
+          denominator = (eidx-widx)*self._stride_x
+          xy_coef[0] /= denominator
+          xy_coef[1] /= denominator
+        elif nidx != sidx and widx == eidx:
+          xy_coef = [
+            1,
+            0,
+            nid * self._stride_y + self._offset_y - gy,
+            gy - sid * self._stride_y - self._offset_y,
+          ]
+          denominator = (nidx-sidx)*self._stride_y
+          xy_coef[2] /= denominator
+          xy_coef[3] /= denominator
+        else:
+          xy_coef = [1, 0, 0, 0]
+        xy_coefs.append(xy_coef)
+
+    return np.array(center_idxs), np.array(xy_coefs)
+
+
 def get_vgg19_centers():
   grid_h = 18
   grid_w = 22
