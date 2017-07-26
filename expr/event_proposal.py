@@ -453,8 +453,8 @@ def merge_track_db():
   ]
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  track_len = 50
-  # track_len = 25
+  # track_len = 50
+  track_len = 25
   threshold = 0.5
 
   names = []
@@ -596,6 +596,6 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  intersect_backward_forward_tracks()
-  # merge_track_db()
+  # intersect_backward_forward_tracks()
+  merge_track_db()
   # pad_proposal_to_square()
