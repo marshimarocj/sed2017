@@ -428,8 +428,8 @@ def generate_pos_neg_lst():
   for name in names:
     print name
 
-    label_file = os.path.join(label_dir, '%s.%d.forward.backward.interval.pkl'%(name, track_len))
-    out_file = os.path.join(label_dir, '%s.%d.forward.backward.pos'%(name, track_len))
+    label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
+    out_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
     with open(label_file) as f:
       pseudo_pos_labels = cPickle.load(f)
     with open(out_file, 'w') as fout:
@@ -438,17 +438,17 @@ def generate_pos_neg_lst():
         event = label['event']
         fout.write('%d %s\n'%(tid, event))
 
-    label_file = os.path.join(label_dir, '%s.%d.forward.backward.frame.pkl'%(name, track_len))
+    label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.frame.pkl'%(name, track_len))
     tids = set()
     with open(label_file) as f:
       for label in pseudo_pos_labels:
         tid = label['tid']
         tids.add(tid)
 
-    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     track_db = api.db.TrackDb()
     track_db.load(db_file)
-    out_file = os.path.join(label_dir, '%s.%d.forward.backward.neg'%(name, track_len))
+    out_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.neg'%(name, track_len))
     with open(out_file, 'w') as fout:
       for tid in track_db.trackid2track:
         if tid not in tids:
@@ -457,8 +457,8 @@ def generate_pos_neg_lst():
 
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
-  find_track_frame_intersected_with_bbox()
-  # generate_pos_neg_lst()
+  # find_track_frame_intersected_with_bbox()
+  generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
