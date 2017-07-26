@@ -448,7 +448,7 @@ def generate_pos_neg_lst():
     db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     track_db = api.db.TrackDb()
     track_db.load(db_file)
-    out_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.neg'%(name, track_len))
+    out_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg'%(name, track_len))
     with open(out_file, 'w') as fout:
       for tid in track_db.trackid2track:
         if tid not in tids:
