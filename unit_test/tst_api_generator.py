@@ -100,6 +100,33 @@ def tst_opticalflow_toi():
   pass
 
 
+def gen_script():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+
+  video_names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          video_names.append(name)
+
+  num_process = 10
+  gap = (len(video_names) + num_process - 1) / num_process
+  for i in range(0, len(video_names), num_process):
+    out_file = '%d.sh'%(i/num_process)
+    _names = video_names[i:i+num_process]
+    with open(out_file, 'w') as fout:
+      for name in _names:
+        cmd = ['python', 'tst_api_generator.py', name]
+        fout.write(' '.join(cmd) + '\n')
+
+
 def tst_viz_tracklet():
   # root_dir = '/usr0/home/jiac/data/sed' #aladdin1
   root_dir = '/data'
@@ -157,4 +184,5 @@ def tst_viz_tracklet():
 if __name__ == '__main__':
   # tst_c3d_toi()
   # tst_vgg_toi()
-  tst_viz_tracklet()
+  gen_script()
+  # tst_viz_tracklet()
