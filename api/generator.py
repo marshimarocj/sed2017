@@ -32,7 +32,16 @@ class FtInTrack(object):
 # it's a generator
 # one pass of ftdb to generate features in the tracklets from trackdb
 # this is a generator and yield FtInTrack object
-def crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
+def crop_instant_ft_in_track(trackdb, ftdb, centers):
+  chunks = ftdb.chunks
+  for chunk in chunks:
+    print 'chunk:', chunk
+    one_chunk_generator = _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk)
+    for ft_in_track in one_chunk_generator:
+      yield ft_in_track
+
+
+def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
 

@@ -292,10 +292,10 @@ class VGG19FtDb(InstantFtDb):
 
 
 def get_vgg19_centers():
-  grid_h = 9
-  grid_w = 11
+  grid_h = 18
+  grid_w = 22
   centers = [
-    (64*i + 32, 64*j + 32) for i in range(grid_h) for j in range(grid_w)
+    (32*i + 31, 32*j + 31) for i in range(grid_h) for j in range(grid_w)
   ]
   centers = np.array(centers)
 
