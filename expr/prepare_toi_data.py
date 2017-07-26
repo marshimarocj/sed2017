@@ -110,7 +110,7 @@ def shuffle_neg():
   for name in names:
     print name
     for track_len in track_lens:
-      neg_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg')
+      neg_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg'%(name, track_len))
       ids = []
       with open(neg_file) as f:
         for line in f:
