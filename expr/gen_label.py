@@ -294,7 +294,6 @@ def normalize_match_name():
 
 def event_matched_tracks():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  # track_dir = os.path.join(root_dir, 'tracking', 'person')
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
