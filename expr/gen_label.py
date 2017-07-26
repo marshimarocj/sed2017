@@ -301,8 +301,9 @@ def event_matched_tracks():
   ]
   label_dir = os.path.join(root_dir, 'pseudo_label')
 
-  direction = 'forward'
-  track_len = 25
+  # direction = 'forward'
+  # track_len = 25
+  track_len = 50
 
   names = []
   for lst_file in lst_files:
@@ -313,9 +314,9 @@ def event_matched_tracks():
         if 'CAM4' not in name:
           names.append(name)
 
-  event2num_tracks = {}
+  # event2num_tracks = {}
   for name in names:
-    label_file = os.path.join(label_dir, '%s.pkl'%name)
+    label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
     with open(label_file) as f:
       pseudo_pos_labels = cPickle.load(f)
     eventid2trackids = {}
@@ -329,17 +330,21 @@ def event_matched_tracks():
         eventid2trackids[eventid] = []
       eventid2trackids[eventid].append(tid)
 
-    for eventid in eventid2trackids:
-      data = eventid.split('_')
-      event = data[2]
-      num_track = len(eventid2trackids[eventid])
-      if event not in event2num_tracks:
-        event2num_tracks[event] = []
-      event2num_tracks[event].append(num_track)
+    # for eventid in eventid2trackids:
+    #   data = eventid.split('_')
+    #   event = data[2]
+    #   num_track = len(eventid2trackids[eventid])
+    #   if event not in event2num_tracks:
+    #     event2num_tracks[event] = []
+    #   event2num_tracks[event].append(num_track)
 
-  for event in event2num_tracks:
-    num_tracks = event2num_tracks[event]
-    print event, np.mean(num_tracks), np.median(num_tracks), np.percentile(num_tracks, 10), np.percentile(num_tracks, 90)
+    out_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.match.pkl'%(name, track_len))
+    with open(out_file, 'w') as fout:
+      cPickle.dump(eventid2trackids, fout)
+
+  # for event in event2num_tracks:
+  #   num_tracks = event2num_tracks[event]
+  #   print event, np.mean(num_tracks), np.median(num_tracks), np.percentile(num_tracks, 10), np.percentile(num_tracks, 90)
 
 
 def recall():
@@ -458,7 +463,7 @@ def generate_pos_neg_lst():
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
-  generate_pos_neg_lst()
+  # generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
-  # event_matched_tracks()
+  event_matched_tracks()
