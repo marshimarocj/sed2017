@@ -352,8 +352,8 @@ def recall():
   # directions = ['forward']
   # directions = ['backward']
   # directions = ['forward', 'backward']
-  # track_lens = [25]
-  track_lens = [50]
+  track_lens = [25]
+  # track_lens = [50]
   # track_lens = [25, 50]
 
   names = []
