@@ -352,8 +352,8 @@ def recall():
   # directions = ['forward']
   # directions = ['backward']
   # directions = ['forward', 'backward']
-  # track_lens = [25]
-  track_lens = [50]
+  track_lens = [25]
+  # track_lens = [50]
   # track_lens = [25, 50]
 
   names = []
@@ -454,9 +454,9 @@ def generate_pos_neg_lst():
 
 
 if __name__ == '__main__':
-  find_track_interval_intersected_with_bbox()
+  # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
-  # recall()
+  recall()
   # normalize_match_name()
   # event_matched_tracks()
