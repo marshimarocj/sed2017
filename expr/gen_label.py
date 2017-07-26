@@ -437,6 +437,7 @@ def generate_pos_neg_lst():
         tid = label['tid']
         event = label['event']
         fout.write('%d %s\n'%(tid, event))
+    print out_file
 
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.5.frame.pkl'%(name, track_len))
     tids = set()
