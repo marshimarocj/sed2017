@@ -384,8 +384,8 @@ def recall():
     events = video2events[name]
     recalled_events = set()
     for track_len in track_lens:
-      # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.interval.pkl'%(name, track_len))
-      file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
+      file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.interval.pkl'%(name, track_len))
+      # file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.interval.pkl'%(name, track_len))
       # file = os.path.join(label_dir, '%s.%d.forward.backward.0.50.interval.pkl'%(name, track_len))
       # file = os.path.join(label_dir, '%s.%d.forward.backward.0.75.interval.pkl'%(name, track_len))
       with open(file) as f:
