@@ -27,15 +27,19 @@ def resize_paf(paf, dst_size):
 def merge():
   root_dir = '/home/jiac/data/sed' # danny
   lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
+    # os.path.join(root_dir, 'dev08-1.lst'),
+    # os.path.join(root_dir, 'eev08-1.lst'),
+    os.path.join(root_dir, '2017.refined.lst')
   ]
   paf_root_dirs = [
-    os.path.join(root_dir, 'paf', '1.0'),
-    os.path.join(root_dir, 'paf', '1.5'),
+    # os.path.join(root_dir, 'paf', '1.0'),
+    # os.path.join(root_dir, 'paf', '1.5'),
+    os.path.join('/data/extDisk1/jiac/sed', 'paf', 'tst2017', '1.0'),
+    os.path.join('/data/extDisk1/jiac/sed', 'paf', 'tst2017', '1.5'),
   ]
   # out_root_dir = os.path.join(root_dir, 'paf', 'merge_1.0_1.5')
-  out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'paf', 'merge_1.0_1.5')
+  # out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'paf', 'merge_1.0_1.5')
+  out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'paf', 'tst2017', 'merge_1.0_1.5')
 
   dst_size = (135, 108)
 
@@ -44,10 +48,11 @@ def merge():
     with open(lst_file) as f:
       for line in f:
         line = line.strip()
-        name, _ = os.path.splitext(line)
-        if 'CAM4' in name:
-          continue
-        videonames.append(name)
+        # name, _ = os.path.splitext(line)
+        # if 'CAM4' in name:
+        #   continue
+        # videonames.append(name)
+        videonames.append(line)
 
   for videoname in videonames:
     paf_dirs = [os.path.join(paf_root_dir, videoname) for paf_root_dir in paf_root_dirs]
