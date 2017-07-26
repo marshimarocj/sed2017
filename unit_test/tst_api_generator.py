@@ -150,7 +150,7 @@ def tst_viz_tracklet():
           video_names.append(name)
 
   # for video_name in video_names:
-  for video_name in video_names[1:]:
+  for video_name in video_names[1:2]:
     clip_dir = os.path.join(preprocess_dir, video_name, 'clip_6000_100')
     clip_lst_file = os.path.join(preprocess_dir, video_name, 'clip_6000_100.lst')
     clip_db = api.db.ClipDb(clip_dir, clip_lst_file)
