@@ -46,6 +46,7 @@ def sample_data_for_center():
       shape = fts.shape
       for i, j, k in itertools.product(range(shape[0]), range(shape[2]), range(shape[3])):
         rs.addData(fts[i, :, j, k])
+      del fts
 
   data = rs.pool
   np.save(out_file, data)
