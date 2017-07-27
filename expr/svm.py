@@ -22,8 +22,8 @@ def prepare_trn_tst_pos_data():
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
   out_files = [
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.npz')
+    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
   ]
   label_dir = os.path.join(root_dir, 'pseudo_label')
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
@@ -46,6 +46,7 @@ def prepare_trn_tst_pos_data():
     pos_fts = []
     pos_labels = []
     pos_tids = []
+    pos_names = []
     for name in names:
       print name
       for track_len in track_lens:
@@ -75,6 +76,7 @@ def prepare_trn_tst_pos_data():
             pos_fts.append(ft)
             pos_labels.append(lid)
             pos_tids.append(id)
+            pos_names.append(name)
     np.savez_compressed(out_file, fts=pos_fts, labels=pos_labels, ids=pos_tids)
 
 
