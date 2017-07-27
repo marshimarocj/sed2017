@@ -118,5 +118,5 @@ def gen_script():
 
 
 if __name__ == '__main__':
-  # interpolate_to_align()
-  gen_script()
+  interpolate_to_align()
+  # gen_script()
