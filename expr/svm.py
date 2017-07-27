@@ -18,17 +18,23 @@ event2lid = {
 '''expr
 '''
 def prepare_trn_tst_pos_data():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data2/sed' # gpu9
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
+  # out_files = [
+  #   os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
+  #   os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+  # ]
   out_files = [
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+    os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
   ]
   label_dir = os.path.join(root_dir, 'pseudo_label')
-  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  ft_dir = os.path.join(root_dir, 'vgg19', 'vlad')
 
   track_lens = [25, 50]
 
@@ -143,5 +149,5 @@ def prepare_trn_tst_neg_data():
 
 
 if __name__ == '__main__':
-  # prepare_trn_tst_pos_data()
-  prepare_trn_tst_neg_data()
+  prepare_trn_tst_pos_data()
+  # prepare_trn_tst_neg_data()
