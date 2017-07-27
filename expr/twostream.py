@@ -48,13 +48,14 @@ def interpolate_to_align():
     for chunk in chunks:
       chunk_file = os.path.join(ft_dir, '%d.npz'%chunk)
       data = np.load(chunk_file)
-      num = data.shape[0]
+      _fts = data['fts']
+      num = _fts.shape[0]
       for i in range(num):
         frame = last_frame + src_ft_gap
         last_idx = last_frame / dst_ft_gap
         current_idx = frame / dst_ft_gap
         if last_ft is None: # initial case
-          fts.append(data[i])
+          fts.append(_fts[i])
         else:
           for j in range(last_idx, current_idx):
             inteporlate_frame = (j+1)*dst_ft_gap
@@ -66,9 +67,9 @@ def interpolate_to_align():
               fts = []
             a = (frame - interpolate_frame) / float(frame - last_frame)
             b = (interpolate_frame - last_frame) / float(frame - last_frame)
-            ft = last_ft * a + data[i] * b
+            ft = last_ft * a + _fts[i] * b
             fts.append(ft)
-        last_ft = data[i]
+        last_ft = _fts[i]
         last_frame = frame
 
     if len(fts) > 0:
