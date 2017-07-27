@@ -33,10 +33,12 @@ def sample_data_for_center():
 
   for name in names:
     ft_dir = os.path.join(ft_root_dir, name)
-    c3d_db = api.db.C3DFtDb(ft_dir)
+    # c3d_db = api.db.C3DFtDb(ft_dir)
+    vgg_db = api.db.VGG19FtDb(ft_dir)
     print name
 
-    for chunk in c3d_db.chunks:
+    # for chunk in c3d_db.chunks:
+    for chunk in vgg_db.chunks:
       fts = c3d_db.load_chunk(chunk)
       fts = np.moveaxis(fts, (0, 1, 2, 3), (0, 3, 1, 2))
       dim_ft = fts.shape[-1]
