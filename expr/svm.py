@@ -59,7 +59,7 @@ def prepare_trn_tst_pos_data():
               lid = event2lid[label]
               tid2lid[tid] = lid
 
-        pos_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.0.75.npz'%(name, track_len))
+        pos_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
         data = np.load(pos_ft_file)
         fts = data['vlads']
         ids = data['ids']
