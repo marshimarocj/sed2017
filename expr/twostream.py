@@ -17,7 +17,7 @@ def interpolate_to_align():
   #   os.path.join(root_dir, 'eev08-1.lst'),
   # ]
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
-  out_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_5frame')
+  out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'twostream', 'feat_anet_flow_5frame')
  
   # names = []
   # for lst_file in lst_files:
