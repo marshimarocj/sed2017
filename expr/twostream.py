@@ -30,10 +30,10 @@ def interpolate_to_align():
   #       name, _  = os.path.splitext(line)
   #       names.append(name)
 
-  # parser = argparse.ArgumentParser()
-  # parser.add_argument('name');
-  # args = parser.parse_args()
-  # name = args.name
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name');
+  args = parser.parse_args()
+  name = args.name
 
   src_ft_gap = 6
   dst_ft_gap = 5
