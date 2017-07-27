@@ -34,7 +34,7 @@ def prepare_trn_tst_pos_data():
   ]
   label_dir = os.path.join(root_dir, 'pseudo_label')
   # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
-  ft_dir = os.path.join(root_dir, 'vgg19', 'vlad')
+  ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
 
   track_lens = [25, 50]
 
