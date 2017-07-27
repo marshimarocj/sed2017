@@ -92,14 +92,18 @@ def cluster_centers():
 
 
 def encode_vlad():
-  root_dir = '/data1/jiac/sed' # uranus
-  ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
-  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
+  kmeans_file = os.path.join(root_dir, 'vgg19_pool5_fullres', 'kmeans.center.32.pkl')
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  out_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
 
   # track_len = 50
   track_len = 25
