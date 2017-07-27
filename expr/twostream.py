@@ -33,14 +33,14 @@ def interpolate_to_align():
   chunk_gap = 7500
 
   for name in names:
+    if not os.path.exists(out_dir):
+      os.mkdir(out_dir)
+    print name
     ft_dir = os.path.join(ft_root_dir, name)
     names = os.listdir(ft_dir)
     chunks = [int(name.split('.')[0]) for name in names]
     chunks = sorted(chunks)
     out_dir = os.path.join(out_root_dir, name)
-    if not os.path.exists(out_dir):
-      os.mkdir(out_dir)
-    print name
 
     base_frame = 0
     last_frame = 0
