@@ -105,8 +105,8 @@ def encode_vlad():
   # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
   out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
 
-  # track_len = 50
-  track_len = 25
+  track_len = 50
+  # track_len = 25
 
   with open(kmeans_file) as f:
     kmeans = cPickle.load(f)
