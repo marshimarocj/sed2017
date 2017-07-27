@@ -41,11 +41,12 @@ def sample_data_for_center():
 
     # for chunk in c3d_db.chunks:
     for chunk in vgg_db.chunks:
+      print chunk
       # fts = c3d_db.load_chunk(chunk)
       fts = vgg_db.load_chunk(chunk)
       shape = fts.shape
       for i, j, k in itertools.product(range(shape[0]), range(shape[2]), range(shape[3])):
-        rs.addData(fts[i, :, j, k])
+        rs.addData(np.array(fts[i, :, j, k]))
       del fts
 
   data = rs.pool
