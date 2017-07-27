@@ -22,7 +22,7 @@ def sample_data_for_center():
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   num_sample = 10000
-  out_file = os.path.join(root_dir, 'sample.%d.npy'%num_sample)
+  out_file = os.path.join(ft_root_dir, 'sample.%d.npy'%num_sample)
 
   names = [
     'LGW_20071101_E1_CAM1',
@@ -70,5 +70,5 @@ def cluster_centers():
 
 
 if __name__ == '__main__':
-  sample_data_for_center()
-  # cluster_centers()
+  # sample_data_for_center()
+  cluster_centers()
