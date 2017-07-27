@@ -63,7 +63,7 @@ def cluster_centers():
   kmeans = KMeans(n_clusters=num_center)
 
   data = np.load(sample_file)
-  kmean.fit(data)
+  kmeans.fit(data)
 
   cluster_centers = kmeans.cluster_centers_
   np.save(out_file, cluster_centers_)
