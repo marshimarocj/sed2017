@@ -54,10 +54,10 @@ def sample_data_for_center():
 
 
 def cluster_centers():
-  # root_dir = '/data1/jiac/sed' # uranus
-  # ft_root_dir = os.path.join(root_dir, 'c3d')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  root_dir = '/data1/jiac/sed' # uranus
+  ft_root_dir = os.path.join(root_dir, 'c3d')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
   out_file = os.path.join(ft_root_dir, 'center.32.npy')
 
