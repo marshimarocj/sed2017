@@ -63,6 +63,10 @@ def merge():
 
     names = os.listdir(paf_dirs[0])
     for name in names:
+      out_file = os.path.join(out_dir, name)
+      if os.path.exists(out_file):
+        continue
+
       paf_file = os.path.join(paf_dirs[0], name)
       paf1 = np.load(paf_file)['fts']
       paf_file = os.path.join(paf_dirs[1], name)
@@ -75,7 +79,6 @@ def merge():
         paf_merge[i] = (r_paf1 + paf1_5[i])/2.0
       paf_merge[paf_merge < 1e-3] = 0
 
-      out_file = os.path.join(out_dir, name)
       np.savez_compressed(out_file, fts=paf_merge)
 
 
