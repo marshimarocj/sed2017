@@ -20,9 +20,6 @@ def encode(fts, kmeans):
   for i in range(kmeans.n_clusters):
     idx = np.nonzero(center_idxs==i)[0]
     print idx
-    print fts.shape
-    _fts = fts[idx]
-    print _fts.shape
     diff = fts[idx] - np.expand_dims(centers[i], 0)
     if diff.shape[0] > 0:
       diff = np.sum(diff, 0)
@@ -144,7 +141,7 @@ def encode_vlad():
       for i in range(num):
         id = ids[i]
         if id != prev_id:
-          vlad = encode(_fts, kmeans)
+          vlad = encode(np.array(_fts), kmeans)
           out_vlads.append(vlad)
           out_ids.append(prev_id)
           prev_id = id
@@ -152,7 +149,7 @@ def encode_vlad():
           _fts = []
         _fts.append(fts[i])
       if len(_fts) > 0:
-        vlad = encode(_fts, kmeans)
+        vlad = encode(np.array(_fts), kmeans)
         out_vlads.append(vlad)
         out_ids.append(id)
         del _fts
