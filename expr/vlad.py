@@ -17,10 +17,10 @@ import sample
 '''expr
 '''
 def sample_data_for_center():
-  root_dir = '/data1/jiac/sed' # uranus
-  ft_root_dir = os.path.join(root_dir, 'c3d')
-  # root_dir = '/home/jiac/data2/sed' # gpu9
-  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   num_sample = 10000
   out_file = os.path.join(root_dir, 'sample.%d.npy'%num_sample)
 
@@ -35,14 +35,14 @@ def sample_data_for_center():
 
   for name in names:
     ft_dir = os.path.join(ft_root_dir, name)
-    c3d_db = api.db.C3DFtDb(ft_dir)
-    # vgg_db = api.db.VGG19FtDb(ft_dir)
+    # c3d_db = api.db.C3DFtDb(ft_dir)
+    vgg_db = api.db.VGG19FtDb(ft_dir)
     print name
 
-    for chunk in c3d_db.chunks:
-    # for chunk in vgg_db.chunks:
-      fts = c3d_db.load_chunk(chunk)
-      # fts = vgg_db.load_chunk(chunk)
+    # for chunk in c3d_db.chunks:
+    for chunk in vgg_db.chunks:
+      # fts = c3d_db.load_chunk(chunk)
+      fts = vgg_db.load_chunk(chunk)
       shape = fts.shape
       for i, j, k in itertools.product(range(shape[0]), range(shape[2]), range(shape[3])):
         rs.addData(fts[i, :, j, k])
