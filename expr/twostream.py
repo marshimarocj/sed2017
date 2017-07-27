@@ -63,7 +63,7 @@ def interpolate_to_align():
             interpolate_frame = (j+1)*dst_ft_gap
             if interpolate_frame % chunk_gap == 0:
               _chunk = interpolate_frame/chunk_gap - 1
-              out_file = os.path.join(out_dir, '%d.npz'%_chunk)
+              out_file = os.path.join(out_dir, '%d.npz'%(_chunk*chunk_gap))
               np.savez_compressed(out_file, fts=fts)
               del fts
               fts = []
@@ -76,7 +76,7 @@ def interpolate_to_align():
 
     if len(fts) > 0:
       _chunk = interpolate_frame / chunk_gap
-      out_file = os.path.join(out_dir, '%d.npz'%_chunk)
+      out_file = os.path.join(out_dir, '%d.npz'%(_chunk*chunk_gap))
       np.savez_compressed(out_file, fts=fts)
       del fts
       fts = []
