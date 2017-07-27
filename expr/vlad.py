@@ -68,7 +68,7 @@ def cluster_centers():
   kmeans.fit(data)
 
   cluster_centers = kmeans.cluster_centers_
-  np.save(out_file, cluster_centers_)
+  np.save(out_file, cluster_centers)
 
 
 if __name__ == '__main__':
