@@ -38,6 +38,8 @@ def prepare_trn_tst_pos_data():
     with open(lst_file) as f:
       for line in f:
         line = line.strip()
+        if 'CAM4' in line:
+          continue
         name, _ = os.path.splitext(line)
         names.append(name)
 
