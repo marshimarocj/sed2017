@@ -11,23 +11,24 @@ import numpy as np
 '''expr
 '''
 def interpolate_to_align():
-  root_dir = '/home/jiac/data/sed'
-  lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
-  ]
+  root_dir = '/home/jiac/data/sed' # danny
+  # lst_files = [
+  #   os.path.join(root_dir, 'dev08-1.lst'),
+  #   os.path.join(root_dir, 'eev08-1.lst'),
+  # ]
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
-  out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'twostream', 'feat_anet_flow_5frame')
+  # out_root_dir = os.path.join('/data/extDisk1/jiac/sed', 'twostream', 'feat_anet_flow_5frame')
+  out_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_5frame')
  
-  names = []
-  for lst_file in lst_files:
-    with open(lst_file) as f:
-      for line in f:
-        line = line.strip()
-        if 'CAM4' in line:
-          continue
-        name, _  = os.path.splitext(line)
-        names.append(name)
+  # names = []
+  # for lst_file in lst_files:
+  #   with open(lst_file) as f:
+  #     for line in f:
+  #       line = line.strip()
+  #       if 'CAM4' in line:
+  #         continue
+  #       name, _  = os.path.splitext(line)
+  #       names.append(name)
 
   # parser = argparse.ArgumentParser()
   # parser.add_argument('name');
@@ -117,5 +118,5 @@ def gen_script():
 
 
 if __name__ == '__main__':
-  interpolate_to_align()
-  # gen_script()
+  # interpolate_to_align()
+  gen_script()
