@@ -1,8 +1,10 @@
 import os
+import itertools
 import sys
 sys.path.append('../')
 
 import numpy as np
+from sklearn.cluster import KMeans
 
 import api.db
 import sample
@@ -41,15 +43,30 @@ def sample_data_for_center():
     for chunk in vgg_db.chunks:
       # fts = c3d_db.load_chunk(chunk)
       fts = vgg_db.load_chunk(chunk)
-      fts = np.moveaxis(fts, (0, 1, 2, 3), (0, 3, 1, 2))
-      dim_ft = fts.shape[-1]
-      fts = fts.reshape((-1, dim_ft))
-      for i in range(fts.shape[0]):
-        rs.addData(fts[i])
+      shape = fts.shape
+      for i, j, k in itertools.product(range(shape[0]), range(shape[2]), range(shape[3])):
+        rs.addData(fts[i, :, j, k])
 
   data = rs.pool
   np.save(out_file, data)
 
 
+def cluster_centers():
+  root_dir = '/data1/jiac/sed' # uranus
+  ft_root_dir = os.path.join(root_dir, 'c3d')
+  sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
+  out_file = os.path.join(ft_root_dir, 'center.32.npy')
+
+  num_center = 32
+  kmeans = KMeans(n_clusters=num_center)
+
+  data = np.load(sample_file)
+  kmean.fit(data)
+
+  cluster_centers = kmeans.cluster_centers_
+  np.save(out_file, cluster_centers_)
+
+
 if __name__ == '__main__':
   sample_data_for_center()
+  # cluster_centers()
