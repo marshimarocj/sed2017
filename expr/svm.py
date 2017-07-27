@@ -143,4 +143,5 @@ def prepare_trn_tst_neg_data():
 
 
 if __name__ == '__main__':
-  prepare_trn_tst_pos_data()
+  # prepare_trn_tst_pos_data()
+  prepare_trn_tst_neg_data()
