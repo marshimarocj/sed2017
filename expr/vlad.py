@@ -93,7 +93,7 @@ def cluster_centers():
 def encode_vlad():
   root_dir = '/data1/jiac/sed' # uranus
   ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
-  kmeans_file = os.path.join(ft_root_dir, 'kmeans.center.32.pkl')
+  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
