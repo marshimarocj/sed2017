@@ -15,9 +15,8 @@ import sample
 def sample_data_for_center():
   root_dir = '/data1/jiac/sed' # uranus
   ft_root_dir = os.path.join(root_dir, 'c3d')
-  out_file = os.path.join(root_dir, 'sample.npy')
-
-  num_samples = 10000
+  num_sample = 10000
+  out_file = os.path.join(root_dir, 'sample.%d.npy'%num_sample)
 
   names = [
     'LGW_20071101_E1_CAM1',
@@ -26,7 +25,7 @@ def sample_data_for_center():
     'LGW_20071108_E1_CAM5',
   ]
 
-  rs = sample.ReservoirSampling(num_samples)
+  rs = sample.ReservoirSampling(num_sample)
 
   for name in names:
     ft_dir = os.path.join(ft_root_dir, name)
