@@ -40,12 +40,14 @@ def interpolate_to_align():
     out_dir = os.path.join(out_root_dir, name)
     if not os.path.exists(out_dir):
       os.mkdir(out_dir)
+    print name
 
     base_frame = 0
     last_frame = 0
     last_ft = None
     fts = []
     for chunk in chunks:
+      print chunk
       chunk_file = os.path.join(ft_dir, '%d.npz'%chunk)
       data = np.load(chunk_file)
       _fts = data['fts']
@@ -58,7 +60,7 @@ def interpolate_to_align():
           fts.append(_fts[i])
         else:
           for j in range(last_idx, current_idx):
-            inteporlate_frame = (j+1)*dst_ft_gap
+            interpolate_frame = (j+1)*dst_ft_gap
             if interpolate_frame % chunk_gap == 0:
               _chunk = interpolate_frame/chunk_gap - 1
               out_file = os.path.join(out_dir, '%d.npz'%_chunk)
