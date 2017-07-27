@@ -15,8 +15,10 @@ import sample
 '''expr
 '''
 def sample_data_for_center():
-  root_dir = '/data1/jiac/sed' # uranus
-  ft_root_dir = os.path.join(root_dir, 'c3d')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   num_sample = 10000
   out_file = os.path.join(root_dir, 'sample.%d.npy'%num_sample)
 
