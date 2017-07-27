@@ -21,6 +21,8 @@ def encode(fts, kmeans):
     idx = np.nonzero(center_idxs==i)[0]
     print idx
     print fts.shape
+    _fts = fts[idx]
+    print _fts.shape
     diff = fts[idx] - np.expand_dims(centers[i], 0)
     if diff.shape[0] > 0:
       diff = np.sum(diff, 0)
