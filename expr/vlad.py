@@ -118,11 +118,11 @@ def encode_vlad():
   for name in names:
     files = [
       os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-      os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.npz'%(name, track_len)),
+      os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
     ]
     out_files = [
       os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-      os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.npz'%(name, track_len)),
+      os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
     ]
     print name
 
