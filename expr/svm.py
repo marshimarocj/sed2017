@@ -67,7 +67,7 @@ def prepare_trn_tst_pos_data():
         num = ids.shape[0]
         for i in range(num):
           ft = fts[i]
-          ids = ids[i]
+          id = ids[i]
           if id in tid2lid:
             lid = tid2lid[id]
             pos_fts.append(ft)
