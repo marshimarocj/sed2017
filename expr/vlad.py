@@ -59,7 +59,7 @@ def cluster_centers():
   root_dir = '/home/jiac/data2/sed' # gpu9
   ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
-  out_file = os.path.join(ft_root_dir, 'center.32.npy')
+  out_file = os.path.join(ft_root_dir, 'kmeans.center.32.pkl')
 
   num_center = 32
   kmeans = KMeans(n_clusters=num_center)
@@ -67,8 +67,14 @@ def cluster_centers():
   data = np.load(sample_file)
   kmeans.fit(data)
 
-  cluster_centers = kmeans.cluster_centers_
-  np.save(out_file, cluster_centers)
+  # cluster_centers = kmeans.cluster_centers_
+  # np.save(out_file, cluster_centers)
+  with open(out_file, 'w') as fout:
+    cPickle.dump(kmeans, fout)
+
+
+def encode_vlad():
+  pass
 
 
 if __name__ == '__main__':
