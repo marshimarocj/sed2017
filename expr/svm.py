@@ -125,7 +125,7 @@ def prepare_trn_tst_neg_data():
       print name
       for track_len in track_lens:
         neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
-        data = np.load(pos_ft_file)
+        data = np.load(neg_ft_file)
         fts = data['vlads']
         ids = data['ids']
 
