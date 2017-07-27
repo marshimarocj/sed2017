@@ -1,5 +1,6 @@
 import os
 import itertools
+import cPickle
 import sys
 sys.path.append('../')
 
