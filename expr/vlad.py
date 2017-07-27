@@ -19,7 +19,7 @@ def encode(fts, kmeans):
   diffs = []
   for i in range(kmeans.n_clusters):
     idx = np.nonzero(centers_idxs==i)[0]
-    diff = fts[idx, :] - np.expand_dims(centers[i], 0)
+    diff = fts[idx] - np.expand_dims(centers[i], 0)
     if diff.shape[0] > 0:
       diff = np.sum(diff, 0)
     else:
