@@ -132,6 +132,9 @@ def encode_vlad():
     print name
 
     for file, out_file in zip(files, out_files):
+      if os.path.exists(out_file):
+        continue
+
       data = np.load(file)
       fts = data['fts']
       centers = data['centers']
