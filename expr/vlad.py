@@ -13,6 +13,22 @@ import sample
 
 '''func
 '''
+def encode(fts, kmeans):
+  center_idxs = kmeans.predict(fts)
+  centers = kmeans.cluster_centers_
+  diffs = []
+  for i in range(kmeans.n_clusters):
+    diff = fts[center_idxs==i] - np.expand_dims(centers[i], 0)
+    if diff.shape[0] > 0:
+      diff = np.sum(diff, 0)
+    else:
+      diff = np.zeros(centers[i].shape)
+    diffs.append(diff)
+  vlad = np.concatenate(diffs)
+  norm = np.linalg.norm(vlad)
+  if norm > 0:
+    vlad /= norm
+  return vlad
 
 
 '''expr
@@ -75,9 +91,72 @@ def cluster_centers():
 
 
 def encode_vlad():
-  pass
+  root_dir = '/data1/jiac/sed' # uranus
+  ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  kmeans_file = os.path.join(ft_root_dir, 'kmeans.center.32.pkl')
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  out_dir = os.path.join(root_dir, 'c3d', 'vlad')
+
+  track_len = 50
+
+  with open(kmeans_file) as f:
+    kmeans = cPickle.load(f)
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        if 'CAM4' not in line:
+          name, _ = os.path.splitext(line)
+          names.append(name)
+
+  for name in names:
+    files = [
+      os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+      os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.npz'%(name, track_len)),
+    ]
+    out_files = [
+      os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+      os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.npz'%(name, track_len)),
+    ]
+    print name
+
+    for file, out_file in zip(files, out_files):
+      data = np.load(file)
+      fts = data['fts']
+      centers = data['centers']
+      ids = data['ids']
+      num = ids.shape[0]
+
+      prev_id = ids[0]
+      _fts = []
+      out_vlads = []
+      out_ids = []
+      for i in range(num):
+        id = ids[i]
+        if id != prev_id:
+          vlad = encode(_fts, kmeans)
+          out_vlads.append(vlad)
+          out_ids.append(prev_id)
+          prev_id = id
+          del _fts
+          _fts = []
+        _fts.append(fts[i])
+      if len(_fts) > 0:
+        vlad = encode(_fts, kmeans)
+        out_vlads.append(vlad)
+        out_ids.append(id)
+        del _fts
+        _fts = []
+
+      np.savez_compressed(out_file, vlads=out_vlads, ids=out_ids)
 
 
 if __name__ == '__main__':
   # sample_data_for_center()
-  cluster_centers()
+  # cluster_centers()
+  encode_vlad()
