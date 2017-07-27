@@ -39,7 +39,8 @@ def sample_data_for_center():
 
     # for chunk in c3d_db.chunks:
     for chunk in vgg_db.chunks:
-      fts = c3d_db.load_chunk(chunk)
+      # fts = c3d_db.load_chunk(chunk)
+      fts = vgg_db.load_chunk(chunk)
       fts = np.moveaxis(fts, (0, 1, 2, 3), (0, 3, 1, 2))
       dim_ft = fts.shape[-1]
       fts = fts.reshape((-1, dim_ft))
