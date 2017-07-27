@@ -82,5 +82,34 @@ def interpolate_to_align():
       fts = []
 
 
+def gen_script():
+  root_dir = '/home/jiac/data/sed'
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        if 'CAM4' in line:
+          continue
+        name, _  = os.path.splitext(line)
+        names.append(name)
+
+  num_process = 4
+  gap = (len(names) + num_process - 1) / num_process
+  for i in range(num_process):
+    _names = names[i*gap:(i+1)*gap]
+    out_file = '%d.sh'%i
+    with open(out_file, 'w') as fout:
+      for name in _names:
+        cmd = ['python', 'twostream.py', name]
+        fout.write(' '.join(cmd) + '\n')
+
+
 if __name__ == '__main__':
-  interpolate_to_align()
+  # interpolate_to_align()
+  gen_script()
