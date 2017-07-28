@@ -397,17 +397,17 @@ class FtCenters(object):
 
 class VggFtCenters(FtCenters):
   def __init__(self):
-    FtCenters.__init__(18, 22, 32, 32, 31, 31)
+    FtCenters.__init__(self, 18, 22, 32, 32, 31, 31)
 
 
 class C3DFtCenters(FtCenters):
   def __init__(self):
-    FtCenters.__init__(36, 45, 16, 16, 8, 8)
+    FtCenters.__init__(self, 36, 45, 16, 16, 8, 8)
 
 
 class FlowCenters(FtCenters):
   def __init__(self):
-    FtCenters.__init__(18, 23, 32, 32, 16, 16)
+    FtCenters.__init__(self, 18, 23, 32, 32, 16, 16)
 
 
 def get_vgg19_centers():
