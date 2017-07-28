@@ -178,7 +178,8 @@ def prepare_trn_data():
   ids = np.zeros((num_pos+num_neg,), dtype=np.int32)
   names = np.zeros((num_pos+num_neg,), dtype=np.int32)
 
-  idxs = np.random.shuffle(range(num_pos+num_neg))
+  idxs = np.arange(num_pos+num_neg)
+  np.random.shuffle(idxs)
   fts[idxs < num_pos] = pos_fts[idxs[idxs < num_pos]]
   fts[idxs >= num_pos] = neg_fts[idxs[idxs >= num_pos] - num_pos]
   labels[idxs < num_pos]= pos_labels[idxs[idxs < num_pos]]
