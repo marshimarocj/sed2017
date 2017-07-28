@@ -226,7 +226,7 @@ def prepare_trn_early_fusion_data():
       id = pos_ids[i]
       label = pos_labels[i]
       ft = pos_fts[i]
-      name = names[i]
+      name = pos_names[i]
       if id not in id2fts:
         id2fts['%s_%d'%(name, id)] = []
         id2cnt['%s_%d'%(name, id)] = 0
@@ -244,7 +244,7 @@ def prepare_trn_early_fusion_data():
       id = neg_ids[i]
       label = 0
       ft = neg_fts[i]
-      name = names[i]
+      name = neg_names[i]
       if id not in id2fts:
         id2fts['%s_%d'%(name, id)] = []
         id2cnt['%s_%d'%(name, id)] = 0
@@ -343,6 +343,6 @@ if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  # prepare_trn_early_fusion_data()
-  train_model()
+  prepare_trn_early_fusion_data()
+  # train_model()
   # val_model()
