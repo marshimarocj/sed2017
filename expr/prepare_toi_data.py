@@ -218,13 +218,15 @@ def prepare_neg_ft():
 
 
 def generate_script():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # root_dir = '/home/jiac/data/sed' # gpu9
   lst_files = [
     # os.path.join(root_dir, 'dev08-1.lst'),
     # os.path.join(root_dir, 'eev08-1.lst'),
-    os.path.join(root_dir, '2017.refined.lst')
+    # os.path.join(root_dir, '2017.refined.lst')
+    os.path.join(root_dir, 'video', '2017.refined.lst')
   ]
 
   num_process = 10
@@ -235,7 +237,9 @@ def generate_script():
       for line in f:
         line = line.strip()
         # name, _ = os.path.splitext(line)
-        name = line
+        # name = line
+        pos = line.find('.')
+        name = line[:pos]
         if 'CAM4' in name:
           continue
         names.append(name)
@@ -409,9 +413,9 @@ def prepare_toi_ft_for_tst():
 
 if __name__ == '__main__':
   # prepare_pos_ft()
-  # generate_script()
+  generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
   # prepare_neg_vgg19()
-  prepare_toi_ft_for_tst()
+  # prepare_toi_ft_for_tst()
