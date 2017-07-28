@@ -1,6 +1,8 @@
 import os
+import cPickle
 
 import numpy as np
+from sklearn.svm import LinearSVC
 
 import sample
 
@@ -194,9 +196,22 @@ def prepare_trn_data():
 
 def train_model():
   root_dir = '/data1/jiac/sed' # uranus
+  trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+
+  data = np.load(trn_file)
+  fts = data['fts']
+  labels = data['labels']
+
+  model = LinearSVC()
+  model.fit(fts, labels)
+
+  with open(out_file, 'w') as fout:
+    cPickle.dump(model, fout)
 
 
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
-  prepare_trn_data()
+  # prepare_trn_data()
+  train_model()
