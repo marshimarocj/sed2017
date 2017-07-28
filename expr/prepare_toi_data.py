@@ -359,7 +359,8 @@ def generate_script():
 
 
 def prepare_toi_ft_for_tst():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # xiaojun
   track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
   # ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
   # out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
