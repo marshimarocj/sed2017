@@ -184,7 +184,7 @@ def prepare_trn_data():
   fts[idxs >= num_pos] = neg_fts[idxs[idxs >= num_pos] - num_pos]
   labels[idxs < num_pos]= pos_labels[idxs[idxs < num_pos]]
   ids[idxs < num_pos] = pos_ids[idxs[idxs < num_pos]]
-  ids[ids >= num_pos] = neg_ids[idxs[idxs >= num_pos] - num_pos]
+  ids[idxs >= num_pos] = neg_ids[idxs[idxs >= num_pos] - num_pos]
   names[idxs < num_pos] = pos_names[idxs[idxs < num_pos]]
   names[idxs >= num_pos] = neg_names[idxs[idxs >= num_pos] - num_pos]
 
