@@ -96,7 +96,8 @@ def prepare_trn_tst_pos_data():
 
 def prepare_trn_tst_neg_data():
   # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data2/sed' # uranus
+  # root_dir = '/home/jiac/data2/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
@@ -104,18 +105,23 @@ def prepare_trn_tst_neg_data():
   pos_files = [
   #   os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
   #   os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
-    os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
+    # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
+    # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
   ]
   multiplier = 5
   out_files = [
     # os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.%d.npz'%multiplier),
     # os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.%d.npz'%multiplier)
-    os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.%d.npz'%multiplier),
-    os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.%d.npz'%multiplier)
+    # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.%d.npz'%multiplier),
+    # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.%d.npz'%multiplier)
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.%d.npz'%multiplier),
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.%d.npz'%multiplier)
   ]
   # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
-  ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
+  # ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
 
   track_lens = [25, 50]
 
