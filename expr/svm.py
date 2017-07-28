@@ -204,7 +204,7 @@ def prepare_trn_early_fusion_data():
     os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
   ]
   neg_trn_files = [
-    os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
+    os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz'),
     os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
   ]
   out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
