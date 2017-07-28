@@ -1,5 +1,6 @@
 import os
 import cPickle
+import random
 
 import numpy as np
 from sklearn.svm import LinearSVC
