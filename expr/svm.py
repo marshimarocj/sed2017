@@ -156,10 +156,14 @@ def prepare_trn_tst_neg_data():
 
 
 def prepare_trn_data():
-  root_dir = '/data1/jiac/sed' # uranus
-  pos_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  pos_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
+  out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
@@ -188,8 +192,6 @@ def prepare_trn_data():
   labels[idxs < num_pos]= pos_labels[idxs[idxs < num_pos]]
   ids[idxs < num_pos] = pos_ids[idxs[idxs < num_pos]]
   ids[idxs >= num_pos] = neg_ids[idxs[idxs >= num_pos] - num_pos]
-  # names[idxs < num_pos] = pos_names[idxs[idxs < num_pos]]
-  # names[idxs >= num_pos] = neg_names[idxs[idxs >= num_pos] - num_pos]
   names = names[idxs]
 
   np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
@@ -251,6 +253,6 @@ def val_model():
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
-  # prepare_trn_data()
+  prepare_trn_data()
   # train_model()
-  val_model()
+  # val_model()
