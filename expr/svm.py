@@ -203,7 +203,7 @@ def train_model():
   fts = data['fts']
   labels = data['labels']
 
-  model = LinearSVC()
+  model = LinearSVC(verboase=1)
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
