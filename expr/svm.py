@@ -197,13 +197,14 @@ def prepare_trn_data():
 def train_model():
   root_dir = '/data1/jiac/sed' # uranus
   trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.l1.pkl')
 
   data = np.load(trn_file)
   fts = data['fts']
   labels = data['labels']
 
-  model = LinearSVC(verboase=1)
+  model = LinearSVC(verboase=1, penalty='l1')
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
