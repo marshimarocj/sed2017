@@ -271,6 +271,7 @@ def prepare_trn_early_fusion_data():
   for i, id in enumerate(valid_ids):
     fts[i] = np.concatenate(id2fts[id])
     labels[i] = id2label[id]
+  print fts.shape
 
   ids = []
   names = []
