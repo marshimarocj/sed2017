@@ -589,6 +589,31 @@ def pad_proposal_to_square():
     square_track_db.save(db_file)
 
 
+def generate_map_file():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  lst_file = os.path.join(root_dir, 'tst2017', '2017.refined.lst')
+  track_dir = os.path.join(root_dir, 'tst2017', 'tracking')
+
+  with open(lst_file) as f:
+    for line in f:
+      name = line.strip()
+      track_file = os.path.join(track_dir, name + '.25.forward.npz')
+      out_file = os.path.join(track_dir, name + '.25.forward.map')
+      data = np.load(track_file)
+      keys = data.keys()
+      keys = [int(key) for key in keys]
+      keys = sorted(keys)
+
+      id = 0
+      with open(out_file, 'w') as fout:
+        for key in keys:
+          tracks = data['%010d'%key]
+          num_track = tracks.shape[1]
+          for i in range(num_track):
+            fout.write('%d %d_%d\n'%(id, key, i))
+            id += 1
+
+
 if __name__ == '__main__':
   # flow_dstrb_in_events()
   # filter_out_proposals()
@@ -597,5 +622,6 @@ if __name__ == '__main__':
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
   # intersect_backward_forward_tracks()
-  merge_track_db()
+  # merge_track_db()
   # pad_proposal_to_square()
+  generate_map_file()
