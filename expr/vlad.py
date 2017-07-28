@@ -73,6 +73,7 @@ def sample_data_for_center():
   np.save(out_file, data)
 
 
+# TODO
 def sample_data_for_twostream_sync_center():
   root_dir = '/home/jiac/data/sed' # xiaojun
   flow_ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_5frame')
@@ -115,8 +116,10 @@ def sample_data_for_twostream_sync_center():
 def cluster_centers():
   # root_dir = '/data1/jiac/sed' # uranus
   # ft_root_dir = os.path.join(root_dir, 'c3d')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_5frame')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
   out_file = os.path.join(ft_root_dir, 'kmeans.center.32.pkl')
 
@@ -207,7 +210,7 @@ def encode_vlad():
 
 
 if __name__ == '__main__':
-  sample_data_for_center()
+  # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  # cluster_centers()
+  cluster_centers()
   # encode_vlad()
