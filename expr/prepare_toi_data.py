@@ -174,6 +174,10 @@ def prepare_neg_ft():
   # center_grid = api.db.VggFtCenters()
 
   for track_len in track_lens:
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
+    if os.path.exists(out_file):
+      continue
+
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
     neg_trackids = []
     with open(label_file) as f:
@@ -209,7 +213,7 @@ def prepare_neg_ft():
     frames = np.array(frames, dtype=np.int32)
     centers = np.concatenate(centers, 0)
     ids = np.array(ids, dtype=np.int32)
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
+    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
     np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
