@@ -152,6 +152,49 @@ def prepare_trn_tst_neg_data():
     np.savez_compressed(out_file, fts=neg_fts, ids=neg_ids, names=neg_names)
 
 
+def prepare_trn_data():
+  root_dir = '/data1/jiac/sed' # uranus
+  pos_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
+
+  data = np.load(pos_trn_file)
+  pos_fts = data['fts']
+  pos_labels = data['labels']
+  pos_ids = data['ids']
+  pos_names = data['names']
+  num_pos = pos_fts.shape[0]
+
+  data = np.load(neg_trn_file)
+  neg_fts = data['fts']
+  neg_ids = data['ids']
+  neg_names = data['names']
+  num_neg = neg_fts.shape[0]
+
+  dim_ft = pos_fts.shape[1]
+
+  fts = np.zeros((num_pos+num_neg, dim_ft), dtype=np.float32)
+  labels = np.zeros((num_pos+num_neg,), dtype=np.int32)
+  ids = np.zeros((num_pos+num_neg,), dtype=np.int32)
+  names = np.zeros((num_pos+num_neg,), dtype=np.int32)
+
+  idxs = np.random.shuffle(range(num_pos+num_neg))
+  fts[idxs < num_pos] = pos_fts[idxs[idxs < num_pos]]
+  fts[idxs >= num_pos] = neg_fts[idxs[idxs >= num_pos] - num_pos]
+  labels[idxs < num_pos]= pos_labels[idxs[idxs < num_pos]]
+  ids[idxs < num_pos] = pos_ids[idxs[idxs < num_pos]]
+  ids[ids >= num_pos] = neg_ids[idxs[idxs >= num_pos] - num_pos]
+  names[idxs < num_pos] = pos_names[idxs[idxs < num_pos]]
+  names[idxs >= num_pos] = neg_names[idxs[idxs >= num_pos] - num_pos]
+
+  np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
+
+
+def train_model():
+  root_dir = '/data1/jiac/sed' # uranus
+
+
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
-  prepare_trn_tst_neg_data()
+  # prepare_trn_tst_neg_data()
+  prepare_trn_data()
