@@ -31,16 +31,16 @@ class FtInTrack(object):
 
 # it's a generator and yields FtInTrack object
 # one pass of ftdb to generate features in the tracklets from trackdb
-def crop_instant_ft_in_track(trackdb, ftdb, centers):
+def crop_instant_ft_in_track(trackdb, ftdb, center_grid):
   chunks = ftdb.chunks
   for chunk in chunks:
     print 'chunk:', chunk
-    one_chunk_generator = _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk)
+    one_chunk_generator = _crop_instant_ft_in_track(trackdb, ftdb, center_grid, chunk)
     for ft_in_track in one_chunk_generator:
       yield ft_in_track
 
 
-def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
+def _crop_instant_ft_in_track(trackdb, ftdb, center_grid, chunk):
   fts = ftdb.load_chunk(chunk)
   shape = fts.shape
 
@@ -55,7 +55,7 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
       id = track.id
       box = track.track[frame-track.start_frame]
       boxs = np.expand_dims(box, 0)
-      is_xy = ftdb.query_center_in_box(centers, boxs)
+      is_xy = center_grid.center_in_box(boxs)
       center_idxs, box_idxs = np.where(is_xy)
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
@@ -67,7 +67,7 @@ def _crop_instant_ft_in_track(trackdb, ftdb, centers, chunk):
         cache[id].append({
           'ft': fts[f, :, r, c],
           'frame': frame,
-          'center': centers[center_idx]
+          'center': center_grid.centers[center_idx]
         })
 
     # remove old tracklets

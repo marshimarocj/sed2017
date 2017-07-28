@@ -405,7 +405,7 @@ class C3DFtCenters(FtCenters):
     FtCenters.__init__(self, 36, 45, 16, 16, 8, 8)
 
 
-class FlowCenters(FtCenters):
+class FlowFtCenters(FtCenters):
   def __init__(self):
     FtCenters.__init__(self, 18, 23, 32, 32, 16, 16)
 

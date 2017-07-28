@@ -36,6 +36,21 @@ def tar_tst_videos():
       fout.add(video_file, name + '.avi')
 
 
+def lnk_2017_tst_flow_ft_for_transfer():
+  src_ft_dir = '/data/MM23/junweil/sed/test/feat_anet_flow_6frame'
+  dst_ft_dir = '/home/jiac/data/sed2017/tst2017/feat_anet_flow_6frame'
+  lst_file = '/home/jiac/data/sed2017/2017.refined.lst'
+
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name = line
+      src_file = os.path.join(src_ft_dir, name + '.mov.deint_1.npz')
+      dst_file = os.path.join(dst_ft_dir, name + '.mov.deint_1.npz')
+      os.symlink(src_file, dst_file)
+
+
 if __name__ == '__main__':
   # extract_tst_videos()
-  tar_tst_videos()
+  # tar_tst_videos()
+  lnk_2017_tst_flow_ft_for_transfer()

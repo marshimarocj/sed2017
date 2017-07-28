@@ -43,12 +43,15 @@ def flow_threshold_func(qbegin, qend, tbegin, tend):
 def prepare_pos_ft():
   # root_dir = '/data1/jiac/sed' # uranus
   root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
   # ft_root_dir = os.path.join(root_dir, 'c3d')
   # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
   # track_len = 25
   # track_len = 50
@@ -59,10 +62,11 @@ def prepare_pos_ft():
   args = parser.parse_args()
   name = args.name
 
-  # centers = api.db.C3DCenters()
+  # center_grid = api.db.C3DFtCenters()
   # threshold_func = c3d_threshold_func
-  center_grid = api.db.FlowCenters()
+  center_grid = api.db.FlowFtCenters()
   threshold_func = flow_threshold_func
+  # center_grid = api.db.VggFtCenters()
 
   for track_len in track_lens:
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
@@ -76,14 +80,17 @@ def prepare_pos_ft():
     ft_dir = os.path.join(ft_root_dir, name)
     # ft_db = api.db.C3DFtDb(ft_dir)
     ft_db = api.db.FlowFtDb(ft_dir)
+    # ft_db = api.db.VggFtDb(ft_dir)
 
-    pos_in_track_generator = api.generator.crop_duration_ft_in_track(
+    pos_ft_in_track_generator = api.generator.crop_duration_ft_in_track(
       track_db, ft_db, center_grid, threshold_func)
+    # pos_ft_in_track_generator = api.generator.crop_instant_ft_in_track(
+    #   track_db, ft_db, center_grid)
     fts = []
     frames = []
     centers = []
     ids = []
-    for ft_in_track in pos_in_track_generator:
+    for ft_in_track in pos_ft_in_track_generator:
       num = len(ft_in_track.frames)
       fts.append(ft_in_track.fts)
       frames.extend(ft_in_track.frames)
@@ -139,12 +146,18 @@ def shuffle_neg():
             fout.write('%d\n'%id)
 
 
-def prepare_neg_c3d():
-  root_dir = '/data1/jiac/sed' # uranus
+def prepare_neg_ft():
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'c3d')
-  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
   track_lens = [25, 50]
   neg_split = 0
@@ -154,7 +167,11 @@ def prepare_neg_c3d():
   args = parser.parse_args()
   name = args.name
 
-  c3d_centers = api.db.get_c3d_centers()
+  # center_grid = api.db.C3DFtCenters()
+  # threshold_func = c3d_threshold_func
+  center_grid = api.db.FlowFtCenters()
+  threshold_func = flow_threshold_func
+  # center_grid = api.db.VggFtCenters()
 
   for track_len in track_lens:
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
@@ -169,15 +186,19 @@ def prepare_neg_c3d():
     track_db.load(db_file, neg_trackids)
 
     ft_dir = os.path.join(ft_root_dir, name)
-    c3d_db = api.db.C3DFtDb(ft_dir)
+    # ft_db = api.db.C3DFtDb(ft_dir)
+    ft_db = api.db.FlowFtDb(ft_dir)
+    # ft_db = api.db.VggFtDb(ft_dir)
 
-    neg_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
-      track_db, c3d_db, c3d_centers, c3d_threshold_func)
+    neg_ft_in_track_generator = api.generator.crop_duration_ft_in_track(
+      track_db, ft_db, center_grid, threshold_func)
+    # neg_ft_in_track_generator = api.generator.crop_instant_ft_in_track(
+    #   track_db, ft_db, center_grid)
     fts = []
     frames = []
     centers = []
     ids = []
-    for ft_in_track in neg_c3d_in_track_generator:
+    for ft_in_track in neg_ft_in_track_generator:
       num = len(ft_in_track.frames)
       fts.append(ft_in_track.fts)
       frames.extend(ft_in_track.frames)
@@ -228,112 +249,112 @@ def generate_script():
         fout.write(' '.join(cmd) + '\n')
 
 
-def prepare_pos_vgg19():
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  label_dir = os.path.join(root_dir, 'pseudo_label')
-  track_dir = os.path.join(root_dir, 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
-  out_dir = os.path.join(ft_root_dir, 'track_group')
+# def prepare_pos_vgg19():
+#   root_dir = '/home/jiac/data2/sed' # gpu9
+#   label_dir = os.path.join(root_dir, 'pseudo_label')
+#   track_dir = os.path.join(root_dir, 'tracking')
+#   ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+#   out_dir = os.path.join(ft_root_dir, 'track_group')
 
-  track_lens = [25, 50]
+#   track_lens = [25, 50]
 
-  parser = argparse.ArgumentParser()
-  parser.add_argument('name')
-  args = parser.parse_args()
-  name = args.name
+#   parser = argparse.ArgumentParser()
+#   parser.add_argument('name')
+#   args = parser.parse_args()
+#   name = args.name
 
-  vgg_centers = api.db.get_vgg19_centers()
+#   vgg_centers = api.db.get_vgg19_centers()
 
-  for track_len in track_lens:
-    label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
-    id2event = load_pos_track_label_file(label_file)
-    pos_trackids = id2event.keys()
+#   for track_len in track_lens:
+#     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
+#     id2event = load_pos_track_label_file(label_file)
+#     pos_trackids = id2event.keys()
 
-    db_file = os.path.join(track_dir,'%s.%d.forward.backward.square.npz'%(name, track_len))
-    track_db = api.db.TrackDb()
-    track_db.load(db_file, pos_trackids)
+#     db_file = os.path.join(track_dir,'%s.%d.forward.backward.square.npz'%(name, track_len))
+#     track_db = api.db.TrackDb()
+#     track_db.load(db_file, pos_trackids)
 
-    ft_dir = os.path.join(ft_root_dir, name)
-    vgg_db = api.db.VGG19FtDb(ft_dir)
+#     ft_dir = os.path.join(ft_root_dir, name)
+#     vgg_db = api.db.VGG19FtDb(ft_dir)
 
-    pos_vgg_in_track_generator = api.generator.crop_instant_ft_in_track(
-      track_db, vgg_db, vgg_centers)
-    fts = []
-    frames = []
-    centers = []
-    ids = []
-    for ft_in_track in pos_vgg_in_track_generator:
-      num = len(ft_in_track.frames)
-      fts.append(ft_in_track.fts)
-      frames.extend(ft_in_track.frames)
-      centers.append(ft_in_track.centers)
-      ids.extend(num*[ft_in_track.id])
+#     pos_vgg_in_track_generator = api.generator.crop_instant_ft_in_track(
+#       track_db, vgg_db, vgg_centers)
+#     fts = []
+#     frames = []
+#     centers = []
+#     ids = []
+#     for ft_in_track in pos_vgg_in_track_generator:
+#       num = len(ft_in_track.frames)
+#       fts.append(ft_in_track.fts)
+#       frames.extend(ft_in_track.frames)
+#       centers.append(ft_in_track.centers)
+#       ids.extend(num*[ft_in_track.id])
 
-    fts = np.concatenate(fts, 0)
-    frames = np.array(frames, dtype=np.int32)
-    centers = np.concatenate(centers, 0)
-    ids = np.array(ids, dtype=np.int32)
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
-    np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
+#     fts = np.concatenate(fts, 0)
+#     frames = np.array(frames, dtype=np.int32)
+#     centers = np.concatenate(centers, 0)
+#     ids = np.array(ids, dtype=np.int32)
+#     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+#     np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
-def prepare_neg_vgg19():
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  label_dir = os.path.join(root_dir, 'pseudo_label')
-  track_dir = os.path.join(root_dir, 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
-  out_dir = os.path.join(ft_root_dir, 'track_group')
+# def prepare_neg_vgg19():
+#   root_dir = '/home/jiac/data2/sed' # gpu9
+#   label_dir = os.path.join(root_dir, 'pseudo_label')
+#   track_dir = os.path.join(root_dir, 'tracking')
+#   ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+#   out_dir = os.path.join(ft_root_dir, 'track_group')
 
-  track_lens = [25, 50]
-  neg_split = 0
+#   track_lens = [25, 50]
+#   neg_split = 0
 
-  parser = argparse.ArgumentParser()
-  parser.add_argument('name')
-  args = parser.parse_args()
-  name = args.name
+#   parser = argparse.ArgumentParser()
+#   parser.add_argument('name')
+#   args = parser.parse_args()
+#   name = args.name
 
-  vgg_centers = api.db.get_vgg19_centers()
+#   vgg_centers = api.db.get_vgg19_centers()
 
-  for track_len in track_lens:
-    label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
-    neg_trackids = []
-    with open(label_file) as f:
-      for line in f:
-        line = line.strip()
-        neg_trackids.append(int(line))
+#   for track_len in track_lens:
+#     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
+#     neg_trackids = []
+#     with open(label_file) as f:
+#       for line in f:
+#         line = line.strip()
+#         neg_trackids.append(int(line))
 
-    db_file = os.path.join(track_dir,'%s.%d.forward.backward.square.npz'%(name, track_len))
-    track_db = api.db.TrackDb()
-    track_db.load(db_file, neg_trackids)
+#     db_file = os.path.join(track_dir,'%s.%d.forward.backward.square.npz'%(name, track_len))
+#     track_db = api.db.TrackDb()
+#     track_db.load(db_file, neg_trackids)
 
-    ft_dir = os.path.join(ft_root_dir, name)
-    vgg_db = api.db.VGG19FtDb(ft_dir)
+#     ft_dir = os.path.join(ft_root_dir, name)
+#     vgg_db = api.db.VGG19FtDb(ft_dir)
 
-    neg_vgg_in_track_generator = api.generator.crop_instant_ft_in_track(
-      track_db, vgg_db, vgg_centers)
-    fts = []
-    frames = []
-    centers = []
-    ids = []
-    for ft_in_track in neg_vgg_in_track_generator:
-      num = len(ft_in_track.frames)
-      fts.append(ft_in_track.fts)
-      frames.extend(ft_in_track.frames)
-      centers.append(ft_in_track.centers)
-      ids.extend(num*[ft_in_track.id])
+#     neg_vgg_in_track_generator = api.generator.crop_instant_ft_in_track(
+#       track_db, vgg_db, vgg_centers)
+#     fts = []
+#     frames = []
+#     centers = []
+#     ids = []
+#     for ft_in_track in neg_vgg_in_track_generator:
+#       num = len(ft_in_track.frames)
+#       fts.append(ft_in_track.fts)
+#       frames.extend(ft_in_track.frames)
+#       centers.append(ft_in_track.centers)
+#       ids.extend(num*[ft_in_track.id])
 
-    fts = np.concatenate(fts, 0)
-    frames = np.array(frames, dtype=np.int32)
-    centers = np.concatenate(centers, 0)
-    ids = np.array(ids, dtype=np.int32)
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-    np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
+#     fts = np.concatenate(fts, 0)
+#     frames = np.array(frames, dtype=np.int32)
+#     centers = np.concatenate(centers, 0)
+#     ids = np.array(ids, dtype=np.int32)
+#     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
+#     np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
 
 
 if __name__ == '__main__':
-  prepare_pos_ft()
+  # prepare_pos_ft()
   # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  # prepare_neg_c3d()
+  prepare_neg_ft()
   # prepare_neg_vgg19()
