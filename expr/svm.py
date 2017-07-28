@@ -176,7 +176,7 @@ def prepare_trn_data():
   fts = np.zeros((num_pos+num_neg, dim_ft), dtype=np.float32)
   labels = np.zeros((num_pos+num_neg,), dtype=np.int32)
   ids = np.zeros((num_pos+num_neg,), dtype=np.int32)
-  names = np.zeros((num_pos+num_neg,), dtype=np.int32)
+  names = np.concatenate([pos_names, neg_names])
 
   idxs = np.arange(num_pos+num_neg)
   np.random.shuffle(idxs)
@@ -185,8 +185,9 @@ def prepare_trn_data():
   labels[idxs < num_pos]= pos_labels[idxs[idxs < num_pos]]
   ids[idxs < num_pos] = pos_ids[idxs[idxs < num_pos]]
   ids[idxs >= num_pos] = neg_ids[idxs[idxs >= num_pos] - num_pos]
-  names[idxs < num_pos] = pos_names[idxs[idxs < num_pos]]
-  names[idxs >= num_pos] = neg_names[idxs[idxs >= num_pos] - num_pos]
+  # names[idxs < num_pos] = pos_names[idxs[idxs < num_pos]]
+  # names[idxs >= num_pos] = neg_names[idxs[idxs >= num_pos] - num_pos]
+  names = names[idxs]
 
   np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
 
