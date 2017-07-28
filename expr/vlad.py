@@ -62,7 +62,7 @@ def sample_data_for_center():
 
     for chunk in ft_db.chunks:
       print chunk
-      fts = fb_db.load_chunk(chunk)
+      fts = ft_db.load_chunk(chunk)
       shape = fts.shape
       for i, j, k in itertools.product(range(shape[0]), range(shape[2]), range(shape[3])):
         rs.addData(np.array(fts[i, :, j, k]))
