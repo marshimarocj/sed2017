@@ -291,6 +291,13 @@ class VGG19FtDb(InstantFtDb):
     InstantFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
+class FlowFtDb(DurationFtDb):
+  def __init__(self, ft_dir):
+    self._ft_gap = 6
+    self._chunk_gap = 7500
+    DurationFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
+
+
 class FtCenters(object):
   def __init__(self, grid_y, grid_x, stride_y, stride_x, offset_y, offset_x):
     self._grid_y = grid_y
@@ -343,7 +350,7 @@ class FtCenters(object):
         idx = (gx - self._offset_x) / float(self._stride_x)
         widx = floor(idx)
         eidx = ceil(idx)
-        
+
         center_idxs.append([
           nidx * self._grid_x + widx,
           nidx * self._grid_x + eidx,
