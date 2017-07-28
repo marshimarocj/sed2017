@@ -3,6 +3,7 @@ import cPickle
 
 import numpy as np
 from sklearn.svm import LinearSVC
+from sklearn.metrics import average_precision_score
 
 import sample
 
@@ -197,8 +198,7 @@ def prepare_trn_data():
 def train_model():
   root_dir = '/data1/jiac/sed' # uranus
   trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
-  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.l1.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   data = np.load(trn_file)
   fts = data['fts']
@@ -206,7 +206,7 @@ def train_model():
 
   print 'load complete'
 
-  model = LinearSVC(verbose=1, penalty='l1')
+  model = LinearSVC(verbose=1)
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
@@ -215,12 +215,42 @@ def train_model():
 
 def val_model():
   root_dir = '/data1/jiac/sed' # uranus
-  pos_val_file = os.path.join(root_dir, )
-  neg_val_file = os.path.join(root_dir, )
+  pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
+  model_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+
+  with open(model_file) as f:
+    model = cPickle.load(f)
+
+  data = np.load(pos_val_file)
+  fts = data['fts']
+  pos_labels = data['labels']
+
+  pos_predicts = model.decision_function(fts)
+
+  del fts
+  data = np.load(neg_val_file)
+  fts = data['fts']
+  neg_predicts = model.decision_function(fts)
+  num_neg = neg_predicts.shape[0]
+  neg_labels = np.zeros((num_neg,), dtype=np.int32)
+
+  predicts = np.concatenate([pos_predicts, neg_predicts], axis=0)
+  labels = np.concatenate([pos_labels, neg_labels])
+
+  events = {}
+  for event in event2lid:
+    lid = event2lid[event]
+    events[lid] = event
+
+  for c in range(1, 5):
+    ap = average_precision_score(labels == c, predicts[:, c])
+    print events[c], ap
 
 
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  train_model()
+  # train_model()
+  val_model()
