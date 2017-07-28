@@ -232,12 +232,13 @@ def prepare_trn_early_fusion_data():
       label = pos_labels[i]
       ft = pos_fts[i]
       name = pos_names[i]
-      if id not in id2fts:
-        id2fts['%s_%d'%(name, id)] = []
-        id2cnt['%s_%d'%(name, id)] = 0
-      id2fts['%s_%d'%(name, id)].append(ft)
-      id2label['%s_%d'%(name, id)] = label
-      id2cnt['%s_%d'%(name, id)] += 1
+      key = '%s_%d'%(name, id)
+      if key not in id2fts:
+        id2fts[key] = []
+        id2cnt[key] = 0
+      id2fts[key].append(ft)
+      id2label[key] = label
+      id2cnt[key] += 1
 
   for neg_trn_file in neg_trn_files:
     data = np.load(neg_trn_file)
@@ -250,12 +251,13 @@ def prepare_trn_early_fusion_data():
       label = 0
       ft = neg_fts[i]
       name = neg_names[i]
-      if id not in id2fts:
-        id2fts['%s_%d'%(name, id)] = []
-        id2cnt['%s_%d'%(name, id)] = 0
-      id2fts['%s_%d'%(name, id)].append(ft)
-      id2label['%s_%d'%(name, id)] = label
-      id2cnt['%s_%d'%(name, id)] += 1
+      key = '%s_%d'%(name, id)
+      if key not in id2fts:
+        id2fts[key] = []
+        id2cnt[key] = 0
+      id2fts[key].append(ft)
+      id2label[key] = label
+      id2cnt[key] += 1
 
   print len(id2cnt)
   valid_ids = []
