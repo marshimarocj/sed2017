@@ -109,7 +109,8 @@ def encode_vlad():
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
   # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
-  out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
+  # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
 
   # track_len = 50
   track_len = 25
@@ -174,5 +175,5 @@ def encode_vlad():
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  cluster_centers()
-  # encode_vlad()
+  # cluster_centers()
+  encode_vlad()
