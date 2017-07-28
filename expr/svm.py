@@ -297,7 +297,7 @@ def prepare_val_early_fusion_data():
     os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
   ]
   out_pos_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
-  out_neg_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.npz')
+  out_neg_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.5.npz')
 
   tst_files = [
     pos_tst_files,
