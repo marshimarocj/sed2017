@@ -204,11 +204,19 @@ def train_model():
   fts = data['fts']
   labels = data['labels']
 
-  model = LinearSVC(verboase=1, penalty='l1')
+  print 'load complete'
+
+  model = LinearSVC(verbose=1, penalty='l1')
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
     cPickle.dump(model, fout)
+
+
+def val_model():
+  root_dir = '/data1/jiac/sed' # uranus
+  pos_val_file = os.path.join(root_dir, )
+  neg_val_file = os.path.join(root_dir, )
 
 
 if __name__ == '__main__':
