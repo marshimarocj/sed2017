@@ -61,7 +61,7 @@ def prepare_pos_ft():
 
   # centers = api.db.C3DCenters()
   # threshold_func = c3d_threshold_func
-  centers = api.db.FlowCenters()
+  center_grid = api.db.FlowCenters()
   threshold_func = flow_threshold_func
 
   for track_len in track_lens:
@@ -78,7 +78,7 @@ def prepare_pos_ft():
     ft_db = api.db.FlowFtDb(ft_dir)
 
     pos_in_track_generator = api.generator.crop_duration_ft_in_track(
-      track_db, ft_db, centers, threshold_func)
+      track_db, ft_db, center_grid, threshold_func)
     fts = []
     frames = []
     centers = []
@@ -194,7 +194,8 @@ def prepare_neg_c3d():
 
 def generate_script():
   # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/home/jiac/data/sed' # gpu9
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
@@ -330,8 +331,8 @@ def prepare_neg_vgg19():
 
 
 if __name__ == '__main__':
-  prepare_pos_ft()
-  # generate_script()
+  # prepare_pos_ft()
+  generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_c3d()
