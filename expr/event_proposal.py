@@ -556,8 +556,7 @@ def pad_proposal_to_square():
     for tid in track_db.trackid2track:
       track = track_db.trackid2track[tid]
       bboxs = track.track
-      track_len = track.track_len
-      for i in range(track_len):
+      for i in range(track.track_len):
         w = bboxs[i, 2] - bboxs[i, 0]
         h = bboxs[i, 3] - bboxs[i, 1]
         if w > h:
