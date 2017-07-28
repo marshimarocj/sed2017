@@ -257,11 +257,13 @@ def prepare_trn_early_fusion_data():
       id2label['%s_%d'%(name, id)] = label
       id2cnt['%s_%d'%(name, id)] += 1
 
+  print len(id2cnt)
   valid_ids = []
   for id in id2cnt:
     cnt = id2cnt[id]
     if cnt == 2:
       valid_ids.append(id)
+  print len(valid_ids)
 
   random.shuffle(valid_ids)
 
