@@ -34,14 +34,21 @@ def c3d_threshold_func(qbegin, qend, tbegin, tend):
   return  iend - ibegin >= 8
 
 
+def flow_threshold_func(qbegin, qend, tbegin, tend):
+  return qbegin >= tbegin and qend <= tend
+
+
 '''expr
 '''
-def prepare_pos_c3d():
-  root_dir = '/data1/jiac/sed' # uranus
+def prepare_pos_ft():
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # xiaojun
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'c3d')
-  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
 
   # track_len = 25
   # track_len = 50
@@ -52,7 +59,10 @@ def prepare_pos_c3d():
   args = parser.parse_args()
   name = args.name
 
-  c3d_centers = api.db.get_c3d_centers()
+  # centers = api.db.C3DCenters()
+  # threshold_func = c3d_threshold_func
+  centers = api.db.FlowCenters()
+  threshold_func = flow_threshold_func
 
   for track_len in track_lens:
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
@@ -64,15 +74,16 @@ def prepare_pos_c3d():
     track_db.load(db_file, pos_trackids)
 
     ft_dir = os.path.join(ft_root_dir, name)
-    c3d_db = api.db.C3DFtDb(ft_dir)
+    # ft_db = api.db.C3DFtDb(ft_dir)
+    ft_db = api.db.FlowFtDb(ft_dir)
 
-    pos_c3d_in_track_generator = api.generator.crop_duration_ft_in_track(
-      track_db, c3d_db, c3d_centers, c3d_threshold_func)
+    pos_in_track_generator = api.generator.crop_duration_ft_in_track(
+      track_db, ft_db, centers, threshold_func)
     fts = []
     frames = []
     centers = []
     ids = []
-    for ft_in_track in pos_c3d_in_track_generator:
+    for ft_in_track in pos_in_track_generator:
       num = len(ft_in_track.frames)
       fts.append(ft_in_track.fts)
       frames.extend(ft_in_track.frames)
@@ -319,9 +330,9 @@ def prepare_neg_vgg19():
 
 
 if __name__ == '__main__':
-  # prepare_pos_c3d()
+  prepare_pos_ft()
   # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_c3d()
-  prepare_neg_vgg19()
+  # prepare_neg_vgg19()

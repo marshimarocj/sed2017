@@ -123,7 +123,7 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
         print track.id, track.start_frame, track.track.shape, frame, ftdb.ft_duration
       box = track.track[frame-track.start_frame]
       boxs = np.expand_dims(box, 0)
-      is_xy = ftdb.query_center_in_box(centers, boxs)
+      is_xy = centers.center_in_box(boxs)
       center_idxs, box_idxs = np.where(is_xy)
       for center_idx, box_idx in zip(center_idxs, box_idxs):
         if id not in cache:
@@ -135,7 +135,7 @@ def _crop_duration_ft_in_track(trackdb, ftdb, centers, chunk, threshold_func):
         cache[id].append({
           'ft': fts[f, :, r, c],
           'frame': frame,
-          'center': centers[center_idx]
+          'center': centers.centers[center_idx]
         })
 
     # remove old tracklets

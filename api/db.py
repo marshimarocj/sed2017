@@ -295,6 +295,7 @@ class FlowFtDb(DurationFtDb):
   def __init__(self, ft_dir):
     self._ft_gap = 6
     self._chunk_gap = 7500
+    self._ft_duration = 5
     DurationFtDb.__init__(self, ft_dir, self._ft_gap, self._chunk_gap)
 
 
@@ -392,6 +393,21 @@ class FtCenters(object):
         xy_coefs.append(xy_coef)
 
     return np.array(center_idxs), np.array(xy_coefs)
+
+
+class VggFtCenters(FtCenters):
+  def __init__(self):
+    FtCenters.__init__(18, 22, 32, 32, 31, 31)
+
+
+class C3DFtCenters(FtCenters):
+  def __init__(self):
+    FtCenters.__init__(36, 45, 16, 16, 8, 8)
+
+
+class FlowCenters(FtCenters):
+  def __init__(self):
+    FtCenters.__init__(18, 23, 32, 32, 16, 16)
 
 
 def get_vgg19_centers():
