@@ -373,7 +373,7 @@ def prepare_toi_ft_for_tst():
   track_db = api.db.TrackDb()
   track_db.load(db_file)
 
-  ft_dir = os.path.join(ft_root_dir, name)
+  ft_dir = os.path.join(ft_root_dir, name + '.mov.deint')
   ft_db = api.db.C3DFtDb(ft_dir)
 
   ft_in_track_generator = api.generator.crop_duration_ft_in_track(
