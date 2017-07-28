@@ -221,7 +221,7 @@ def prepare_trn_early_fusion_data():
     pos_ids = data['ids']
     pos_names = data['names']
     num_pos = pos_fts.shape[0]
-    ft_dims.push_back(pos_fts.shape[1])
+    ft_dims.append(pos_fts.shape[1])
     for i in range(num_pos):
       id = pos_ids[i]
       label = pos_labels[i]
