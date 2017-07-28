@@ -266,7 +266,7 @@ def prepare_trn_early_fusion_data():
   random.shuffle(valid_ids)
 
   num = len(valid_ids)
-  fts = np.zeros((num, sum(dim_fts)), dtype=np.float32)
+  fts = np.zeros((num, sum(ft_dims)), dtype=np.float32)
   labels = np.zeros((num,), dtype=np.int32)
   for i, id in enumerate(valid_ids):
     fts[i] = np.concatenate(id2fts[id])
