@@ -361,23 +361,29 @@ def generate_script():
 def prepare_toi_ft_for_tst():
   root_dir = '/data1/jiac/sed' # uranus
   track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
-  ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
-  out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
+  # out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
   args = parser.parse_args()
   name = args.name
 
-  center_grid = api.db.C3DFtCenters()
-  threshold_func = c3d_threshold_func
+  # center_grid = api.db.C3DFtCenters()
+  # threshold_func = c3d_threshold_func
+  center_grid = api.db.FlowFtCenters()
+  threshold_func = flow_threshold_func
 
   db_file = os.path.join(track_dir, '%s.25.forward.square.npz'%name)
   track_db = api.db.TrackDb()
   track_db.load(db_file)
 
-  ft_dir = os.path.join(ft_root_dir, name + '.mov.deint')
-  ft_db = api.db.C3DFtDb(ft_dir)
+  # ft_dir = os.path.join(ft_root_dir, name + '.mov.deint')
+  # ft_db = api.db.C3DFtDb(ft_dir)
+  ft_dir = os.path.join(ft_root_dir, name)
+  ft_db = api.db.FlowFtDb(ft_dir)
 
   ft_in_track_generator = api.generator.crop_duration_ft_in_track(
     track_db, ft_db, center_grid, threshold_func)

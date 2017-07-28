@@ -435,10 +435,10 @@ def val_model():
 
 
 if __name__ == '__main__':
-  # prepare_trn_tst_pos_data()
+  prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
-  val_model()
+  # val_model()
