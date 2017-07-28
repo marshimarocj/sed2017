@@ -286,6 +286,87 @@ def prepare_trn_early_fusion_data():
   np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
 
 
+def prepare_val_early_fusion_data():
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  pos_tst_files = [
+    os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz'),
+  ]
+  neg_tst_files = [
+    os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.5.npz'),
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
+  ]
+  out_pos_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
+  out_neg_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.npz')
+
+  tst_files = [
+    pos_tst_files,
+    neg_tst_files,
+  ]
+  out_files = [
+    out_pos_file,
+    out_neg_file,
+  ]
+
+  for s in range(2):
+    out_file = out_files[s]
+    id2fts = {}
+    if s == 0:
+      id2label = {}
+    id2cnt = {}
+
+    ft_dims = []
+    for tst_file in tst_files[s]:
+      data = np.load(tst_file)
+      pos_fts = data['fts']
+      if s == 0:
+        pos_labels = data['labels']
+      pos_ids = data['ids']
+      pos_names = data['names']
+      num_pos = pos_fts.shape[0]
+      ft_dims.append(pos_fts.shape[1])
+      for i in range(num_pos):
+        id = pos_ids[i]
+        if s == 0:
+          label = pos_labels[i]
+        ft = pos_fts[i]
+        name = pos_names[i]
+        key = '%s_%d'%(name, id)
+        if key not in id2fts:
+          id2fts[key] = []
+          id2cnt[key] = 0
+        id2fts[key].append(ft)
+        if s == 0:
+          id2label[key] = label
+        id2cnt[key] += 1
+
+    valid_ids = []
+    for id in id2cnt:
+      cnt = id2cnt[id]
+      if cnt == 2:
+        valid_ids.append(id)
+
+    num = len(valid_ids)
+    fts = np.zeros((num, sum(ft_dims)), dtype=np.float32)
+    if s == 0:
+      labels = np.zeros((num,), dtype=np.int32)
+    for i, id in enumerate(valid_ids):
+      fts[i] = np.concatenate(id2fts[id])
+      if s == 0:
+        labels[i] = id2label[id]
+
+    ids = []
+    names = []
+    for id in valid_ids:
+      data = id.split('_')
+      names.append(data[0])
+      ids.append(int(data[1]))
+    if s == 0:
+      np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
+    else:
+      np.savez_compressed(out_file, fts=fts, ids=ids, names=names)
+
+
 def train_model():
   # root_dir = '/data1/jiac/sed' # uranus
   # trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
@@ -354,5 +435,6 @@ if __name__ == '__main__':
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
-  train_model()
+  prepare_val_early_fusion_data()
+  # train_model()
   # val_model()
