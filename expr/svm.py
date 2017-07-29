@@ -95,6 +95,54 @@ def prepare_trn_tst_pos_data():
     np.savez_compressed(out_file, fts=pos_fts, labels=pos_labels, ids=pos_tids, names=pos_names)
 
 
+def sample_neg_ids():
+  root_dir = '/data1/jiac/sed' # uranus
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  pos_files = [
+    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+  ]
+  multiplier = 5
+  out_files = [
+    os.path.join(root_dir, 'expr', 'c3d', 'neg.25.5.lst'),
+    os.path.join(root_dir, 'expr', 'c3d', 'neg.50.5.lst'),
+  ]
+
+  track_lens = [25, 50]
+
+  for track_len in track_lens:
+    lst_file = lst_files[s]
+    pos_file = pos_files[s]
+    out_file = out_files[s]
+
+    data = np.load(pos_file)
+    num_pos = data['labels'].shape[0]
+    num_neg = num_pos*multiplier
+
+    rs = sample.ReservoirSampling(num_neg)
+
+    for name in names:
+      print name
+      for track_len in track_lens:
+        neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
+        data = np.load(neg_ft_file)
+        fts = data['vlads']
+        ids = data['ids']
+
+        num = ids.shape[0]
+        for i in range(num):
+          ft = np.array(fts[i])
+          id = ids[i]
+          rs.addData((id, name))
+    data = rs.pool
+    with open(out_file, 'w') as fout:
+      for d in data:
+        fout.write('%d %s\n'%(d[0], d[1]))
+
+
 def prepare_trn_tst_neg_data():
   # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # uranus
@@ -444,7 +492,8 @@ def val_model():
 
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
-  prepare_trn_tst_neg_data()
+  sample_neg_ids()
+  # prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
