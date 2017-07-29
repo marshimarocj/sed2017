@@ -277,16 +277,20 @@ def prepare_trn_data():
 
 
 def prepare_trn_early_fusion_data():
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/home/jiac/data/sed2017' # rocks
   pos_trn_files = [
     os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
+    # os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
   ]
   neg_trn_files = [
     os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
+    # os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
   ]
-  out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'dev08.vlad.npz')
 
   id2fts = {}
   id2label = {}
@@ -519,8 +523,8 @@ if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
   # prepare_trn_tst_neg_data()
-  prepare_trn_data()
-  # prepare_trn_early_fusion_data()
+  # prepare_trn_data()
+  prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
   # val_model()
