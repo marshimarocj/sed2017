@@ -175,8 +175,8 @@ def prepare_trn_tst_neg_data():
     os.path.join(root_dir, 'expr', 'c3d', 'neg.eev08.5.lst'),
   ]
   out_files = [
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.%d.npz'%multiplier),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.%d.npz'%multiplier)
+    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz'%multiplier),
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz'%multiplier)
     # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.%d.npz'%multiplier),
     # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.%d.npz'%multiplier)
     # os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.%d.npz'%multiplier),
