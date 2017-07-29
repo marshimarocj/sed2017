@@ -286,7 +286,7 @@ def prepare_trn_early_fusion_data():
   ]
   neg_trn_files = [
     # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
+    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz'),
     os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
   ]
   # out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
@@ -383,7 +383,7 @@ def prepare_val_early_fusion_data():
   ]
   neg_tst_files = [
     # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.5.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz'),
     os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
   ]
   # out_pos_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
