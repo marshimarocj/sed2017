@@ -124,6 +124,15 @@ def sample_neg_ids():
 
     rs = sample.ReservoirSampling(num_neg)
 
+    names = []
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        if 'CAM4' in line:
+          continue
+        name, _ = os.path.splitext(line)
+        names.append(name)
+
     for name in names:
       print name
       for track_len in track_lens:
