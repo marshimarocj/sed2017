@@ -373,17 +373,22 @@ def prepare_trn_early_fusion_data():
 
 
 def prepare_val_early_fusion_data():
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/home/jiac/data/sed2017' # rocks
   pos_tst_files = [
     os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz'),
+    # os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz'),
   ]
   neg_tst_files = [
     os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.5.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
+    # os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
   ]
-  out_pos_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
-  out_neg_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.5.npz')
+  # out_pos_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
+  # out_neg_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.5.npz')
+  out_pos_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
+  out_neg_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
 
   tst_files = [
     pos_tst_files,
@@ -537,6 +542,6 @@ if __name__ == '__main__':
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
-  # prepare_val_early_fusion_data()
+  prepare_val_early_fusion_data()
   # train_model()
-  val_model()
+  # val_model()
