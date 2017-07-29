@@ -1,6 +1,7 @@
 import os
 import itertools
 import cPickle
+import argparse
 import sys
 sys.path.append('../')
 
@@ -30,6 +31,37 @@ def encode(fts, kmeans):
   if norm > 0:
     vlad /= norm
   return vlad
+
+
+def _encode_vlad(file, out_file, kmeans):
+  data = np.load(file)
+  fts = data['fts']
+  centers = data['centers']
+  ids = data['ids']
+  num = ids.shape[0]
+
+  prev_id = ids[0]
+  _fts = []
+  out_vlads = []
+  out_ids = []
+  for i in range(num):
+    id = ids[i]
+    if id != prev_id:
+      vlad = encode(np.array(_fts), kmeans)
+      out_vlads.append(vlad)
+      out_ids.append(prev_id)
+      prev_id = id
+      del _fts
+      _fts = []
+    _fts.append(fts[i])
+  if len(_fts) > 0:
+    vlad = encode(np.array(_fts), kmeans)
+    out_vlads.append(vlad)
+    out_ids.append(id)
+    del _fts
+    _fts = []
+
+  np.savez_compressed(out_file, vlads=out_vlads, ids=out_ids)
 
 
 '''expr
@@ -151,38 +183,88 @@ def encode_vlad():
         if os.path.exists(out_file):
           continue
 
-        data = np.load(file)
-        fts = data['fts']
-        centers = data['centers']
-        ids = data['ids']
-        num = ids.shape[0]
+        # data = np.load(file)
+        # fts = data['fts']
+        # centers = data['centers']
+        # ids = data['ids']
+        # num = ids.shape[0]
 
-        prev_id = ids[0]
-        _fts = []
-        out_vlads = []
-        out_ids = []
-        for i in range(num):
-          id = ids[i]
-          if id != prev_id:
-            vlad = encode(np.array(_fts), kmeans)
-            out_vlads.append(vlad)
-            out_ids.append(prev_id)
-            prev_id = id
-            del _fts
-            _fts = []
-          _fts.append(fts[i])
-        if len(_fts) > 0:
-          vlad = encode(np.array(_fts), kmeans)
-          out_vlads.append(vlad)
-          out_ids.append(id)
-          del _fts
-          _fts = []
+        # prev_id = ids[0]
+        # _fts = []
+        # out_vlads = []
+        # out_ids = []
+        # for i in range(num):
+        #   id = ids[i]
+        #   if id != prev_id:
+        #     vlad = encode(np.array(_fts), kmeans)
+        #     out_vlads.append(vlad)
+        #     out_ids.append(prev_id)
+        #     prev_id = id
+        #     del _fts
+        #     _fts = []
+        #   _fts.append(fts[i])
+        # if len(_fts) > 0:
+        #   vlad = encode(np.array(_fts), kmeans)
+        #   out_vlads.append(vlad)
+        #   out_ids.append(id)
+        #   del _fts
+        #   _fts = []
 
-        np.savez_compressed(out_file, vlads=out_vlads, ids=out_ids)
+        # np.savez_compressed(out_file, vlads=out_vlads, ids=out_ids)
+        _encode_vlad(file, out_file, kmeans)
+
+
+def gen_script():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  out_file = 'vlad.sh'
+
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+  with open(out_file, 'w') as fout:
+    for name in names:
+      cmd = ['python', 'vlad.py', name]
+      fout.write(' '.join(cmd) + '\n')
+
+
+def encode_vlad_rocks():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  args = parser.parse_args()
+
+  name = args.name
+
+  track_lens = [25, 50]
+
+  with open(kmeans_file) as f:
+    kmeans = cPickle.load(f)
+
+  for track_len in track_lens:
+    file = os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+    out_files = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.50.0.npz'%(name, track_len)),
+
+    _encode_vlad(file, out_file, kmeans)
 
 
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
   # cluster_centers()
-  encode_vlad()
+  # encode_vlad()
+  gen_script()
+  # encode_vlad_rocks()
