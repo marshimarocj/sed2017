@@ -442,12 +442,12 @@ def prepare_val_early_fusion_data():
 
 
 def train_model():
-  root_dir = '/data1/jiac/sed' # uranus
-  trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # root_dir = '/home/jiac/data2/sed' # gpu9
-  # trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
-  # out_file = os.path.join(root_dir, 'expr', 'vgg19', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'vgg19', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # trn_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
