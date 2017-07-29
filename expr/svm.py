@@ -24,7 +24,8 @@ event2lid = {
 def prepare_trn_tst_pos_data():
   # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # gpu9
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed2017' # rocks
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
@@ -97,7 +98,8 @@ def prepare_trn_tst_pos_data():
 def prepare_trn_tst_neg_data():
   # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # uranus
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed2017' # rocks
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
@@ -441,7 +443,7 @@ def val_model():
 
 
 if __name__ == '__main__':
-  # prepare_trn_tst_pos_data()
+  prepare_trn_tst_pos_data()
   prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
