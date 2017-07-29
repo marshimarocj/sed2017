@@ -251,7 +251,8 @@ def encode_vlad_rocks():
 
   name = args.name
 
-  track_lens = [25, 50]
+  # track_lens = [25, 50]
+  track_lens = [50]
 
   with open(kmeans_file) as f:
     kmeans = cPickle.load(f)
