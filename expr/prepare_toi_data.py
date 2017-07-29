@@ -334,7 +334,8 @@ def gen_script_rocks():
         name, _ = os.path.splitext(line)
         if 'CAM4' in name:
           continue
-        for s in range(10):
+        for s in range(1):
+        # for s in range(1, 10):
           cmd = [
             'python', 'prepare_toi_data.py', name, str(s)
           ]
