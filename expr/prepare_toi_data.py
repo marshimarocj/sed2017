@@ -229,7 +229,6 @@ def prepare_neg_ft_on_all_splits():
   track_dir = os.path.join(root_dir, 'tracking')
   ft_root_dir = os.path.join(root_dir, 'c3d')
   lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
   out_dir = os.path.join(root_dir, 'c3d', 'track_group')
