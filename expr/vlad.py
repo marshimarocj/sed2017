@@ -266,5 +266,5 @@ if __name__ == '__main__':
   # sample_data_for_twostream_sync_center()
   # cluster_centers()
   # encode_vlad()
-  gen_script()
-  # encode_vlad_rocks()
+  # gen_script()
+  encode_vlad_rocks()
