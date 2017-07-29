@@ -215,55 +215,43 @@ def prepare_neg_ft():
   args = parser.parse_args()
   name = args.name
 
-  # # center_grid = api.db.C3DFtCenters()
-  # # threshold_func = c3d_threshold_func
-  # center_grid = api.db.FlowFtCenters()
-  # threshold_func = flow_threshold_func
-  # # center_grid = api.db.VggFtCenters()
-
   for track_len in track_lens:
-    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-    # if os.path.exists(out_file):
-    #   continue
+    label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
+    track_db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
+    ft_dir = os.path.join(ft_root_dir, name)
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
+    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d')
 
-    # label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
-    # neg_trackids = []
-    # with open(label_file) as f:
-    #   for line in f:
-    #     line = line.strip()
-    #     neg_trackids.append(int(line))
 
-    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
-    # track_db = api.db.TrackDb()
-    # track_db.load(db_file, neg_trackids)
+def prepare_neg_ft_on_all_splits():
+  root_dir = '/data1/jiac/sed' # uranus
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking')
+  ft_root_dir = os.path.join(root_dir, 'c3d')
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
 
-    # ft_dir = os.path.join(ft_root_dir, name)
-    # # ft_db = api.db.C3DFtDb(ft_dir)
-    # ft_db = api.db.FlowFtDb(ft_dir)
-    # # ft_db = api.db.VggFtDb(ft_dir)
+  names = []
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
 
-    # neg_ft_in_track_generator = api.generator.crop_duration_ft_in_track(
-    #   track_db, ft_db, center_grid, threshold_func)
-    # # neg_ft_in_track_generator = api.generator.crop_instant_ft_in_track(
-    # #   track_db, ft_db, center_grid)
-    # fts = []
-    # frames = []
-    # centers = []
-    # ids = []
-    # for ft_in_track in neg_ft_in_track_generator:
-    #   num = len(ft_in_track.frames)
-    #   fts.append(ft_in_track.fts)
-    #   frames.extend(ft_in_track.frames)
-    #   centers.append(ft_in_track.centers)
-    #   ids.extend(num*[ft_in_track.id])
+  track_len = 25
 
-    # fts = np.concatenate(fts, 0)
-    # frames = np.array(frames, dtype=np.int32)
-    # centers = np.concatenate(centers, 0)
-    # ids = np.array(ids, dtype=np.int32)
-    # # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-    # np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
+  parser = argparse.ArgumentParser()
+  parser.add_argument('neg_split', type=int)
+  args = parser.parse_args()
+  neg_split = args.neg_split
 
+  for name in names:
+    print name
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
     track_db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     ft_dir = os.path.join(ft_root_dir, name)
@@ -485,6 +473,7 @@ if __name__ == '__main__':
   # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  prepare_neg_ft()
+  # prepare_neg_ft()
+  prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
