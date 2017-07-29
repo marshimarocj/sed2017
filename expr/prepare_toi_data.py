@@ -42,7 +42,8 @@ def flow_threshold_func(qbegin, qend, tbegin, tend):
 '''
 def prepare_pos_ft():
   # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
@@ -412,7 +413,7 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  # prepare_pos_ft()
+  prepare_pos_ft()
   # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
