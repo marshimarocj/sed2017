@@ -154,47 +154,63 @@ def sample_neg_ids():
 
 
 def prepare_trn_tst_neg_data():
-  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # uranus
   # root_dir = '/home/jiac/data/sed' # xiaojun
-  root_dir = '/home/jiac/data/sed2017' # rocks
+  # root_dir = '/home/jiac/data/sed2017' # rocks
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  pos_files = [
+  # pos_files = [
   #   os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
   #   os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
-    # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
-    # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
-    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  #   # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
+  #   # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
+  #   # os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
+  #   # os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  # ]
+  neg_id_files = [
+    os.path.join(root_dir, 'expr', 'c3d', 'neg.dev08.5.lst'),
+    os.path.join(root_dir, 'expr', 'c3d', 'neg.eev08.5.lst'),
   ]
-  multiplier = 5
   out_files = [
-    # os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.%d.npz'%multiplier),
-    # os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.%d.npz'%multiplier)
+    os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.%d.npz'%multiplier),
+    os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.%d.npz'%multiplier)
     # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.%d.npz'%multiplier),
     # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.%d.npz'%multiplier)
-    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.%d.npz'%multiplier),
-    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.%d.npz'%multiplier)
+    # os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.%d.npz'%multiplier),
+    # os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.%d.npz'%multiplier)
   ]
-  # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
-  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
 
   track_lens = [25, 50]
 
   for s in range(2):
     lst_file = lst_files[s]
-    pos_file = pos_files[s]
+    # pos_file = pos_files[s]
+    neg_id_file = neg_id_files[s]
     out_file = out_files[s]
 
-    data = np.load(pos_file)
-    num_pos = data['labels'].shape[0]
-    num_neg = num_pos*multiplier
+    track_len2name2ids = {25: {}, 50: {}}
+    with open(neg_id_file) as f:
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        track_len = int(data[0])
+        id = int(data[1])
+        name = data[2]
+        if name not in track_len2name2ids:
+          track_len2name2ids[track_len][name] = set()
+        track_len2name2ids[track_len][name].add(id)
 
-    rs = sample.ReservoirSampling(num_neg)
+    # data = np.load(pos_file)
+    # num_pos = data['labels'].shape[0]
+    # num_neg = num_pos*multiplier
+
+    # rs = sample.ReservoirSampling(num_neg)
 
     names = []
     with open(lst_file) as f:
@@ -205,6 +221,9 @@ def prepare_trn_tst_neg_data():
         name, _ = os.path.splitext(line)
         names.append(name)
 
+    neg_fts = []
+    neg_ids = []
+    neg_names = []
     for name in names:
       print name
       for track_len in track_lens:
@@ -217,12 +236,15 @@ def prepare_trn_tst_neg_data():
         for i in range(num):
           ft = np.array(fts[i])
           id = ids[i]
-          rs.addData((ft, id, name))
+          if id in track_len2name2ids[track_len][name]:
+            neg_fts.append(ft)
+            neg_ids.append(id)
+            neg_names.append(name)
 
-    data = rs.pool
-    neg_fts = [d[0] for d in data]
-    neg_ids = [d[1] for d in data]
-    neg_names = [d[2] for d in data]
+    # data = rs.pool
+    # neg_fts = [d[0] for d in data]
+    # neg_ids = [d[1] for d in data]
+    # neg_names = [d[2] for d in data]
     np.savez_compressed(out_file, fts=neg_fts, ids=neg_ids, names=neg_names)
 
 
@@ -502,8 +524,8 @@ def val_model():
 
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
-  sample_neg_ids()
-  # prepare_trn_tst_neg_data()
+  # sample_neg_ids()
+  prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
