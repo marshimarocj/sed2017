@@ -39,7 +39,9 @@ def sample_data_for_center():
   # ft_root_dir = os.path.join(root_dir, 'c3d')
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  root_dir = '/home/jiac/data/sed' # danny
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   num_sample = 10000
   out_file = os.path.join(ft_root_dir, 'sample.%d.npy'%num_sample)
@@ -173,7 +175,7 @@ def encode_vlad():
 
 
 if __name__ == '__main__':
-  # sample_data_for_center()
+  sample_data_for_center()
   # sample_data_for_twostream_sync_center()
   # cluster_centers()
-  encode_vlad()
+  # encode_vlad()
