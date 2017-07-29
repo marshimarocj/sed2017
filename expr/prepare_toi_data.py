@@ -46,7 +46,7 @@ def _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d'):
       neg_trackids.append(int(line))
 
   track_db = api.db.TrackDb()
-  track_db.load(db_file, neg_trackids)
+  track_db.load(track_db_file, neg_trackids)
 
   ft_dir = os.path.join(ft_root_dir, name)
   if ft == 'c3d':
