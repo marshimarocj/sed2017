@@ -255,8 +255,8 @@ def encode_vlad_rocks():
     kmeans = cPickle.load(f)
 
   for track_len in track_lens:
-    file = os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+    file = os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
 
     _encode_vlad(file, out_file, kmeans)
 
