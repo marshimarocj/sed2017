@@ -105,7 +105,11 @@ def encode_vlad():
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'vgg19_pool5_fullres', 'kmeans.center.32.pkl')
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed2017' # danny
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   lst_files = [
@@ -116,7 +120,7 @@ def encode_vlad():
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
   out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
 
-  track_len = 50
+  track_lens = [25, 50]
   # track_len = 25
 
   with open(kmeans_file) as f:
@@ -132,52 +136,53 @@ def encode_vlad():
           names.append(name)
 
   for name in names:
-    files = [
-      os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-      os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-    ]
-    out_files = [
-      os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-      os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-    ]
-    print name
+    for track_len in track_lens:
+      files = [
+        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+        # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+      ]
+      out_files = [
+        os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+        # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+      ]
+      print name
 
-    for file, out_file in zip(files, out_files):
-      if os.path.exists(out_file):
-        continue
+      for file, out_file in zip(files, out_files):
+        if os.path.exists(out_file):
+          continue
 
-      data = np.load(file)
-      fts = data['fts']
-      centers = data['centers']
-      ids = data['ids']
-      num = ids.shape[0]
+        data = np.load(file)
+        fts = data['fts']
+        centers = data['centers']
+        ids = data['ids']
+        num = ids.shape[0]
 
-      prev_id = ids[0]
-      _fts = []
-      out_vlads = []
-      out_ids = []
-      for i in range(num):
-        id = ids[i]
-        if id != prev_id:
+        prev_id = ids[0]
+        _fts = []
+        out_vlads = []
+        out_ids = []
+        for i in range(num):
+          id = ids[i]
+          if id != prev_id:
+            vlad = encode(np.array(_fts), kmeans)
+            out_vlads.append(vlad)
+            out_ids.append(prev_id)
+            prev_id = id
+            del _fts
+            _fts = []
+          _fts.append(fts[i])
+        if len(_fts) > 0:
           vlad = encode(np.array(_fts), kmeans)
           out_vlads.append(vlad)
-          out_ids.append(prev_id)
-          prev_id = id
+          out_ids.append(id)
           del _fts
           _fts = []
-        _fts.append(fts[i])
-      if len(_fts) > 0:
-        vlad = encode(np.array(_fts), kmeans)
-        out_vlads.append(vlad)
-        out_ids.append(id)
-        del _fts
-        _fts = []
 
-      np.savez_compressed(out_file, vlads=out_vlads, ids=out_ids)
+        np.savez_compressed(out_file, vlads=out_vlads, ids=out_ids)
 
 
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  cluster_centers()
-  # encode_vlad()
+  # cluster_centers()
+  encode_vlad()
