@@ -109,7 +109,7 @@ def encode_vlad():
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   # root_dir = '/home/jiac/data/sed2017' # rocks
-  root_dir = '/home/jiac/data/sed2017' # danny
+  root_dir = '/home/jiac/data/sed' # danny
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   lst_files = [
