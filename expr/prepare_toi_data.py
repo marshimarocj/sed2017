@@ -433,6 +433,6 @@ if __name__ == '__main__':
   # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  # prepare_neg_ft()
+  prepare_neg_ft()
   # prepare_neg_vgg19()
-  prepare_toi_ft_for_tst()
+  # prepare_toi_ft_for_tst()
