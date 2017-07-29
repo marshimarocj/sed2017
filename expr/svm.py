@@ -106,6 +106,7 @@ def sample_neg_ids():
     os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
   ]
   multiplier = 5
+  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   out_files = [
     os.path.join(root_dir, 'expr', 'c3d', 'neg.dev08.5.lst'),
     os.path.join(root_dir, 'expr', 'c3d', 'neg.eev08.5.lst'),
