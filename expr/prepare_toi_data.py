@@ -57,7 +57,7 @@ def _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d'):
     center_grid = api.db.FlowFtCenters()
     threshold_func = flow_threshold_func
   elif ft == 'vgg':
-    ft_db = api.db.VggFtDb(ft_dir)
+    ft_db = api.db.VGG19FtDb(ft_dir)
     center_grid = api.db.VggFtCenters()
 
   if ft == 'c3d' or ft == 'flow':
