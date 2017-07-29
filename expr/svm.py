@@ -478,8 +478,10 @@ def train_model():
   root_dir = '/home/jiac/data/sed2017' # rocks
   # trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  trn_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'dev08.vlad.npz')
-  out_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # trn_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'dev08.vlad.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  trn_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'dev08.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   data = np.load(trn_file)
   fts = data['fts']
@@ -551,5 +553,5 @@ if __name__ == '__main__':
   # prepare_trn_data()
   prepare_trn_early_fusion_data()
   prepare_val_early_fusion_data()
-  # train_model()
+  train_model()
   # val_model()
