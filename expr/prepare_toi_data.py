@@ -338,7 +338,7 @@ def gen_script_rocks():
           cmd = [
             'python', 'prepare_toi_data.py', name, str(s)
           ]
-        fout.write(' '.join(cmd) + '\n')
+          fout.write(' '.join(cmd) + '\n')
 
 
 # def prepare_pos_vgg19():
