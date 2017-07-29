@@ -305,12 +305,16 @@ def prepare_trn_early_fusion_data():
     pos_names = data['names']
     num_pos = pos_fts.shape[0]
     ft_dims.append(pos_fts.shape[1])
+    unique_keys = set()
     for i in range(num_pos):
       id = pos_ids[i]
       label = pos_labels[i]
       ft = pos_fts[i]
       name = pos_names[i]
       key = '%s_%d'%(name, id)
+      if key in unique_keys:
+        continue
+      unique_keys.add(key)
       if key not in id2fts:
         id2fts[key] = []
         id2cnt[key] = 0
@@ -324,12 +328,16 @@ def prepare_trn_early_fusion_data():
     neg_ids = data['ids']
     neg_names = data['names']
     num_neg = neg_fts.shape[0]
+    unique_keys = set()
     for i in range(num_neg):
       id = neg_ids[i]
       label = 0
       ft = neg_fts[i]
       name = neg_names[i]
       key = '%s_%d'%(name, id)
+      if key in unique_keys:
+        continue
+      unique_keys.add(key)
       if key not in id2fts:
         id2fts[key] = []
         id2cnt[key] = 0
@@ -403,6 +411,7 @@ def prepare_val_early_fusion_data():
       pos_names = data['names']
       num_pos = pos_fts.shape[0]
       ft_dims.append(pos_fts.shape[1])
+      unique_keys = set()
       for i in range(num_pos):
         id = pos_ids[i]
         if s == 0:
@@ -410,6 +419,9 @@ def prepare_val_early_fusion_data():
         ft = pos_fts[i]
         name = pos_names[i]
         key = '%s_%d'%(name, id)
+        if key in unique_keys:
+          continue
+        unique_keys.append(key)
         if key not in id2fts:
           id2fts[key] = []
           id2cnt[key] = 0
@@ -524,7 +536,7 @@ if __name__ == '__main__':
   # sample_neg_ids()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  # prepare_trn_early_fusion_data()
+  prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  train_model()
+  # train_model()
   # val_model()
