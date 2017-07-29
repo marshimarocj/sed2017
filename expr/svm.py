@@ -193,7 +193,7 @@ def prepare_trn_tst_neg_data():
         track_len = int(data[0])
         id = int(data[1])
         name = data[2]
-        if name not in track_len2name2ids:
+        if name not in track_len2name2ids[track_len]:
           track_len2name2ids[track_len][name] = set()
         track_len2name2ids[track_len][name].add(id)
 
