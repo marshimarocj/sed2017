@@ -235,10 +235,14 @@ def prepare_trn_data():
   # pos_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
   # neg_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  pos_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
-  out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
