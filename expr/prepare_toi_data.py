@@ -50,10 +50,15 @@ def _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d'):
 
   if ft == 'c3d':
     ft_db = api.db.C3DFtDb(ft_dir)
+    center_grid = api.db.C3DFtCenters()
+    threshold_func = c3d_threshold_func
   elif ft == 'flow':
     ft_db = api.db.FlowFtDb(ft_dir)
+    center_grid = api.db.FlowFtCenters()
+    threshold_func = flow_threshold_func
   elif ft == 'vgg':
     ft_db = api.db.VggFtDb(ft_dir)
+    center_grid = api.db.VggFtCenters()
 
   if ft == 'c3d' or ft == 'flow':
     neg_ft_in_track_generator = api.generator.crop_duration_ft_in_track(
@@ -210,11 +215,11 @@ def prepare_neg_ft():
   args = parser.parse_args()
   name = args.name
 
-  # center_grid = api.db.C3DFtCenters()
-  # threshold_func = c3d_threshold_func
-  center_grid = api.db.FlowFtCenters()
-  threshold_func = flow_threshold_func
-  # center_grid = api.db.VggFtCenters()
+  # # center_grid = api.db.C3DFtCenters()
+  # # threshold_func = c3d_threshold_func
+  # center_grid = api.db.FlowFtCenters()
+  # threshold_func = flow_threshold_func
+  # # center_grid = api.db.VggFtCenters()
 
   for track_len in track_lens:
     # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
