@@ -470,14 +470,14 @@ def val_model():
   # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # root_dir = '/home/jiac/data2/sed' # gpu9
-  # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
-  # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.5.npz')
-  # model_file = os.path.join(root_dir, 'expr', 'vgg19', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   root_dir = '/home/jiac/data2/sed' # gpu9
-  pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.5.npz')
-  model_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  pos_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.5.npz')
+  model_file = os.path.join(root_dir, 'expr', 'vgg19', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.5.npz')
+  # model_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -515,5 +515,5 @@ if __name__ == '__main__':
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  train_model()
-  # val_model()
+  # train_model()
+  val_model()
