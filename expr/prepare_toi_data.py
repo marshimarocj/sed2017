@@ -194,26 +194,29 @@ def shuffle_neg():
 
 
 def prepare_neg_ft():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/home/jiac/data/sed2017' # rocks
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'c3d')
-  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
-  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
-  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
   track_lens = [25, 50]
-  neg_split = 1
+  # neg_split = 1
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
+  parser.add_argument('neg_split', type=int)
   args = parser.parse_args()
   name = args.name
+  neg_split = args.neg_split
 
   for track_len in track_lens:
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
@@ -303,6 +306,38 @@ def generate_script():
         cmd = [
           'python', 'prepare_toi_data.py', name
         ]
+        fout.write(' '.join(cmd) + '\n')
+
+
+def gen_script_rocks():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+
+  out_file = 'prepare_toi_data.sh'
+  with open(out_file, 'w') as fout:
+    with open(lst_files[0]) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' in name:
+          continue
+        cmd = [
+          'python', 'prepare_toi_data.py', name, '0'
+        ]
+        fout.write(' '.join(cmd) + '\n')
+    with open(lst_files[1]) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' in name:
+          continue
+        for s in range(10):
+          cmd = [
+            'python', 'prepare_toi_data.py', name, str(s)
+          ]
         fout.write(' '.join(cmd) + '\n')
 
 
@@ -473,9 +508,10 @@ def prepare_toi_ft_for_tst():
 if __name__ == '__main__':
   # prepare_pos_ft()
   # generate_script()
+  gen_script_rocks()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
-  prepare_neg_ft_on_all_splits()
+  # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
