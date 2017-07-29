@@ -221,26 +221,26 @@ def prepare_neg_ft():
 
 def generate_script():
   # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data/sed' # danny
-  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/home/jiac/data2/sed' # gpu9
   # root_dir = '/home/jiac/data/sed' # gpu9
   lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
-    # os.path.join(root_dir, '2017.refined.lst')
+    # os.path.join(root_dir, 'dev08-1.lst'),
+    # os.path.join(root_dir, 'eev08-1.lst'),
+    os.path.join(root_dir, '2017.refined.lst')
     # os.path.join(root_dir, 'video', '2017.refined.lst')
   ]
 
-  # num_process = 10
-  num_process = 3
+  num_process = 10
+  # num_process = 3
 
   names = []
   for lst_file in lst_files:
     with open(lst_file) as f:
       for line in f:
         line = line.strip()
-        name, _ = os.path.splitext(line)
-        # name = line
+        # name, _ = os.path.splitext(line)
+        name = line
         # pos = line.find('.')
         # name = line[:pos]
         if 'CAM4' in name:
@@ -252,8 +252,8 @@ def generate_script():
 
   for i in range(0, num, gap):
     idx = i/gap
-    out_file = 'prepare_toi_data.%d.sh'%idx
-    # out_file = 'prepare_toi_data.tst.%d.sh'%idx
+    # out_file = 'prepare_toi_data.%d.sh'%idx
+    out_file = 'prepare_toi_data.tst.%d.sh'%idx
     with open(out_file, 'w') as fout:
       for j in range(i, min(i+gap, num)):
         name = names[j]
@@ -367,7 +367,8 @@ def generate_script():
 
 def prepare_toi_ft_for_tst():
   # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data2/sed' # gpu9
   track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
   # ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
   # out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
@@ -415,8 +416,8 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  prepare_pos_ft()
-  # generate_script()
+  # prepare_pos_ft()
+  generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
