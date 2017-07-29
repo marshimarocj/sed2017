@@ -197,12 +197,6 @@ def prepare_trn_tst_neg_data():
           track_len2name2ids[track_len][name] = set()
         track_len2name2ids[track_len][name].add(id)
 
-    # data = np.load(pos_file)
-    # num_pos = data['labels'].shape[0]
-    # num_neg = num_pos*multiplier
-
-    # rs = sample.ReservoirSampling(num_neg)
-
     names = []
     with open(lst_file) as f:
       for line in f:
@@ -232,22 +226,18 @@ def prepare_trn_tst_neg_data():
             neg_ids.append(id)
             neg_names.append(name)
 
-    # data = rs.pool
-    # neg_fts = [d[0] for d in data]
-    # neg_ids = [d[1] for d in data]
-    # neg_names = [d[2] for d in data]
     np.savez_compressed(out_file, fts=neg_fts, ids=neg_ids, names=neg_names)
 
 
 def prepare_trn_data():
-  # root_dir = '/data1/jiac/sed' # uranus
-  # pos_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
-  # neg_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
-  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  pos_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
-  out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
+  root_dir = '/data1/jiac/sed' # uranus
+  pos_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.npz')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.npz')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
@@ -516,8 +506,8 @@ def val_model():
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
-  prepare_trn_tst_neg_data()
-  # prepare_trn_data()
+  # prepare_trn_tst_neg_data()
+  prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
