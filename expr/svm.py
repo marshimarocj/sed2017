@@ -426,7 +426,7 @@ def prepare_val_early_fusion_data():
         key = '%s_%d'%(name, id)
         if key in unique_keys:
           continue
-        unique_keys.append(key)
+        unique_keys.add(key)
         if key not in id2fts:
           id2fts[key] = []
           id2cnt[key] = 0
