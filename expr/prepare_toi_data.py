@@ -239,10 +239,9 @@ def generate_script():
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
-        name = line
+        # name = line
         # pos = line.find('.')
         # name = line[:pos]
-        # name = line
         if 'CAM4' in name:
           continue
         names.append(name)
@@ -415,8 +414,8 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  # prepare_pos_ft()
-  generate_script()
+  prepare_pos_ft()
+  # generate_script()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
