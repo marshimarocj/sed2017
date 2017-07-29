@@ -107,13 +107,13 @@ def sample_neg_ids():
   ]
   multiplier = 5
   out_files = [
-    os.path.join(root_dir, 'expr', 'c3d', 'neg.25.5.lst'),
-    os.path.join(root_dir, 'expr', 'c3d', 'neg.50.5.lst'),
+    os.path.join(root_dir, 'expr', 'c3d', 'neg.dev08.5.lst'),
+    os.path.join(root_dir, 'expr', 'c3d', 'neg.eev08.5.lst'),
   ]
 
   track_lens = [25, 50]
 
-  for track_len in track_lens:
+  for s in range(2):
     lst_file = lst_files[s]
     pos_file = pos_files[s]
     out_file = out_files[s]
@@ -136,11 +136,11 @@ def sample_neg_ids():
         for i in range(num):
           ft = np.array(fts[i])
           id = ids[i]
-          rs.addData((id, name))
+          rs.addData((track_len, id, name))
     data = rs.pool
     with open(out_file, 'w') as fout:
       for d in data:
-        fout.write('%d %s\n'%(d[0], d[1]))
+        fout.write('%d %d %s\n'%(d[0], d[1], d[2]))
 
 
 def prepare_trn_tst_neg_data():
