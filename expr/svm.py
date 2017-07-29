@@ -448,9 +448,12 @@ def train_model():
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  trn_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
-  out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # trn_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'dev08.vlad.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   data = np.load(trn_file)
   fts = data['fts']
@@ -512,8 +515,8 @@ if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
   # prepare_trn_tst_neg_data()
-  prepare_trn_data()
+  # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  # train_model()
+  train_model()
   # val_model()
