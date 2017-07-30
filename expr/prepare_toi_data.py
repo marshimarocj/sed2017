@@ -451,8 +451,8 @@ def prepare_toi_ft_for_tst():
   # root_dir = '/home/jiac/data3/sed' # gpu4
   track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
   # track_dir = os.path.join(root_dir, 'tst2017', 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
-  out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017')
+  out_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'tst2017', 'vgg19_pool5_fullres')
