@@ -240,9 +240,12 @@ def prepare_trn_data():
   # neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
   root_dir = '/home/jiac/data/sed2017' # rocks
-  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
+  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
@@ -504,10 +507,13 @@ def train_model():
 def train_final_model():
   root_dir = '/home/jiac/data/sed2017' # rocks
   trn_files = [
-    os.path.join(root_dir, 'expr', 'c3d.flow', 'dev08.vlad.npz'),
-    os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.npz'),
+    # os.path.join(root_dir, 'expr', 'c3d.flow', 'dev08.vlad.npz'),
+    # os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.npz'),
   ]
-  out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   fts = []
   labels = []
@@ -587,9 +593,9 @@ if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
   # prepare_trn_tst_neg_data()
-  # prepare_trn_data()
+  prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
-  train_final_model()
+  # train_final_model()
   # val_model()
