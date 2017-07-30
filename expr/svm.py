@@ -619,7 +619,7 @@ def predict_on_eev():
     _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
     ids.append(ids)
     predicts.append(_predicts)
-  ids = np.concatenate(idxs, 0)
+  ids = np.concatenate(ids, 0)
   predicts = np.concatenate(predicts, 0)
   np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
