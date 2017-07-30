@@ -281,6 +281,8 @@ def normalize_format():
       dst_dir = os.path.join(dst_root_dir, videoname + '.mov.deint')
       if not os.path.exists(dst_dir):
         os.mkdir(dst_dir)
+      else:
+        continue
 
       names = os.listdir(src_dir)
       for name in names:
