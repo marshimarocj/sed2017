@@ -671,6 +671,7 @@ def eval_full():
   predicts = []
   labels = []
   for name in names:
+    print name
     predict_file = os.path.join(predict_dir, name + '.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
