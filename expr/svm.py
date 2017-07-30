@@ -644,6 +644,60 @@ def predict_on_eev():
   np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
+def eval_full():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(name)
+
+  data = np.load(pos_file)
+  ids = data['ids']
+  names = data['names']
+  labels = data['labels']
+  num = ids.shape[0]
+  pos_key2label = {}
+  for i in range(num):
+    key = '%s_%d'%(names[i], ids[i])
+    pos_key2label[key] = labels[i]
+
+  predicts = []
+  labels = []
+  for name in names:
+    predict_file = os.path.join(predict_dir, name + '.npz')
+    data = np.load(predict_file)
+    _predicts = data['predicts']
+    _ids = data['ids']
+    num = _ids.shape[0]
+    predicts.append(_predicts)
+    for i in range(num):
+      key = '%s_%d'%(name, ids[i])
+      if key in pos_key2label:
+        label = pos_key2label[key]
+      else:
+        label = 0
+      labels.append(label)
+
+  predicts = np.concatenate(predicts, 0)
+  labels = np.array(labels)
+
+  events = {}
+  for event in event2lid:
+    lid = event2lid[event]
+    events[lid] = event
+
+  for c in range(1, 5):
+    ap = average_precision_score(labels == c, predicts[:, c])
+    print events[c], ap
+
+
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
@@ -654,5 +708,6 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  predict_on_eev()
+  # predict_on_eev()
   # gen_predict_script()
+  eval_full()
