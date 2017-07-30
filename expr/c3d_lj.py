@@ -278,6 +278,10 @@ def normalize_format():
     for line in f:
       videoname = line.strip()
       src_dir = os.path.join(src_root_dir, videoname)
+      dst_dir = os.path.join(dst_root_dir, videoname)
+      if not os.path.exists(dst_dir):
+        os.mkdir(dst_dir)
+
       names = os.listdir(src_dir)
       for name in names:
         src_file = os.path.join(src_dir, name)
