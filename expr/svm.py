@@ -589,6 +589,40 @@ def val_model():
     print events[c], ap
 
 
+def predict_on_eev():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full_predict.npz')
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  args = parser.parse_args()
+
+  name = args.name
+
+  with open(model_file) as f:
+    model = cPickle.load(f)
+
+  files = [os.path.join(vlad_dir, '%s.25.forward.backward.square.pos.0.75.npz'%name)] + \
+    [os.path.join(vlad_dir, '%s.25.forward.backward.square.neg.0.50.%d.npz'%(name, split)) for split in range(10)]
+  ids = []
+  predicts = []
+  for file in files:
+    print file
+    data = np.load(file)
+    _ids = data['ids']
+    _vlads = data['vlads']
+    _predicts = model.decision_function(_vlads)
+    _predicts = np.exp(-_predicts)
+    _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
+    ids.append(ids)
+    predicts.append(_predicts)
+  ids = np.concatenate(idxs, 0)
+  predicts = np.concatenate(predicts, 0)
+  np.savez_compressed(out_file, predicts=predicts, ids=ids)
+
+
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
@@ -597,5 +631,6 @@ if __name__ == '__main__':
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
-  train_final_model()
+  # train_final_model()
   # val_model()
+  predict_on_eev()
