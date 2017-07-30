@@ -277,8 +277,8 @@ def normalize_format():
   with open(lst_file) as f:
     for line in f:
       videoname = line.strip()
-      src_dir = os.path.join(src_root_dir, videoname)
-      dst_dir = os.path.join(dst_root_dir, videoname)
+      src_dir = os.path.join(src_root_dir, videoname + '.mov.deint')
+      dst_dir = os.path.join(dst_root_dir, videoname + '.mov.deint')
       if not os.path.exists(dst_dir):
         os.mkdir(dst_dir)
 
