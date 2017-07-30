@@ -445,16 +445,16 @@ def gen_script_rocks():
 
 
 def prepare_toi_ft_for_tst():
-  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data/sed' # xiaojun
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  # root_dir = '/home/jiac/data2/sed' # gpu9
   # root_dir = '/home/jiac/data3/sed' # gpu4
   track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
   # track_dir = os.path.join(root_dir, 'tst2017', 'tracking')
-  # ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
-  # out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
-  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
+  out_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'tst2017', 'vgg19_pool5_fullres')
   # out_dir = os.path.join(root_dir, 'tst2017', 'vgg19_pool5_fullres', 'track_group')
 
@@ -463,20 +463,20 @@ def prepare_toi_ft_for_tst():
   args = parser.parse_args()
   name = args.name
 
-  # center_grid = api.db.C3DFtCenters()
-  # threshold_func = c3d_threshold_func
-  center_grid = api.db.FlowFtCenters()
-  threshold_func = flow_threshold_func
+  center_grid = api.db.C3DFtCenters()
+  threshold_func = c3d_threshold_func
+  # center_grid = api.db.FlowFtCenters()
+  # threshold_func = flow_threshold_func
   # center_grid = api.db.VggFtCenters()
 
   db_file = os.path.join(track_dir, '%s.25.forward.square.npz'%name)
   track_db = api.db.TrackDb()
   track_db.load(db_file)
 
-  # ft_dir = os.path.join(ft_root_dir, name + '.mov.deint')
-  # ft_db = api.db.C3DFtDb(ft_dir)
-  ft_dir = os.path.join(ft_root_dir, name)
-  ft_db = api.db.FlowFtDb(ft_dir)
+  ft_dir = os.path.join(ft_root_dir, name + '.mov.deint')
+  ft_db = api.db.C3DFtDb(ft_dir)
+  # ft_dir = os.path.join(ft_root_dir, name)
+  # ft_db = api.db.FlowFtDb(ft_dir)
   # ft_db = api.db.VGG19FtDb(ft_dir)
 
   out_file = os.path.join(out_dir, '%s.25.forward.square.npz'%name)
@@ -512,7 +512,7 @@ if __name__ == '__main__':
   # gen_script_rocks()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  prepare_neg_ft()
+  # prepare_neg_ft()
   # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
-  # prepare_toi_ft_for_tst()
+  prepare_toi_ft_for_tst()

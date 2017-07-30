@@ -247,7 +247,7 @@ def bat_c3d():
 
 
 def post_process():
-  root_dir = '/data1/jiac/sed'
+  root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'video', 'dev09', '2017.refined.lst')
   ft_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
 
@@ -268,7 +268,28 @@ def post_process():
         shutil.move(src_file, dst_file)
 
 
+def normalize_format():
+  root_dir = '/data1/jiac/sed' # uranus
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
+  src_root_dir = os.path.join(root_dir, 'c3d', 'sed_test_2017')
+  dst_root_dir = os.path.join(root_dir, 'c3d', 'tst2017')
+
+  with open(lst_file) as f:
+    for line in f:
+      videoname = line.strip()
+      src_dir = os.path.join(src_root_dir, videoname)
+      names = os.listdir(src_dir)
+      for name in names:
+        src_file = os.path.join(src_dir, name)
+        dst_file = os.path.join(dst_dir, name)
+        data = np.load(src_file)
+        fts = data['fts']
+        np.moveaxis(fts, (0, 1, 2, 3), (0, 3, 1, 2))
+        np.save(dst_file, fts=fts)
+
+
 if __name__ == '__main__':
   # tst_c3d()
   # bat_c3d()
-  post_process()
+  # post_process()
+  normalize_format()
