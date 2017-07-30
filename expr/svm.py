@@ -590,6 +590,25 @@ def val_model():
     print events[c], ap
 
 
+def gen_predict_script():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  out_file = 'predict_eev.sh'
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(name)
+
+  with open(out_file, 'w') as fout:
+    for name in names:
+      cmd = ['python', 'svm.py', name]
+      fout.write(' '.join(cmd) + '\n')
+
+
 def predict_on_eev():
   root_dir = '/home/jiac/data/sed2017' # rocks
   vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
@@ -634,4 +653,5 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  predict_on_eev()
+  # predict_on_eev()
+  gen_predict_script()
