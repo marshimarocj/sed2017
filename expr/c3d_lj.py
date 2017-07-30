@@ -289,7 +289,7 @@ def normalize_format():
         data = np.load(src_file)
         fts = data['fts']
         np.moveaxis(fts, (0, 1, 2, 3), (0, 3, 1, 2))
-        np.save(dst_file, fts=fts)
+        np.savez_compressed(dst_file, fts=fts)
 
 
 if __name__ == '__main__':
