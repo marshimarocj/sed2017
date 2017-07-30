@@ -288,7 +288,7 @@ def normalize_format():
         dst_file = os.path.join(dst_dir, name)
         data = np.load(src_file)
         fts = data['fts']
-        np.moveaxis(fts, (0, 1, 2, 3), (0, 3, 1, 2))
+        fts = np.moveaxis(fts, (0, 1, 2, 3), (0, 2, 3, 1))
         np.savez_compressed(dst_file, fts=fts)
 
 
