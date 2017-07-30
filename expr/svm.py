@@ -697,7 +697,7 @@ def eval_full():
   predicts = []
   labels = []
   for videoname in videonames:
-    print name
+    print videoname
     predict_file = os.path.join(predict_dir, videoname + '.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
