@@ -678,7 +678,7 @@ def eval_full():
     num = _ids.shape[0]
     predicts.append(_predicts)
     for i in range(num):
-      key = '%s_%d'%(name, ids[i])
+      key = '%s_%d'%(name, _ids[i])
       if key in pos_key2label:
         label = pos_key2label[key]
       else:
