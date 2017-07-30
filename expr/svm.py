@@ -644,6 +644,32 @@ def predict_on_eev():
   np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
+def predict_on_tst2017():
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad')
+  model_file = os.path.join(root_dir, 'expr', 'flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
+  out_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+
+  with open(model_file) as f:
+    model = cPickle.load(f)
+
+  with open(lst_file) as f:
+    for line in f:
+      name = line.strip()
+      print name
+
+      file = os.path.join(vlad_dir, '%s.25.forward.square.npz'%name)
+      data = np.load(file)
+      ids = data['ids']
+      vlads = data['vlads']
+      predicts = model.decision_function(vlads)
+      predicts = np.exp(-predicts)
+      predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
+      out_file = os.path.join(out_dir, name + '.npz')
+      np.savez_compressed(out_file, predicts=predicts, ids=ids)
+
+
 def eval_full():
   root_dir = '/home/jiac/data/sed2017' # rocks
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
@@ -711,4 +737,5 @@ if __name__ == '__main__':
   # val_model()
   # predict_on_eev()
   # gen_predict_script()
-  eval_full()
+  # eval_full()
+  predict_on_tst2017()
