@@ -170,10 +170,10 @@ def encode_vlad():
     with open(lst_file) as f:
       for line in f:
         line = line.strip()
-        # if 'CAM4' not in line:
-        #   name, _ = os.path.splitext(line)
-        #   names.append(name)
-        names.append(line)
+        if 'CAM4' not in line:
+          name, _ = os.path.splitext(line)
+          names.append(name)
+        # names.append(line)
 
   for name in names:
     for track_len in track_lens:
