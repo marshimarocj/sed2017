@@ -676,13 +676,13 @@ def eval_full():
   predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
   pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
 
-  names = []
+  videonames = []
   with open(lst_file) as f:
     for line in f:
       line = line.strip()
-      name, _ = os.path.splitext(line)
-      if 'CAM4' not in name:
-        names.append(name)
+      videoname, _ = os.path.splitext(line)
+      if 'CAM4' not in videoname:
+        videonames.append(videoname)
 
   data = np.load(pos_file)
   ids = data['ids']
@@ -696,16 +696,16 @@ def eval_full():
 
   predicts = []
   labels = []
-  for name in names:
+  for videoname in videonames:
     print name
-    predict_file = os.path.join(predict_dir, name + '.npz')
+    predict_file = os.path.join(predict_dir, videoname + '.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
     _ids = data['ids']
     num = _ids.shape[0]
     predicts.append(_predicts)
     for i in range(num):
-      key = '%s_%d'%(name, _ids[i])
+      key = '%s_%d'%(videoname, _ids[i])
       if key in pos_key2label:
         label = pos_key2label[key]
       else:
