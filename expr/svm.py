@@ -501,6 +501,35 @@ def train_model():
     cPickle.dump(model, fout)
 
 
+def train_final_model():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  trn_files = [
+    os.path.join(root_dir, 'expr', 'c3d.flow', 'dev08.vlad.npz'),
+    os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.npz'),
+  ]
+  out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+
+  fts = []
+  labels = []
+  for trn_file in trn_files:
+    data = np.load(trn_file)
+    fts.append(data['fts'])
+    labels.append(data['labels'])
+
+  print 'load complete'
+
+  fts = np.concatenate(fts, axis=0)
+  labels = np.concatenate(labels, axis=0)
+
+  print 'merge complete'
+
+  model = LinearSVC(verbose=1)
+  model.fit(fts, labels)
+
+  with open(out_file, 'w') as fout:
+    cPickle.dump(model, fout)
+
+
 def val_model():
   # root_dir = '/data1/jiac/sed' # uranus
   # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
@@ -559,7 +588,8 @@ if __name__ == '__main__':
   # sample_neg_ids()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  prepare_trn_early_fusion_data()
+  # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
+  train_final_model()
   # val_model()
