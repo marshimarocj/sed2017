@@ -613,7 +613,6 @@ def predict_on_eev():
   root_dir = '/home/jiac/data/sed2017' # rocks
   vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full_predict.npz')
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
@@ -621,7 +620,7 @@ def predict_on_eev():
 
   name = args.name
 
-  out_file = os.path.join(root_dir, 'expr', 'twostream', name + '.full_predict.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.npz')
 
   with open(model_file) as f:
     model = cPickle.load(f)
