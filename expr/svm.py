@@ -653,5 +653,5 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  predict_on_eev()
-  # gen_predict_script()
+  # predict_on_eev()
+  gen_predict_script()
