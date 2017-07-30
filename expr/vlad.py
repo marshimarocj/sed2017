@@ -134,30 +134,30 @@ def encode_vlad():
   # root_dir = '/data1/jiac/sed' # uranus
   # ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
-  # kmeans_file = os.path.join(root_dir, 'vgg19_pool5_fullres', 'kmeans.center.32.pkl')
-  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
-  # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
-  ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
-  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
+  # # kmeans_file = os.path.join(root_dir, 'vgg19_pool5_fullres', 'kmeans.center.32.pkl')
+  # # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
+  # # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  # ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
+  # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
-  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed2017' # rocks
   # root_dir = '/home/jiac/data/sed' # danny
-  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
-  # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   lst_files = [
     # os.path.join(root_dir, 'dev08-1.lst'),
-    # os.path.join(root_dir, 'eev08-1.lst'),
-    os.path.join(root_dir, '2017.refined.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+    # os.path.join(root_dir, '2017.refined.lst'),
   ]
   # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
-  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad')
-  out_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'vlad')
+  # out_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'vlad')
 
   # track_lens = [25, 50]
   track_lens = [25]
@@ -180,14 +180,14 @@ def encode_vlad():
       files = [
         # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
         # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-        # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
-        os.path.join(ft_root_dir, '%s.%d.forward.square.npz'%(name, track_len))
+        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
+        # os.path.join(ft_root_dir, '%s.%d.forward.square.npz'%(name, track_len))
       ]
       out_files = [
         # os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
         # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-        # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split)) for split in range(1, 10)
-        os.path.join(out_dir, '%s.%d.forward.square.npz'%(name, track_len))
+        os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split)) for split in range(1, 10)
+        # os.path.join(out_dir, '%s.%d.forward.square.npz'%(name, track_len))
       ]
       print name
 
