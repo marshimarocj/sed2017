@@ -516,7 +516,8 @@ def train_final_model():
     os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.npz'),
   ]
   # out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.final.prob.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   fts = []
   labels = []
@@ -532,7 +533,8 @@ def train_final_model():
 
   print 'merge complete'
 
-  model = LinearSVC(verbose=1)
+  # model = LinearSVC(verbose=1)
+  model = SVC(verbose=1, probability=True)
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
@@ -736,7 +738,7 @@ if __name__ == '__main__':
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   train_model()
-  # train_final_model()
+  train_final_model()
   # val_model()
   # predict_on_eev()
   # gen_predict_script()
