@@ -4,7 +4,7 @@ import random
 import argparse
 
 import numpy as np
-from sklearn.svm import LinearSVC
+from sklearn.svm import LinearSVC, SVC
 from sklearn.metrics import average_precision_score
 
 import sample
@@ -490,7 +490,8 @@ def train_model():
   # trn_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'dev08.vlad.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   trn_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'dev08.vlad.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.prob.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   data = np.load(trn_file)
   fts = data['fts']
@@ -498,7 +499,8 @@ def train_model():
 
   print 'load complete'
 
-  model = LinearSVC(verbose=1)
+  # model = LinearSVC(verbose=1)
+  model = SVC(verbose=1, probability=True)
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
@@ -733,10 +735,10 @@ if __name__ == '__main__':
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  # train_model()
+  train_model()
   # train_final_model()
   # val_model()
   # predict_on_eev()
   # gen_predict_script()
-  eval_full()
+  # eval_full()
   # predict_on_tst2017()
