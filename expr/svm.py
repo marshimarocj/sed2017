@@ -737,5 +737,5 @@ if __name__ == '__main__':
   # val_model()
   # predict_on_eev()
   # gen_predict_script()
-  # eval_full()
-  predict_on_tst2017()
+  eval_full()
+  # predict_on_tst2017()
