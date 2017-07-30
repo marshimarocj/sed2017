@@ -620,7 +620,8 @@ def predict_on_eev():
 
   name = args.name
 
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.raw.npz')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -635,8 +636,8 @@ def predict_on_eev():
     _ids = data['ids']
     _vlads = data['vlads']
     _predicts = model.decision_function(_vlads)
-    _predicts = np.exp(-_predicts)
-    _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
+    # _predicts = np.exp(-_predicts)
+    # _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
     ids.append(_ids)
     predicts.append(_predicts)
   ids = np.concatenate(ids, 0)
@@ -664,9 +665,8 @@ def predict_on_tst2017():
       ids = data['ids']
       vlads = data['vlads']
       predicts = model.decision_function(vlads)
-      # predicts = np.exp(-predicts)
-      # predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
-      out_file = os.path.join(out_dir, name + '.raw.npz')
+      predicts = np.exp(-predicts)
+      predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
       np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
@@ -698,7 +698,8 @@ def eval_full():
   labels = []
   for videoname in videonames:
     print videoname
-    predict_file = os.path.join(predict_dir, videoname + '.npz')
+    # predict_file = os.path.join(predict_dir, videoname + '.npz')
+    predict_file = os.path.join(predict_dir, videoname + '.raw.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
     _ids = data['ids']
@@ -735,7 +736,7 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  # predict_on_eev()
+  predict_on_eev()
   # gen_predict_script()
   # eval_full()
-  predict_on_tst2017()
+  # predict_on_tst2017()
