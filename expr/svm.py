@@ -664,9 +664,9 @@ def predict_on_tst2017():
       ids = data['ids']
       vlads = data['vlads']
       predicts = model.decision_function(vlads)
-      predicts = np.exp(-predicts)
-      predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
-      out_file = os.path.join(out_dir, name + '.npz')
+      # predicts = np.exp(-predicts)
+      # predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
+      out_file = os.path.join(out_dir, name + '.raw.npz')
       np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
@@ -737,5 +737,5 @@ if __name__ == '__main__':
   # val_model()
   # predict_on_eev()
   # gen_predict_script()
-  eval_full()
-  # predict_on_tst2017()
+  # eval_full()
+  predict_on_tst2017()
