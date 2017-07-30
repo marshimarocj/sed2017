@@ -513,9 +513,12 @@ def val_model():
   # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
-  model_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
+  # model_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  pos_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.pos.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.neg.5.npz')
+  model_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -553,5 +556,5 @@ if __name__ == '__main__':
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  train_model()
-  # val_model()
+  # train_model()
+  val_model()
