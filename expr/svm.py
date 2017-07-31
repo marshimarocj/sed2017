@@ -503,7 +503,7 @@ def train_model():
 
   # model = LinearSVC(verbose=1)
   # model = SVC(verbose=1, probability=True)
-  model = LogisticRegression(solver='lbfgs')
+  model = LogisticRegression(solver='lbfgs', verbose=1)
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
@@ -539,7 +539,7 @@ def train_final_model():
 
   # model = LinearSVC(verbose=1)
   # model = SVC(verbose=1, probability=True)
-  model = LogisticRegression(solver='lbfgs')
+  model = LogisticRegression(solver='lbfgs', verbose=1)
   model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
