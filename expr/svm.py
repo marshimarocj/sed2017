@@ -658,13 +658,13 @@ def predict_on_tst2017():
   root_dir = '/home/jiac/data2/sed' # gpu9
   lst_file = os.path.join(root_dir, '2017.refined.lst')
   vlad_dirs = [
-    # os.path.join(root_dir, 'c3d', 'tst2017', 'vlad'),
+    os.path.join(root_dir, 'c3d', 'tst2017', 'vlad'),
     os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad'),
   ]
-  model_file = os.path.join(root_dir, 'expr', 'flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  out_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
-  # model_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # out_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
+  # model_file = os.path.join(root_dir, 'expr', 'flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # out_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+  model_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -692,18 +692,14 @@ def predict_on_tst2017():
             id2cnt[id] = 0
           id2fts[id].append(vlads[i])
           id2cnt[id] += 1
-      print 'merge ft'
 
       vlads = []
       ids = []
       for id in id2fts:
         if id2cnt[id] == len(vlad_dirs):
-        # if id2cnt[id] == 2:
           ft = np.concatenate(id2fts[id])
           vlads.append(ft)
           ids.append(id)
-
-      print 'complete'
 
       predicts = model.decision_function(vlads)
       predicts = np.exp(predicts)
