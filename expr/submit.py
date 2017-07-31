@@ -69,7 +69,8 @@ def generate_csv():
   # lst_file = os.path.join(root_dir, 'eev08-1.lst')
   # track_dir = os.path.join(root_dir, 'tracking')
   root_dir = '/home/jiac/data2/sed' # gpu9
-  predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+  # predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+  predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
   video_dir = os.path.join(root_dir, 'video')
   lst_file = os.path.join(root_dir, '2017.refined.lst')
   track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
