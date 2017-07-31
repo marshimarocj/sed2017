@@ -161,6 +161,7 @@ def generate_xml():
         '--insertCSV', os.path.join(predict_dir, name + '.csv'),
         os.path.join(predict_dir, name + '.xml')
       ]
+      fout.write(' '.join(cmd) + '\n')
 
 
 if __name__ == '__main__':
