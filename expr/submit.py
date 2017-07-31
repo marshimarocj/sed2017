@@ -158,7 +158,7 @@ def generate_xml():
       '--limitto', 'CellToEar,Embrace,Pointing,PersonRuns',
       '--Remove', 'ALL',
       '--write', predict_dir,
-      template_dir
+      template_dir + '/*.xml'
     ]
     fout.write(' '.join(cmd) + '\n')
     for name in names:
