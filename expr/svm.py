@@ -716,7 +716,7 @@ def predict_on_tst2017():
 
 def eval_full():
   # root_dir = '/home/jiac/data/sed2017' # rocks
-  root_dir = '/home/jiac/data/sed2017' # uranus
+  root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
   # predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
   # pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
