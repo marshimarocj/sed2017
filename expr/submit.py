@@ -97,7 +97,8 @@ def generate_csv():
     ids = data['ids']
     predicts = data['predicts']
 
-    track_db_file = os.path.join(track_dir, name + '.25.forward.backward.square.npz')
+    # track_db_file = os.path.join(track_dir, name + '.25.forward.backward.square.npz')
+    track_db_file = os.path.join(track_dir, name + '.25.forward.square.npz')
     track_db = api.db.TrackDb()
     track_db.load(track_db_file)
 
