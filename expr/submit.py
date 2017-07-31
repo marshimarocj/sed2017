@@ -143,6 +143,7 @@ def generate_xml():
   root_dir = '/home/jiac/data2/sed' # gpu9
   lst_file = os.path.join(root_dir, '2017.refined.lst')
   predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
+  template_dir = os.path.join(root_dir, 'submit2017', 'output')
   out_file = 'run.sh'
 
   names = []
@@ -152,6 +153,14 @@ def generate_xml():
       names.append(line)
 
   with open(out_file, 'w') as fout:
+    empty_cmd = [
+      'TV08ViperValidator',
+      '--limtto', 'CellToEar,Embrace,Pointing,PersonRuns',
+      '--Remove', 'ALL',
+      '--write', predict_dir,
+      template_dir
+    ]
+    fout.write(' '.join(cmd) + '\n')
     for name in names:
       cmd = [
         'TV08ViperValidator', 
