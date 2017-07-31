@@ -155,7 +155,7 @@ def generate_xml():
   with open(out_file, 'w') as fout:
     cmd = [
       'TV08ViperValidator',
-      '--limtto', 'CellToEar,Embrace,Pointing,PersonRuns',
+      '--limitto', 'CellToEar,Embrace,Pointing,PersonRuns',
       '--Remove', 'ALL',
       '--write', predict_dir,
       template_dir
