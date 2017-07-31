@@ -692,6 +692,7 @@ def predict_on_tst2017():
             id2cnt[id] = 0
           id2fts[id].append(vlads[i])
           id2cnt[id] += 1
+      print 'merge ft'
 
       vlads = []
       ids = []
@@ -700,7 +701,9 @@ def predict_on_tst2017():
         # if id2cnt[id] == 2:
           ft = np.concatenate(id2fts[id])
           vlads.append(ft)
-          ids.append(ids)
+          ids.append(id)
+
+      print 'complete'
 
       predicts = model.decision_function(vlads)
       predicts = np.exp(predicts)
