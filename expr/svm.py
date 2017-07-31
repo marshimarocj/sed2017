@@ -600,7 +600,8 @@ def val_model():
 
 
 def gen_predict_script():
-  root_dir = '/home/jiac/data/sed2017' # rocks
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
   out_file = 'predict_eev.sh'
 
@@ -776,6 +777,6 @@ if __name__ == '__main__':
   # train_final_model()
   # val_model()
   # predict_on_eev()
-  # gen_predict_script()
+  gen_predict_script()
   # eval_full()
-  predict_on_tst2017()
+  # predict_on_tst2017()
