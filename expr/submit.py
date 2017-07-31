@@ -105,7 +105,7 @@ def generate_csv():
         if start_frame not in start_frame2score:
           start_frame2score[start_frame] = {'score': score, 'lid': lid}
         if score > start_frame2score[start_frame]['score']:
-          start_frame2score[start_frame] = {'score', score, 'lid': lid}
+          start_frame2score[start_frame] = {'score': score, 'lid': lid}
 
     num_frame_file = os.path.join(video_dir, name + '.num_frame')
     with open(num_frame_file) as f:
