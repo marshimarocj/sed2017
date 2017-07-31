@@ -142,8 +142,8 @@ def generate_csv():
 def generate_xml():
   root_dir = '/home/jiac/data2/sed' # gpu9
   lst_file = os.path.join(root_dir, '2017.refined.lst')
-  # predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
-  predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+  predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
+  # predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
   template_dir = os.path.join(root_dir, 'submit2017', 'output', 'testTEAM_2017_retroED_EVAL17_ENG_s-camera_p-RandomSubmission_1')
   out_file = 'run.sh'
 
@@ -156,7 +156,7 @@ def generate_xml():
   with open(out_file, 'w') as fout:
     cmd = [
       'TV08ViperValidator',
-      '--limitto', 'CellToEar,Embrace,Pointing,PersonRuns',
+      '--limitto', 'PersonRuns,CellToEar,ObjectPut,PeopleMeet,PeopleSplitUp,Embrace,Pointing',
       '--Remove', 'ALL',
       '--write', predict_dir,
       template_dir + '/*.xml'
@@ -165,7 +165,7 @@ def generate_xml():
     for name in names:
       cmd = [
         'TV08ViperValidator', 
-        '--limitto', 'CellToEar,Embrace,Pointing,PersonRuns',
+        '--limitto', 'PersonRuns,CellToEar,ObjectPut,PeopleMeet,PeopleSplitUp,Embrace,Pointing',
         '--fps', '25',
         '--write', predict_dir,
         '--insertCSV', os.path.join(predict_dir, name + '.csv'),
