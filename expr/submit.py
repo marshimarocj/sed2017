@@ -153,7 +153,7 @@ def generate_xml():
       names.append(line)
 
   with open(out_file, 'w') as fout:
-    empty_cmd = [
+    cmd = [
       'TV08ViperValidator',
       '--limtto', 'CellToEar,Embrace,Pointing,PersonRuns',
       '--Remove', 'ALL',
