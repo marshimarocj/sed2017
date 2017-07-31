@@ -131,18 +131,18 @@ def cluster_centers():
 
 
 def encode_vlad():
-  root_dir = '/data1/jiac/sed' # uranus
-  # ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # # ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
+  # ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
-  ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
-  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
-  # root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/home/jiac/data2/sed' # gpu9
   # # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
   # # kmeans_file = os.path.join(root_dir, 'vgg19_pool5_fullres', 'kmeans.center.32.pkl')
   # # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'track_group')
   # # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
-  # ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
-  # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
+  ft_root_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'track_group')
+  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
