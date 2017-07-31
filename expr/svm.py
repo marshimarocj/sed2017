@@ -690,7 +690,7 @@ def predict_on_tst2017():
           if id not in id2fts:
             id2fts[id] = []
             id2cnt[id] = 0
-          id2fts[id].append(fts[i])
+          id2fts[id].append(vlads[i])
           id2cnt[id] += 1
       vlads = []
       ids = []
