@@ -695,7 +695,7 @@ def predict_on_tst2017():
       vlads = []
       ids = []
       for id in id2fts:
-        if id2cnt[id] == 1:
+        if id2cnt[id] == len(vlad_dirs):
         # if id2cnt[id] == 2:
           ft = np.concatenate(id2fts[id])
           vlads.append(ft)
@@ -774,5 +774,5 @@ if __name__ == '__main__':
   # val_model()
   # predict_on_eev()
   # gen_predict_script()
-  eval_full()
-  # predict_on_tst2017()
+  # eval_full()
+  predict_on_tst2017()
