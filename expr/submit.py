@@ -132,7 +132,7 @@ def generate_csv():
         lid = start_frame2score[start_frame]['lid']
         event = events[lid]
         score = start_frame2score[start_frame]['score']
-        end_frame = min(start_frame + 24, num_frame-1)
+        end_frame = min(start_frame + 24, num_frame-5)
         decision = score >= threshold
         fout.write('"%d","%s","%d:%d","%f","%d"\n'%(cnt, event, start_frame, end_frame, score, decision))
 
@@ -178,5 +178,5 @@ if __name__ == '__main__':
   # extract_tst_videos()
   # tar_tst_videos()
   # lnk_2017_tst_flow_ft_for_transfer()
-  # generate_csv()
-  generate_xml()
+  generate_csv()
+  # generate_xml()
