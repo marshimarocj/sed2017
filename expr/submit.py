@@ -178,5 +178,5 @@ if __name__ == '__main__':
   # extract_tst_videos()
   # tar_tst_videos()
   # lnk_2017_tst_flow_ft_for_transfer()
-  generate_csv()
-  # generate_xml()
+  # generate_csv()
+  generate_xml()
