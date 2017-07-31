@@ -85,6 +85,7 @@ def generate_csv():
     events[lid] = event
 
   for name in names:
+    print name
     predict_file = os.path.join(predict_dir, name + '.npz')
     data = np.load(predict_file)
     ids = data['ids']

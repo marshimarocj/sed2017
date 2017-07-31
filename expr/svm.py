@@ -656,10 +656,15 @@ def predict_on_eev():
 
 def predict_on_tst2017():
   root_dir = '/home/jiac/data2/sed' # gpu9
-  vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad')
-  model_file = os.path.join(root_dir, 'expr', 'flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   lst_file = os.path.join(root_dir, '2017.refined.lst')
+  vlad_dirs = [
+    # os.path.join(root_dir, 'c3d', 'tst2017', 'vlad'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad'),
+  ]
+  model_file = os.path.join(root_dir, 'expr', 'flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   out_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+  # model_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.final.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # out_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -669,12 +674,34 @@ def predict_on_tst2017():
       name = line.strip()
       print name
 
-      file = os.path.join(vlad_dir, '%s.25.forward.square.npz'%name)
-      data = np.load(file)
-      ids = data['ids']
-      vlads = data['vlads']
+      id2fts = {}
+      id2cnt = {}
+      for vlad_dir in vlad_dirs:
+        file = os.path.join(vlad_dir, '%s.25.forward.square.npz'%name)
+        data = np.load(file)
+        ids = data['ids']
+        vlads = data['vlads']
+        num = ids.shape[0]
+        unique_ids = set() # hack, guard against duplicate bug
+        for i in range(num):
+          id = ids[i]
+          if id in unique_ids:
+            continue
+          if id not in id2fts:
+            id2fts[id] = []
+            id2cnt[id] = 0
+          id2fts[id].append(fts[i])
+          id2cnt[id] += 1
+      vlads = []
+      ids = []
+      for id in id2fts:
+        if id2cnt[id] == 1:
+        # if id2cnt[id] == 2:
+          ft = np.concatenate(id2fts[id])
+          vlads.append(ft)
+          ids.append(ids)
       predicts = model.decision_function(vlads)
-      predicts = np.exp(-predicts)
+      predicts = np.exp(predicts)
       predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
       np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
