@@ -139,8 +139,33 @@ def generate_csv():
         cnt += 1
 
 
+def generate_xml():
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
+  predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
+  out_file = 'run.sh'
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      names.append(line)
+
+  with open(out_file, 'w') as fout:
+    for name in names:
+      cmd = [
+        'TV08ViperValidator', 
+        '--limitto', 'CellToEar,Embrace,Pointing,PersonRuns',
+        '--fps', '25',
+        '--write', predict_dir,
+        '--insertCSV', os.path.join(predict_dir, name + '.csv'),
+        os.path.join(predict_dir, name + '.xml')
+      ]
+
+
 if __name__ == '__main__':
   # extract_tst_videos()
   # tar_tst_videos()
   # lnk_2017_tst_flow_ft_for_transfer()
-  generate_csv()
+  # generate_csv()
+  generate_xml()
