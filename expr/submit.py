@@ -83,7 +83,7 @@ def generate_csv():
       # name, _ = os.path.splitext(line)
       # if 'CAM4' not in name:
       #   names.append(name)
-      names.append(name)
+      names.append(line)
 
   events = {}
   for event in event2lid:
