@@ -68,12 +68,17 @@ def generate_csv():
   # video_dir = os.path.join(root_dir, 'video')
   # lst_file = os.path.join(root_dir, 'eev08-1.lst')
   # track_dir = os.path.join(root_dir, 'tracking')
-  root_dir = '/home/jiac/data2/sed' # gpu9
-  # predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
-  predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
+  # root_dir = '/home/jiac/data2/sed' # gpu9
+  # # predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
+  # predict_dir = os.path.join(root_dir, 'expr', 'c3d.flow', 'tst2017')
+  # video_dir = os.path.join(root_dir, 'video')
+  # lst_file = os.path.join(root_dir, '2017.refined.lst')
+  # track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
+  root_dir = '/data1/jiac/sed' # uranus
+  predict_dir = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full')
   video_dir = os.path.join(root_dir, 'video')
-  lst_file = os.path.join(root_dir, '2017.refined.lst')
-  track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  track_dir = os.path.join(root_dir, 'tracking')
 
   threshold = 0.5
 
@@ -81,10 +86,10 @@ def generate_csv():
   with open(lst_file) as f:
     for line in f:
       line = line.strip()
-      # name, _ = os.path.splitext(line)
-      # if 'CAM4' not in name:
-      #   names.append(name)
-      names.append(line)
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(name)
+      # names.append(line)
 
   events = {}
   for event in event2lid:
@@ -178,5 +183,5 @@ if __name__ == '__main__':
   # extract_tst_videos()
   # tar_tst_videos()
   # lnk_2017_tst_flow_ft_for_transfer()
-  # generate_csv()
-  generate_xml()
+  generate_csv()
+  # generate_xml()
