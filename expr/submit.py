@@ -63,11 +63,16 @@ def lnk_2017_tst_flow_ft_for_transfer():
 
 
 def generate_csv():
-  root_dir = '/home/jiac/data/sed2017' # rocks
-  predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  # predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  # video_dir = os.path.join(root_dir, 'video')
+  # lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  # track_dir = os.path.join(root_dir, 'tracking')
+  root_dir = '/home/jiac/data2/sed' # gpu9
+  predict_dir = os.path.join(root_dir, 'expr', 'flow', 'tst2017')
   video_dir = os.path.join(root_dir, 'video')
-  lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  track_dir = os.path.join(root_dir, 'tracking')
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
+  track_dir = os.path.join(root_dir, 'tracking', 'tst2017')
 
   threshold = 0.5
 
@@ -75,9 +80,10 @@ def generate_csv():
   with open(lst_file) as f:
     for line in f:
       line = line.strip()
-      name, _ = os.path.splitext(line)
-      if 'CAM4' not in name:
-        names.append(name)
+      # name, _ = os.path.splitext(line)
+      # if 'CAM4' not in name:
+      #   names.append(name)
+      names.append(name)
 
   events = {}
   for event in event2lid:
