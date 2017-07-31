@@ -9,6 +9,12 @@ import api.db
 
 '''func
 '''
+event2lid = {
+  'CellToEar': 1,
+  'Embrace': 2,
+  'Pointing': 3,
+  'PersonRuns': 4 
+}
 
 
 '''expr
@@ -57,8 +63,11 @@ def lnk_2017_tst_flow_ft_for_transfer():
 def generate_csv():
   root_dir = '/home/jiac/data/sed2017' # rocks
   predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  video_dir = os.path.join(root_dir, 'video')
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
   track_dir = os.path.join(root_dir, 'tracking')
+
+  threshold = 0.5
 
   names = []
   with open(lst_file) as f:
@@ -68,13 +77,55 @@ def generate_csv():
       if 'CAM4' not in name:
         names.append(name)
 
+  events = {}
+  for event in event2lid:
+    lid = event2lid[event]
+    events[lid] = event
+
   for name in names:
     predict_file = os.path.join(predict_dir, name + '.npz')
     data = np.load(predict_file)
+    ids = data['ids']
+    predicts = data['predicts']
 
     track_db_file = os.path.join(track_dir, name + '.25.forward.backward.square.npz')
     track_db = api.db.TrackDb()
     track_db.load(track_db_file)
+
+    start_frame2score = {}
+    num = ids.shape[0]
+    for i in range(num):
+      id = ids[i]
+      predict = predicts[i]
+      lid = np.argmax(predict)
+      score = np.max(predict)
+      if lid > 0:
+        track = track_db.trackid2track[id]
+        start_frame = track.start_frame
+        if start_frame not in start_frame2score:
+          start_frame2score[start_frame] = {'score': score, 'lid': lid}
+        if score > start_frame2score[start_frame]['score']:
+          start_frame2score[start_frame] = {'score', score, 'lid': lid}
+
+    num_frame_file = os.path.join(video_dir, name + '.num_frame')
+    with open(num_frame_file) as f:
+      line = f.readline()
+      line = line.strip()
+      num_frame = int(line)
+
+    out_file = os.path.join(predict_dir, name + '.csv')
+    with open(out_file, 'w') as fout:
+      fout.write('"ID","EventType","Framespan","DetectionScore","DetectionDecision"\n')
+      cnt = 1
+      for start_frame in start_frame2score:
+        lid = start_frame2score[start_frame]['lid']
+        event = events[lid]
+        score = start_frame2score[start_frame]['score']
+        end_frame = min(start_frame + 25, num_frame)
+        decision = score >= threshold
+        fout.write('"%d","%s","%d:%d","%f","%d"\n'%(cnt, event, start_frame, end_frame, score, decision))
+
+        cnt += 1
 
 
 if __name__ == '__main__':
