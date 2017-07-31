@@ -715,10 +715,13 @@ def predict_on_tst2017():
 
 
 def eval_full():
-  root_dir = '/home/jiac/data/sed2017' # rocks
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed2017' # uranus
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
-  pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  # predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  # pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  predict_dir = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full')
+  pos_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
 
   videonames = []
   with open(lst_file) as f:
@@ -780,7 +783,7 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  predict_on_eev()
+  # predict_on_eev()
   # gen_predict_script()
-  # eval_full()
+  eval_full()
   # predict_on_tst2017()
