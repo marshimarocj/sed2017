@@ -629,8 +629,8 @@ def predict_on_eev():
 
   name = args.name
 
-  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.raw.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.raw.npz')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -645,8 +645,8 @@ def predict_on_eev():
     _ids = data['ids']
     _vlads = data['vlads']
     _predicts = model.decision_function(_vlads)
-    # _predicts = np.exp(-_predicts)
-    # _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
+    _predicts = np.exp(_predicts)
+    _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
     ids.append(_ids)
     predicts.append(_predicts)
   ids = np.concatenate(ids, 0)
@@ -742,10 +742,10 @@ if __name__ == '__main__':
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  train_model()
-  train_final_model()
+  # train_model()
+  # train_final_model()
   # val_model()
-  # predict_on_eev()
+  predict_on_eev()
   # gen_predict_script()
   # eval_full()
   # predict_on_tst2017()

@@ -1,6 +1,10 @@
 import os
 import xml.etree.ElementTree
 import tarfile
+import sys
+sys.path.append('../')
+
+import api.db
 
 
 '''func
@@ -50,7 +54,31 @@ def lnk_2017_tst_flow_ft_for_transfer():
       os.symlink(src_file, dst_file)
 
 
+def generate_csv():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  track_dir = os.path.join(root_dir, 'tracking')
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(name)
+
+  for name in names:
+    predict_file = os.path.join(predict_dir, name + '.npz')
+    data = np.load(predict_file)
+
+    track_db_file = os.path.join(track_dir, name + '.25.forward.backward.square.npz')
+    track_db = api.db.TrackDb()
+    track_db.load(track_db_file)
+
+
 if __name__ == '__main__':
   # extract_tst_videos()
   # tar_tst_videos()
-  lnk_2017_tst_flow_ft_for_transfer()
+  # lnk_2017_tst_flow_ft_for_transfer()
+  generate_csv()
