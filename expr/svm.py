@@ -692,6 +692,7 @@ def predict_on_tst2017():
             id2cnt[id] = 0
           id2fts[id].append(vlads[i])
           id2cnt[id] += 1
+
       vlads = []
       ids = []
       for id in id2fts:
@@ -700,9 +701,12 @@ def predict_on_tst2017():
           ft = np.concatenate(id2fts[id])
           vlads.append(ft)
           ids.append(ids)
+
       predicts = model.decision_function(vlads)
       predicts = np.exp(predicts)
       predicts = predicts / np.sum(predicts, axis=1, keepdims=True)
+
+      out_file = os.path.join(out_dir, name + '.npz')
       np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
