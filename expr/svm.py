@@ -683,8 +683,10 @@ def val_model():
   root_dir = '/data1/jiac/sed' # uranus
   # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
-  pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.25.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.25.npz')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.25.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.25.npz')
+  pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.50.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.50.npz')
   model_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
