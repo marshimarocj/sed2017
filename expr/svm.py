@@ -355,6 +355,7 @@ def prepare_tst_neg_data_with_tracklen_fixed():
   neg_ids = []
   neg_names = []
   for name in names:
+    print name
     neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
     prepare_neg_instances(neg_ft_file, name, name2ids,
       neg_fts, neg_ids, neg_names)
