@@ -305,8 +305,8 @@ def prepare_tst_pos_data_with_tracklen_fixed():
   root_dir = '/home/jiac/data/sed2017' # rocks
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
-  # track_len = 25
-  track_len = 50
+  track_len = 25
+  # track_len = 50
   # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.%d.npz'%track_len)
@@ -339,8 +339,8 @@ def prepare_tst_neg_data_with_tracklen_fixed():
   root_dir = '/home/jiac/data/sed2017' # rocks
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
   neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
-  # track_len = 25
-  track_len = 50
+  track_len = 25
+  # track_len = 50
   # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.%d.npz'%track_len)
