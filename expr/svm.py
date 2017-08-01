@@ -686,29 +686,32 @@ def train_final_model():
 
 
 def val_model():
-  root_dir = '/data1/jiac/sed' # uranus
-  # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
-  # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
-  # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.25.npz')
-  # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.25.npz')
-  pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.50.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.50.npz')
-  model_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+  # # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.npz')
+  # # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.25.npz')
+  # # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.25.npz')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.50.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.50.npz')
+  # model_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'vgg19', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # root_dir = '/home/jiac/data2/sed' # gpu9
   # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'vgg19.c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # root_dir = '/home/jiac/data/sed2017' # rocks
-  # # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
-  # # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
-  # # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  # # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
-  # # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
-  # # model_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
+  pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
+  # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
+  # model_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # pos_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
@@ -919,15 +922,15 @@ def eval_full():
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
-  prepare_tst_pos_data_with_tracklen_fixed()
-  prepare_tst_neg_data_with_tracklen_fixed()
+  # prepare_tst_pos_data_with_tracklen_fixed()
+  # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
   # train_final_model()
-  # val_model()
+  val_model()
   # predict_on_eev()
   # gen_predict_script()
   # eval_full()
