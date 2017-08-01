@@ -706,8 +706,10 @@ def val_model():
   root_dir = '/home/jiac/data/sed2017' # rocks
   # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
-  pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
+  pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.50.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.50.npz')
   model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
