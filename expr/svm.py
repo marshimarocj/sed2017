@@ -337,7 +337,7 @@ def prepare_tst_neg_data_with_tracklen_fixed():
   # track_len = 25
   track_len = 50
   neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vald.neg.5.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.%d.npz'%track_len)
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
 
   track_len2name2ids = load_sampled_neg_ids(neg_id_file)
