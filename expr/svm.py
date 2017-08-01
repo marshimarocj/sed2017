@@ -21,7 +21,7 @@ event2lid = {
 }
 
 
-def prepare_pos_instances(label_file, pos_ft_file,
+def prepare_pos_instances(label_file, pos_ft_file, name,
     pos_fts, pos_labels, pos_tids, pos_names):
   tid2lid = {}
   with open(label_file) as f:
@@ -124,7 +124,7 @@ def prepare_trn_tst_pos_data():
         #     pos_tids.append(id)
         #     pos_names.append(name)
 
-        prepare_pos_instances(label_file, pos_ft_file, 
+        prepare_pos_instances(label_file, pos_ft_file, name,
           pos_fts, pos_labels, pos_tids, pos_names)
     np.savez_compressed(out_file, fts=pos_fts, labels=pos_labels, ids=pos_tids, names=pos_names)
 
@@ -289,7 +289,7 @@ def prepare_tst_pos_data_with_tracklen_fixed():
     print name
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
     pos_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
-    prepare_pos_instances(label_file, pos_ft_file,
+    prepare_pos_instances(label_file, pos_ft_file, name,
       pos_fts, pos_labels, pos_tids, pos_names)
   np.savez_compressed(out_file, fts=pos_fts, labels=pos_labels, ids=pos_tids, names=pos_names)
 
