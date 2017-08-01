@@ -728,8 +728,10 @@ def val_model():
   # model_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # pos_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.neg.5.npz')
-  pos_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.pos.25.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.neg.5.25.npz')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.pos.25.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.neg.5.25.npz')
+  pos_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.pos.50.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'eev08.vlad.neg.5.50.npz')
   model_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   with open(model_file) as f:
