@@ -278,7 +278,7 @@ def prepare_tst_pos_data_with_tracklen_fixed():
       line = line.strip()
       if 'CAM4' in line:
         continue
-      name, _  os.path.splitext(line)
+      name, _ = os.path.splitext(line)
       names.append(name)
 
   pos_fts = []
