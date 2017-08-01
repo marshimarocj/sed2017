@@ -66,7 +66,7 @@ def load_sampled_neg_ids(neg_id_file):
   return track_len2name2ids
 
 
-def prepare_neg_instances(neg_ft_file, name2ids,
+def prepare_neg_instances(neg_ft_file, name, name2ids,
     neg_fts, neg_ids, neg_names):
   data = np.load(neg_ft_file)
   fts = data['vlads']
@@ -293,7 +293,7 @@ def prepare_trn_tst_neg_data():
         #     neg_ids.append(id)
         #     neg_names.append(name)
         name2ids = track_len2name2ids[track_len]
-        prepare_neg_instances(neg_ft_file, name2ids,
+        prepare_neg_instances(neg_ft_file, name, name2ids,
           neg_fts, neg_ids, neg_names)
       print len(neg_ids)
 
@@ -356,7 +356,7 @@ def prepare_tst_neg_data_with_tracklen_fixed():
   neg_names = []
   for name in names:
     neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
-    prepare_neg_instances(neg_ft_file, name2ids,
+    prepare_neg_instances(neg_ft_file, name, name2ids,
       neg_fts, neg_ids, neg_names)
 
   np.savez_compressed(out_file, fts=neg_fts, ids=neg_ids, names=neg_names)
