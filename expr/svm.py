@@ -50,6 +50,38 @@ def prepare_pos_instances(label_file, pos_ft_file, name,
       pos_names.append(name)
 
 
+def load_sampled_neg_ids(neg_id_file):
+  track_len2name2ids = {25: {}, 50: {}}
+  with open(neg_id_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      track_len = int(data[0])
+      id = int(data[1])
+      name = data[2]
+      if name not in track_len2name2ids[track_len]:
+        track_len2name2ids[track_len][name] = set()
+      track_len2name2ids[track_len][name].add(id)
+
+  return track_len2name2ids
+
+
+def prepare_neg_instances(neg_ft_file, name2ids,
+    neg_fts, neg_ids, neg_names):
+  data = np.load(neg_ft_file)
+  fts = data['vlads']
+  ids = data['ids']
+
+  num = ids.shape[0]
+  for i in range(num):
+    ft = np.array(fts[i])
+    id = ids[i]
+    if id in name2ids[name]:
+      neg_fts.append(ft)
+      neg_ids.append(id)
+      neg_names.append(name)
+
+
 '''expr
 '''
 def prepare_trn_tst_pos_data():
@@ -219,17 +251,18 @@ def prepare_trn_tst_neg_data():
     neg_id_file = neg_id_files[s]
     out_file = out_files[s]
 
-    track_len2name2ids = {25: {}, 50: {}}
-    with open(neg_id_file) as f:
-      for line in f:
-        line = line.strip()
-        data = line.split(' ')
-        track_len = int(data[0])
-        id = int(data[1])
-        name = data[2]
-        if name not in track_len2name2ids[track_len]:
-          track_len2name2ids[track_len][name] = set()
-        track_len2name2ids[track_len][name].add(id)
+    # track_len2name2ids = {25: {}, 50: {}}
+    # with open(neg_id_file) as f:
+    #   for line in f:
+    #     line = line.strip()
+    #     data = line.split(' ')
+    #     track_len = int(data[0])
+    #     id = int(data[1])
+    #     name = data[2]
+    #     if name not in track_len2name2ids[track_len]:
+    #       track_len2name2ids[track_len][name] = set()
+    #     track_len2name2ids[track_len][name].add(id)
+    track_len2name2ids = load_sampled_neg_ids(neg_id_file)
 
     names = []
     with open(lst_file) as f:
@@ -247,18 +280,21 @@ def prepare_trn_tst_neg_data():
       print name
       for track_len in track_lens:
         neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
-        data = np.load(neg_ft_file)
-        fts = data['vlads']
-        ids = data['ids']
+        # data = np.load(neg_ft_file)
+        # fts = data['vlads']
+        # ids = data['ids']
 
-        num = ids.shape[0]
-        for i in range(num):
-          ft = np.array(fts[i])
-          id = ids[i]
-          if id in track_len2name2ids[track_len][name]:
-            neg_fts.append(ft)
-            neg_ids.append(id)
-            neg_names.append(name)
+        # num = ids.shape[0]
+        # for i in range(num):
+        #   ft = np.array(fts[i])
+        #   id = ids[i]
+        #   if id in track_len2name2ids[track_len][name]:
+        #     neg_fts.append(ft)
+        #     neg_ids.append(id)
+        #     neg_names.append(name)
+        name2ids = track_len2name2ids[track_len]
+        prepare_neg_instances(neg_ft_file, name2ids,
+          neg_fts, neg_ids, neg_names)
       print len(neg_ids)
 
     np.savez_compressed(out_file, fts=neg_fts, ids=neg_ids, names=neg_names)
@@ -292,6 +328,38 @@ def prepare_tst_pos_data_with_tracklen_fixed():
     prepare_pos_instances(label_file, pos_ft_file, name,
       pos_fts, pos_labels, pos_tids, pos_names)
   np.savez_compressed(out_file, fts=pos_fts, labels=pos_labels, ids=pos_tids, names=pos_names)
+
+
+def prepare_tst_neg_data_with_tracklen_fixed():
+  root_dir = '/data1/jiac/sed' # uranus
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  track_len = 25
+  neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vald.neg.5.%d.npz'%track_len)
+  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+
+  track_len2name2ids = load_sampled_neg_ids(neg_id_file)
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      if 'CAM4' in line:
+        continue
+      name, _ = os.path.splitext(line)
+      names.append(name)
+
+  name2ids = track_len2name2ids[track_len]
+
+  neg_fts = []
+  neg_ids = []
+  neg_names = []
+  for name in names:
+    neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
+    prepare_neg_instances(neg_ft_file, name2ids,
+      neg_fts, neg_ids, neg_names)
+
+  np.savez_compressed(out_file, fts=neg_fts, ids=neg_ids, names=neg_names)
 
 
 def prepare_trn_data():
@@ -838,7 +906,8 @@ def eval_full():
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
-  prepare_tst_pos_data_with_tracklen_fixed()
+  # prepare_tst_pos_data_with_tracklen_fixed()
+  prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
   # prepare_trn_early_fusion_data()
