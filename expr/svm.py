@@ -303,7 +303,8 @@ def prepare_trn_tst_neg_data():
 def prepare_tst_pos_data_with_tracklen_fixed():
   root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  track_len = 25
+  # track_len = 25
+  track_len = 50
   out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.%d.npz'%track_len)
   label_dir = os.path.join(root_dir, 'pseudo_label')
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
@@ -333,7 +334,8 @@ def prepare_tst_pos_data_with_tracklen_fixed():
 def prepare_tst_neg_data_with_tracklen_fixed():
   root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  track_len = 25
+  # track_len = 25
+  track_len = 50
   neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
   out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vald.neg.5.%d.npz'%track_len)
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
@@ -907,7 +909,7 @@ def eval_full():
 if __name__ == '__main__':
   # prepare_trn_tst_pos_data()
   # sample_neg_ids()
-  # prepare_tst_pos_data_with_tracklen_fixed()
+  prepare_tst_pos_data_with_tracklen_fixed()
   prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
