@@ -381,7 +381,7 @@ def prepare_trn_with_neg_sample():
   ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   neg_splits = [0]
   s = ' '.join([str(d) for d in neg_splits])
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.%s.pkl'%s)
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.%s.trn'%s)
 
   track_lens = [25, 50]
 
