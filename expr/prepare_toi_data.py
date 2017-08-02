@@ -349,7 +349,7 @@ def gen_script_rocks():
 def retrieve_failed_jobs():
   root_dir = '/home/jiac/data/sed2017' # rocks
   file = 'prepare_toi_data.sh'
-  outfile = 'prepare_toi_data.failed.sh'
+  out_file = 'prepare_toi_data.failed.sh'
 
   cmds = []
   with open(file) as f:
