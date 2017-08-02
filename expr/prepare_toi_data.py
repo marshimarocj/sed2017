@@ -346,106 +346,22 @@ def gen_script_rocks():
           fout.write(' '.join(cmd) + '\n')
 
 
-# def prepare_pos_vgg19():
-#   root_dir = '/home/jiac/data2/sed' # gpu9
-#   label_dir = os.path.join(root_dir, 'pseudo_label')
-#   track_dir = os.path.join(root_dir, 'tracking')
-#   ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
-#   out_dir = os.path.join(ft_root_dir, 'track_group')
+def retrieve_failed_jobs():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  file = 'prepare_toi_data.sh'
+  outfile = 'prepare_toi_data.failed.sh'
 
-#   track_lens = [25, 50]
+  cmds = []
+  with open(file) as f:
+    for i, line in enumerate(f):
+      job_err_file = 'toi.job.err-%d'%(i+1)
+      if os.path.getsize(job_err_file) > 0:
+        line = line.strip()
+        cmds.append(line)
 
-#   parser = argparse.ArgumentParser()
-#   parser.add_argument('name')
-#   args = parser.parse_args()
-#   name = args.name
-
-#   vgg_centers = api.db.get_vgg19_centers()
-
-#   for track_len in track_lens:
-#     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
-#     id2event = load_pos_track_label_file(label_file)
-#     pos_trackids = id2event.keys()
-
-#     db_file = os.path.join(track_dir,'%s.%d.forward.backward.square.npz'%(name, track_len))
-#     track_db = api.db.TrackDb()
-#     track_db.load(db_file, pos_trackids)
-
-#     ft_dir = os.path.join(ft_root_dir, name)
-#     vgg_db = api.db.VGG19FtDb(ft_dir)
-
-#     pos_vgg_in_track_generator = api.generator.crop_instant_ft_in_track(
-#       track_db, vgg_db, vgg_centers)
-#     fts = []
-#     frames = []
-#     centers = []
-#     ids = []
-#     for ft_in_track in pos_vgg_in_track_generator:
-#       num = len(ft_in_track.frames)
-#       fts.append(ft_in_track.fts)
-#       frames.extend(ft_in_track.frames)
-#       centers.append(ft_in_track.centers)
-#       ids.extend(num*[ft_in_track.id])
-
-#     fts = np.concatenate(fts, 0)
-#     frames = np.array(frames, dtype=np.int32)
-#     centers = np.concatenate(centers, 0)
-#     ids = np.array(ids, dtype=np.int32)
-#     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
-#     np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
-
-
-# def prepare_neg_vgg19():
-#   root_dir = '/home/jiac/data2/sed' # gpu9
-#   label_dir = os.path.join(root_dir, 'pseudo_label')
-#   track_dir = os.path.join(root_dir, 'tracking')
-#   ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
-#   out_dir = os.path.join(ft_root_dir, 'track_group')
-
-#   track_lens = [25, 50]
-#   neg_split = 0
-
-#   parser = argparse.ArgumentParser()
-#   parser.add_argument('name')
-#   args = parser.parse_args()
-#   name = args.name
-
-#   vgg_centers = api.db.get_vgg19_centers()
-
-#   for track_len in track_lens:
-#     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
-#     neg_trackids = []
-#     with open(label_file) as f:
-#       for line in f:
-#         line = line.strip()
-#         neg_trackids.append(int(line))
-
-#     db_file = os.path.join(track_dir,'%s.%d.forward.backward.square.npz'%(name, track_len))
-#     track_db = api.db.TrackDb()
-#     track_db.load(db_file, neg_trackids)
-
-#     ft_dir = os.path.join(ft_root_dir, name)
-#     vgg_db = api.db.VGG19FtDb(ft_dir)
-
-#     neg_vgg_in_track_generator = api.generator.crop_instant_ft_in_track(
-#       track_db, vgg_db, vgg_centers)
-#     fts = []
-#     frames = []
-#     centers = []
-#     ids = []
-#     for ft_in_track in neg_vgg_in_track_generator:
-#       num = len(ft_in_track.frames)
-#       fts.append(ft_in_track.fts)
-#       frames.extend(ft_in_track.frames)
-#       centers.append(ft_in_track.centers)
-#       ids.extend(num*[ft_in_track.id])
-
-#     fts = np.concatenate(fts, 0)
-#     frames = np.array(frames, dtype=np.int32)
-#     centers = np.concatenate(centers, 0)
-#     ids = np.array(ids, dtype=np.int32)
-#     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-#     np.savez_compressed(out_file, fts=fts, frames=frames, centers=centers, ids=ids)
+  with open(out_file, 'w') as fout:
+    for cmd in cmds:
+      fout.write(cmd + '\n')
 
 
 def prepare_toi_ft_for_tst():
@@ -514,9 +430,10 @@ if __name__ == '__main__':
   # prepare_pos_ft()
   # generate_script()
   # gen_script_rocks()
+  retrieve_failed_jobs()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  prepare_neg_ft()
+  # prepare_neg_ft()
   # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
