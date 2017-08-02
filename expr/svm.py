@@ -2,6 +2,7 @@ import os
 import cPickle
 import random
 import argparse
+import itertools
 
 import numpy as np
 from sklearn.svm import LinearSVC, SVC
@@ -129,32 +130,8 @@ def prepare_trn_tst_pos_data():
       print name
       for track_len in track_lens:
         label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
-        # tid2lid = {}
-        # with open(label_file) as f:
-        #   for line in f:
-        #     line = line.strip()
-        #     data = line.split(' ')
-        #     tid = int(data[0])
-        #     label = data[1]
-        #     if label in event2lid:
-        #       lid = event2lid[label]
-        #       tid2lid[tid] = lid
 
         pos_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
-        # data = np.load(pos_ft_file)
-        # fts = data['vlads']
-        # ids = data['ids']
-
-        # num = ids.shape[0]
-        # for i in range(num):
-        #   ft = fts[i]
-        #   id = ids[i]
-        #   if id in tid2lid:
-        #     lid = tid2lid[id]
-        #     pos_fts.append(ft)
-        #     pos_labels.append(lid)
-        #     pos_tids.append(id)
-        #     pos_names.append(name)
 
         prepare_pos_instances(label_file, pos_ft_file, name,
           pos_fts, pos_labels, pos_tids, pos_names)
@@ -251,17 +228,6 @@ def prepare_trn_tst_neg_data():
     neg_id_file = neg_id_files[s]
     out_file = out_files[s]
 
-    # track_len2name2ids = {25: {}, 50: {}}
-    # with open(neg_id_file) as f:
-    #   for line in f:
-    #     line = line.strip()
-    #     data = line.split(' ')
-    #     track_len = int(data[0])
-    #     id = int(data[1])
-    #     name = data[2]
-    #     if name not in track_len2name2ids[track_len]:
-    #       track_len2name2ids[track_len][name] = set()
-    #     track_len2name2ids[track_len][name].add(id)
     track_len2name2ids = load_sampled_neg_ids(neg_id_file)
 
     names = []
@@ -280,18 +246,6 @@ def prepare_trn_tst_neg_data():
       print name
       for track_len in track_lens:
         neg_ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len))
-        # data = np.load(neg_ft_file)
-        # fts = data['vlads']
-        # ids = data['ids']
-
-        # num = ids.shape[0]
-        # for i in range(num):
-        #   ft = np.array(fts[i])
-        #   id = ids[i]
-        #   if id in track_len2name2ids[track_len][name]:
-        #     neg_fts.append(ft)
-        #     neg_ids.append(id)
-        #     neg_names.append(name)
         name2ids = track_len2name2ids[track_len]
         prepare_neg_instances(neg_ft_file, name, name2ids,
           neg_fts, neg_ids, neg_names)
@@ -418,6 +372,57 @@ def prepare_trn_data():
   names = names[idxs]
 
   np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
+
+
+def prepare_trn_with_neg_sample():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  pos_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz')
+  lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  neg_splits = [0]
+  s = ' '.join([str(d) for d in neg_splits])
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.%s.pkl'%s)
+
+  track_lens = [25, 50]
+
+  with open(out_file, 'w') as fout:
+    data = np.load(pos_file)
+    fts = data['fts']
+    labels = data['labels']
+
+    num = labels.shape[0]
+    for i in range(num):
+      ft = fts[i]
+      label = labels[i]
+      fout.write('%d '%label)
+      dim_ft = ft.shape[0]
+      for j in range(dim_ft):
+        if ft[j] > 0:
+          fout.write('%d:%f '%(j+1, ft[j]))
+      fout.write('\n')
+
+    names = []
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          names.append(name)
+
+    for name, split, track_len in itertools.product(names, neg_splits, track_lens):
+      file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split))
+      data = np.load(file)
+
+      fts = data['vlads']
+      num = fts.shape[0]
+      for i in range(num):
+        ft = fts[i]
+        dim_ft = ft.shape[0]
+        fout.write('0 ')
+        for j in range(dim_ft):
+          if ft[j] > 0:
+            fout.write('%d:%f '%(j+1, ft[j]))
+        fout.write('\n')
 
 
 def prepare_trn_early_fusion_data():
@@ -944,11 +949,12 @@ if __name__ == '__main__':
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
+  prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
   # train_final_model()
-  val_model()
+  # val_model()
   # predict_on_eev()
   # gen_predict_script()
   # eval_full()
