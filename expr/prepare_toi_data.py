@@ -1,6 +1,7 @@
 import os
 import argparse
 import random
+import itertools
 import sys
 sys.path.append('../')
 
@@ -228,14 +229,15 @@ def prepare_neg_ft():
 
 
 def prepare_neg_ft_on_all_splits():
-  # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data2/sed' # gpu9
+  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  # ft_root_dir = os.path.join(root_dir, 'c3d')
-  ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
+  ft_root_dir = os.path.join(root_dir, 'c3d')
+  # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   lst_files = [
-    os.path.join(root_dir, 'eev08-1.lst'),
+    # os.path.join(root_dir, 'eev08-1.lst'),
+    os.path.join(root_dir, 'dev08-1.lst'),
   ]
   out_dir = os.path.join(ft_root_dir, 'track_group')
 
@@ -248,21 +250,22 @@ def prepare_neg_ft_on_all_splits():
         if 'CAM4' not in name:
           names.append(name)
 
-  track_len = 25
+  # track_len = 25
+  track_lens = [25, 50]
 
   parser = argparse.ArgumentParser()
   parser.add_argument('neg_split', type=int)
   args = parser.parse_args()
   neg_split = args.neg_split
 
-  for name in names:
+  for name, track_len in itertools.product(names, track_lens):
     print name
     label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
     track_db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     ft_dir = os.path.join(ft_root_dir, name)
     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-    # _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d')
-    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='vgg')
+    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d')
+    # _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='vgg')
 
 
 def generate_script():
@@ -513,7 +516,7 @@ if __name__ == '__main__':
   # gen_script_rocks()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  prepare_neg_ft()
-  # prepare_neg_ft_on_all_splits()
+  # prepare_neg_ft()
+  prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
