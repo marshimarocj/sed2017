@@ -313,7 +313,7 @@ def gen_script_rocks():
   root_dir = '/home/jiac/data/sed2017' # rocks
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
-    # os.path.join(root_dir, 'eev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
   ]
 
   out_file = 'prepare_toi_data.sh'
@@ -328,7 +328,7 @@ def gen_script_rocks():
   #         'python', 'prepare_toi_data.py', name, '0'
   #       ]
   #       fout.write(' '.join(cmd) + '\n')
-    with open(lst_files[1]) as f:
+    with open(lst_files[0]) as f:
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
