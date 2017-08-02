@@ -313,7 +313,7 @@ def gen_script_rocks():
   root_dir = '/home/jiac/data/sed2017' # rocks
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
-    os.path.join(root_dir, 'eev08-1.lst'),
+    # os.path.join(root_dir, 'eev08-1.lst'),
   ]
 
   out_file = 'prepare_toi_data.sh'
@@ -509,10 +509,10 @@ def prepare_toi_ft_for_tst():
 if __name__ == '__main__':
   # prepare_pos_ft()
   # generate_script()
-  # gen_script_rocks()
+  gen_script_rocks()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
-  prepare_neg_ft_on_all_splits()
+  # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
