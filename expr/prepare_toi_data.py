@@ -204,7 +204,8 @@ def prepare_neg_ft():
   # ft_root_dir = os.path.join(root_dir, 'c3d')
   # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  out_dir = os.path.join('/data/MM22/jiac/sed2017', 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
