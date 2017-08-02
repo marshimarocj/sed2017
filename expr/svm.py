@@ -410,6 +410,7 @@ def prepare_trn_with_neg_sample():
           names.append(name)
 
     for name, split, track_len in itertools.product(names, neg_splits, track_lens):
+      print name
       file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split))
       data = np.load(file)
 
