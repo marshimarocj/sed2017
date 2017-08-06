@@ -126,8 +126,31 @@ def normalize_bbox_name():
       os.symlink(src_file, dst_file)
 
 
+def normalize_track_name():
+  root_dir = '/home/jiac/sdb/jiac/data/sed' # gpu1
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
+  track_root_dir = os.path.join(root_dir, 'tracking')
+
+  with open(lst_file) as f:
+    for line in f:
+      videoname = line.strip()
+
+      track_dir = os.path.join(track_root_dir, videoname)
+      names = os.listdir(track_dir)
+      out_lst_file = os.path.join(track_root_dir, videoname + '.lst')
+      with open(out_lst_file, 'w') as fout:
+        for name in names:
+          name, _ = os.path.splitext(name)
+          frame = int(name)
+          src_file = os.path.join(track_dir, '%d.npy'%frame)
+          dst_file = os.path.join(track_dir, '%06d.npy'%frame)
+          os.symlink(src_file, dst_file)
+          fout.write('%06d.npy\n'%frame)
+
+
 if __name__ == '__main__':
   # generate_script()
   # group_script()
   # generate_25fps_lst_from_5fps_lst()
-  normalize_bbox_name()
+  # normalize_bbox_name()
+  normalize_track_name()
