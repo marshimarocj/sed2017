@@ -123,7 +123,8 @@ def normalize_bbox_name():
 
       src_file = os.path.join(bbox_dir, '%d.txt'%frame)
       dst_file = os.path.join(bbox_dir, '%06d.txt'%frame)
-      os.symlink(src_file, dst_file)
+      # os.symlink(src_file, dst_file)
+      shutil.copyfile(src_file, dst_file)
 
 
 def normalize_track_name():
