@@ -1,5 +1,6 @@
 import os
 import json
+import tarfile
 
 
 '''func
@@ -110,9 +111,23 @@ def lnk_to_solve_000001bug():
       os.symlink(src_img_file, dst_img_file)
 
 
+def tar_videos():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  lst_file = os.path.join(root_dir, 'tst2017', '2017.refined.lst')
+  video_dir = os.path.join(root_dir, 'video', 'dev09')
+  out_file = os.path.join(root_dir, 'video', 'tst2017.tar.gz')
+
+  with open(lst_file) as f, tarfile.open(out_file, 'w:gz') as fout:
+    for line in f:
+      line = line.strip()
+      video_file = os.path.join(video_dir, name + '.mov.deint.avi')
+      fout.add(video_file, arcname=name + '.mov.deint.avi')
+
+
 if __name__ == '__main__':
   # missing_videos_in_preprocess()
   # lnk_short_video_imgs_to_ease_tar()
   # lnk_long_video_imgs_to_ease_tar()
   # get_numframe_file()
-  lnk_to_solve_000001bug()
+  # lnk_to_solve_000001bug()
+  tar_videos()
