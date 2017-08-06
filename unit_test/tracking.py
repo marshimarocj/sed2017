@@ -127,9 +127,10 @@ def normalize_bbox_name():
 
 
 def normalize_track_name():
-  root_dir = '/home/jiac/sdb/jiac/data/sed' # gpu1
+  # root_dir = '/home/jiac/sdb/jiac/data/sed' # gpu1
+  root_dir = '/home/jiac/data/sed' # xiaojun
   lst_file = os.path.join(root_dir, '2017.refined.lst')
-  track_root_dir = os.path.join(root_dir, 'tracking')
+  track_root_dir = os.path.join(root_dir, 'tst2017', 'tracking')
 
   with open(lst_file) as f:
     for line in f:
