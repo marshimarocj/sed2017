@@ -109,7 +109,7 @@ def generate_25fps_lst_from_5fps_lst():
 
 
 def normalize_bbox_name():
-  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   lst_file = os.path.join(root_dir, 'tst', 'person_detect.lst')
   bbox_dir = os.path.join(root_dir, 'tst', 'person_detect')
   out_lst_file = os.path.join(root_dir, 'tst', 'person_detect.norm.lst')
@@ -156,5 +156,5 @@ if __name__ == '__main__':
   # generate_script()
   # group_script()
   # generate_25fps_lst_from_5fps_lst()
-  # normalize_bbox_name()
-  normalize_track_name()
+  normalize_bbox_name()
+  # normalize_track_name()
