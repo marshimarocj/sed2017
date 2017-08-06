@@ -141,6 +141,9 @@ def normalize_track_name():
       with open(out_lst_file, 'w') as fout:
         for name in names:
           name, _ = os.path.splitext(name)
+          if 'M' in name:
+            continue
+
           frame = int(name)
           src_file = os.path.join(track_dir, '%d.npy'%frame)
           dst_file = os.path.join(track_dir, '%06d.npy'%frame)
