@@ -119,7 +119,7 @@ def tar_videos():
 
   with open(lst_file) as f, tarfile.open(out_file, 'w:gz') as fout:
     for line in f:
-      line = line.strip()
+      name = line.strip()
       video_file = os.path.join(video_dir, name + '.mov.deint.avi')
       fout.add(video_file, arcname=name + '.mov.deint.avi')
 
