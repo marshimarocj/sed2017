@@ -150,7 +150,10 @@ def normalize_track_name():
           frame = int(name)
           src_file = os.path.join(track_dir, '%d.npy'%frame)
           dst_file = os.path.join(track_dir, '%06d.npy'%frame)
-          os.symlink(src_file, dst_file)
+          if os.path.exists(dst_file):
+            os.remove(dst_file)
+          # os.symlink(src_file, dst_file)
+          shutil.copyfile(src_file, dst_file)
           fout.write('%06d.npy\n'%frame)
 
 
@@ -158,5 +161,5 @@ if __name__ == '__main__':
   # generate_script()
   # group_script()
   # generate_25fps_lst_from_5fps_lst()
-  normalize_bbox_name()
-  # normalize_track_name()
+  # normalize_bbox_name()
+  normalize_track_name()
