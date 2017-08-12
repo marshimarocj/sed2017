@@ -298,7 +298,8 @@ def remove_neg_data_in_dev_for_consistency():
     for track_len in track_lens:
       for split in range(1, 10):
         file = os.path.join(toi_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split))
-        os.remove(file)
+        if os.path.exists(file):
+          os.remove(file)
 
 
 def prepare_neg_ft_on_all_splits():
