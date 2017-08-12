@@ -279,6 +279,28 @@ def prepare_neg_ft_missing():
   _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
 
 
+def remove_neg_data_in_dev_for_consistency():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(name)
+
+  track_lens = [25, 50]
+
+  for name in names:
+    for track_len in track_lens:
+      for split in range(1, 10):
+        file = os.path.join(toi_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split))
+        os.remove(file)
+
+
 def prepare_neg_ft_on_all_splits():
   root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # gpu9
@@ -486,7 +508,8 @@ if __name__ == '__main__':
   # shuffle_neg()
   # prepare_neg_ft()
   # check_track_group_npzfile()
-  prepare_neg_ft_missing()
+  # prepare_neg_ft_missing()
+  remove_neg_data_in_dev_for_consistency()
   # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
