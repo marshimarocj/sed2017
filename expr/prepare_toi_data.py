@@ -503,11 +503,11 @@ def prepare_toi_ft_for_tst():
 if __name__ == '__main__':
   # prepare_pos_ft()
   # generate_script()
-  gen_script_rocks()
+  # gen_script_rocks()
   # retrieve_failed_jobs()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  # prepare_neg_ft()
+  prepare_neg_ft()
   # check_track_group_npzfile()
   # prepare_neg_ft_missing()
   # remove_neg_data_in_dev_for_consistency()
