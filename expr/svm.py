@@ -376,6 +376,26 @@ def prepare_trn_data():
   np.savez_compressed(out_file, fts=fts, labels=labels, ids=ids, names=names)
 
 
+def prepare_trn_txt():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.trn')
+
+  data = np.load(trn_file)
+  fts = data['fts']
+  labels = data['labels']
+  num = fts.shape[0]
+
+  with open(out_file, 'w') as fout:
+    for i in range(num):
+      fout.write('%d '%labels[i])
+      ft = fts[i]
+      for j, ele in enumerate(ft):
+        if ele > 0:
+          fout.write('%d:%f '%(j+1, ft[j]))
+      fout.write('\n')
+
+
 def prepare_trn_with_neg_sample():
   # root_dir = '/home/jiac/data/sed2017' # rocks
   # pos_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz')
@@ -1024,6 +1044,7 @@ if __name__ == '__main__':
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
+  prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
@@ -1033,5 +1054,5 @@ if __name__ == '__main__':
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
-  eval_full()
+  # eval_full()
   # predict_on_tst2017()
