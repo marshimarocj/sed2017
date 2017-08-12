@@ -383,7 +383,7 @@ def prepare_trn_with_neg_sample():
   # s = '_'.join([str(d) for d in neg_splits])
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.%s.trn'%s)
 
-  root_dir = '/data1/jiac/sed2017' # uranus
+  root_dir = '/data1/jiac/sed' # uranus
   pos_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
   lst_file = os.path.join(root_dir, 'dev08-1.lst')
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
