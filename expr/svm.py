@@ -387,7 +387,8 @@ def prepare_trn_with_neg_sample():
   pos_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz')
   lst_file = os.path.join(root_dir, 'dev08-1.lst')
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
-  neg_splits = [0]
+  # neg_splits = [0]
+  neg_splits = [0, 1, 2, 3, 4]
   s = '_'.join([str(d) for d in neg_splits])
   out_file = os.path.join(root_dir, 'expr', 'c3d', 'vlad.neg.%s.trn'%s)
 
