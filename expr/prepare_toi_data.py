@@ -195,11 +195,11 @@ def shuffle_neg():
 
 
 def prepare_neg_ft():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
-  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed2017' # rocks
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
   # ft_root_dir = os.path.join(root_dir, 'c3d')
@@ -503,14 +503,14 @@ def prepare_toi_ft_for_tst():
 if __name__ == '__main__':
   # prepare_pos_ft()
   # generate_script()
-  # gen_script_rocks()
+  gen_script_rocks()
   # retrieve_failed_jobs()
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
   # check_track_group_npzfile()
   # prepare_neg_ft_missing()
-  remove_neg_data_in_dev_for_consistency()
+  # remove_neg_data_in_dev_for_consistency()
   # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
