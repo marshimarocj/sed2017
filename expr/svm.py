@@ -855,12 +855,12 @@ def predict_on_eev():
 
 
 def predict_liblinear_on_eev():
-  # root_dir = '/home/jiac/data/sed2017' # rocks
-  # vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
-  # model_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.0.model')
-  root_dir = '/data1/jiac/sed' # uranus
-  vlad_dir = os.path.join(root_dir, 'c3d', 'vlad')
-  model_file = os.path.join(root_dir, 'expr', 'c3d', 'vlad.neg.0.model')
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  model_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.0.model')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # vlad_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  # model_file = os.path.join(root_dir, 'expr', 'c3d', 'vlad.neg.0.model')
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
@@ -868,8 +868,8 @@ def predict_liblinear_on_eev():
 
   name = args.name
 
-  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.neg.0.raw.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.neg.0.raw.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.neg.0.raw.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.neg.0.raw.npz')
 
   model = liblinear.liblinear.load_model(model_file)
 
@@ -891,10 +891,13 @@ def predict_liblinear_on_eev():
         if ele > 0:
           ft_dict[j+1] = ele
       x, _ = liblinear.gen_feature_nodearray(ft_dict)
-      label = liblinear.liblinear.predict(model, x)
+      # label = liblinear.liblinear.predict(model, x)
+      predict = [0]*5
+      liblinear.liblinear.predict_values(model, x, predict)
+      print predict
 
       ids.append(id)
-      predicts.append(label)
+      predicts.append(predict)
   np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
@@ -1026,8 +1029,8 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  # predict_on_eev()
+  predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
-  eval_full()
+  # eval_full()
   # predict_on_tst2017()
