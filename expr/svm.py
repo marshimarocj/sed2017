@@ -377,7 +377,8 @@ def prepare_trn_data():
 
 
 def prepare_trn_txt():
-  root_dir = '/home/jiac/data/sed2017' # rocks
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed2017' # xiaojun
   trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
   out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.trn')
 
@@ -1044,7 +1045,7 @@ if __name__ == '__main__':
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  # prepare_trn_txt()
+  prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
@@ -1054,5 +1055,5 @@ if __name__ == '__main__':
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
-  eval_full()
+  # eval_full()
   # predict_on_tst2017()
