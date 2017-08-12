@@ -149,15 +149,12 @@ def check_track_group_npzfile():
   with open(outfile, 'w') as fout:
     for name in names:
       for track_len in track_lens:
-        files = [
-          os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
-        ]
-
-        for file in files:
+        for split in range(1, 10):
+          file = os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split))
           try:
             data = np.load(file)
           except:
-            cmd = ['python', 'vlad.py', name, str(track_len)]
+            cmd = ['python', 'vlad.py', name, str(split), str(track_len)]
             fout.write(' '.join(cmd) + '\n')
 
 
