@@ -11,7 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score
 # import liblinear
 
-import sample
+# import sample
 
 
 '''func
