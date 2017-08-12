@@ -778,6 +778,20 @@ def val_model():
     print events[c], ap
 
 
+def val_model_on_full():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      if 'CAM4' in line:
+        continue
+      name, _ = os.path.splitext(line)
+      names.append(name)
+
+
 def gen_predict_script():
   # root_dir = '/home/jiac/data/sed2017' # rocks
   root_dir = '/data1/jiac/sed' # uranus
@@ -814,7 +828,8 @@ def predict_on_eev():
 
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.raw.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.npz')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.raw.npz')
 
   with open(model_file) as f:
     model = cPickle.load(f)
@@ -829,8 +844,8 @@ def predict_on_eev():
     _ids = data['ids']
     _vlads = data['vlads']
     _predicts = model.decision_function(_vlads)
-    _predicts = np.exp(_predicts)
-    _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
+    # _predicts = np.exp(_predicts)
+    # _predicts = _predicts / np.sum(_predicts, axis=1, keepdims=True)
     ids.append(_ids)
     predicts.append(_predicts)
   ids = np.concatenate(ids, 0)
@@ -959,13 +974,13 @@ if __name__ == '__main__':
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  prepare_trn_with_neg_sample()
+  # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
   # train_model()
   # train_final_model()
   # val_model()
-  # predict_on_eev()
+  predict_on_eev()
   # gen_predict_script()
   # eval_full()
   # predict_on_tst2017()
