@@ -157,9 +157,8 @@ def check_track_group_npzfile():
           try:
             data = np.load(file)
           except:
-            print os.path.basename(file)
-        cmd = ['python', 'vlad.py', name, str(track_len)]
-        fout.write(' '.join(cmd) + '\n')
+            cmd = ['python', 'vlad.py', name, str(track_len)]
+            fout.write(' '.join(cmd) + '\n')
 
 
 def encode_vlad():
