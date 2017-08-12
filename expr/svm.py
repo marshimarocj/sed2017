@@ -3,6 +3,7 @@ import cPickle
 import random
 import argparse
 import itertools
+from ctypes import *
 
 import numpy as np
 from sklearn.svm import LinearSVC, SVC
@@ -892,8 +893,9 @@ def predict_liblinear_on_eev():
           ft_dict[j+1] = ele
       x, _ = liblinear.gen_feature_nodearray(ft_dict)
       # label = liblinear.liblinear.predict(model, x)
-      predict = [0]*5
-      liblinear.liblinear.predict_values(model, x, predict)
+      dec_values = (c_double * 5)()
+      liblinear.liblinear.predict_values(model, x, dec_values)
+      predict = dec_values[:5]
       print predict
 
       ids.append(id)
