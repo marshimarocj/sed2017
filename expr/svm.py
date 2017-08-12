@@ -877,12 +877,13 @@ def predict_on_eev():
 
 
 def predict_liblinear_on_eev():
-  # root_dir = '/home/jiac/data/sed2017' # rocks
-  # vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.0.model')
-  root_dir = '/data1/jiac/sed' # uranus
-  vlad_dir = os.path.join(root_dir, 'c3d', 'vlad')
-  model_file = os.path.join(root_dir, 'expr', 'c3d', 'vlad.neg.0.model')
+  model_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.model')
+  # root_dir = '/data1/jiac/sed' # uranus
+  # vlad_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  # model_file = os.path.join(root_dir, 'expr', 'c3d', 'vlad.neg.0.model')
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
@@ -890,8 +891,8 @@ def predict_liblinear_on_eev():
 
   name = args.name
 
-  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.neg.0.raw.npz')
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.neg.0.raw.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.dev08.liblinear.raw.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full', name + '.neg.0.raw.npz')
 
   model = liblinear.liblinear.load_model(model_file)
 
@@ -1045,7 +1046,7 @@ if __name__ == '__main__':
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  prepare_trn_txt()
+  # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
@@ -1053,7 +1054,7 @@ if __name__ == '__main__':
   # train_final_model()
   # val_model()
   # predict_on_eev()
-  # predict_liblinear_on_eev()
+  predict_liblinear_on_eev()
   # gen_predict_script()
   # eval_full()
   # predict_on_tst2017()
