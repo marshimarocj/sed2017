@@ -989,8 +989,8 @@ def eval_full():
   for videoname in videonames:
     print videoname
     # predict_file = os.path.join(predict_dir, videoname + '.npz')
-    predict_file = os.path.join(predict_dir, videoname + '.raw.npz')
-    # predict_file = os.path.join(predict_dir, videoname + '.neg.0.raw.npz')
+    # predict_file = os.path.join(predict_dir, videoname + '.raw.npz')
+    predict_file = os.path.join(predict_dir, videoname + '.neg.0.raw.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
     _ids = data['ids']
