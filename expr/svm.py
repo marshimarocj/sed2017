@@ -989,8 +989,8 @@ def eval_full():
   for videoname in videonames:
     print videoname
     # predict_file = os.path.join(predict_dir, videoname + '.npz')
-    # predict_file = os.path.join(predict_dir, videoname + '.raw.npz')
-    predict_file = os.path.join(predict_dir, videoname + '.neg.0.raw.npz')
+    predict_file = os.path.join(predict_dir, videoname + '.raw.npz')
+    # predict_file = os.path.join(predict_dir, videoname + '.neg.0.raw.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
     _ids = data['ids']
@@ -1030,8 +1030,8 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  predict_on_eev()
+  # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
-  # eval_full()
+  eval_full()
   # predict_on_tst2017()
