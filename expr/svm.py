@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.svm import LinearSVC, SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score
-import liblinear.liblinear
+import liblinear
 
 import sample
 
