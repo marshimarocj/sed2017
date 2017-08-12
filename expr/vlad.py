@@ -136,6 +136,7 @@ def check_track_group_npzfile():
   kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   lst_file = os.path.join(root_dir, 'dev08-1.lst')
   track_lens = [25, 50]
+  outfile = 'vlad.missing.sh'
 
   names = []
   with open(lst_file) as f:
@@ -145,17 +146,20 @@ def check_track_group_npzfile():
         name, _ = os.path.splitext(line)
         names.append(name)
 
-  for name in names:
-    for track_len in track_lens:
-      files = [
-        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
-      ]
+  with open(outfile, 'w') as fout:
+    for name in names:
+      for track_len in track_lens:
+        files = [
+          os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
+        ]
 
-      for file in files:
-        try:
-          data = np.load(file)
-        except:
-          print os.path.basename(file)
+        for file in files:
+          try:
+            data = np.load(file)
+          except:
+            print os.path.basename(file)
+        cmd = ['python', 'vlad.py', name, str(track_len)]
+        fout.write(' '.join(cmd) + '\n')
 
 
 def encode_vlad():
