@@ -136,7 +136,7 @@ def check_track_group_npzfile():
   kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   lst_file = os.path.join(root_dir, 'dev08-1.lst')
   track_lens = [25, 50]
-  outfile = 'vlad.missing.sh'
+  outfile = 'prepare_toi_data.failed.sh'
 
   names = []
   with open(lst_file) as f:

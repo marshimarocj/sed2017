@@ -228,6 +228,29 @@ def prepare_neg_ft():
     _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
 
 
+def prepare_neg_ft_missing():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  track_dir = os.path.join(root_dir, 'tracking')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  out_dir = os.path.join('/data/MM22/jiac/sed2017', 'twostream', 'feat_anet_flow_6frame', 'track_group')
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  parser.add_argument('neg_split', type=int)
+  parser.add_argument('track_len', type=int)
+  args = parser.parse_args()
+  name = args.name
+  neg_split = args.neg_split
+  track_len = args.track_len
+
+  label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.50.neg.%d'%(name, track_len, neg_split))
+  track_db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
+  ft_dir = os.path.join(ft_root_dir, name)
+  out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
+  _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
+
+
 def prepare_neg_ft_on_all_splits():
   root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # gpu9
@@ -433,7 +456,8 @@ if __name__ == '__main__':
   # retrieve_failed_jobs()
   # prepare_pos_vgg19()
   # shuffle_neg()
-  prepare_neg_ft()
+  # prepare_neg_ft()
+  prepare_neg_ft_missing()
   # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
