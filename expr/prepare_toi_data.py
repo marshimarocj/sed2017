@@ -228,6 +228,34 @@ def prepare_neg_ft():
     _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
 
 
+def check_track_group_npzfile():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  track_lens = [25, 50]
+  outfile = 'prepare_toi_data.failed.sh'
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      if 'CAM4' not in line:
+        name, _ = os.path.splitext(line)
+        names.append(name)
+
+  with open(outfile, 'w') as fout:
+    for name in names:
+      for track_len in track_lens:
+        for split in range(1, 10):
+          file = os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split))
+          try:
+            data = np.load(file)
+          except:
+            cmd = ['python', 'prepare_toi_data.py', name, str(split), str(track_len)]
+            fout.write(' '.join(cmd) + '\n')
+
+
 def prepare_neg_ft_missing():
   root_dir = '/home/jiac/data/sed2017' # rocks
   label_dir = os.path.join(root_dir, 'pseudo_label')
@@ -457,7 +485,8 @@ if __name__ == '__main__':
   # prepare_pos_vgg19()
   # shuffle_neg()
   # prepare_neg_ft()
-  prepare_neg_ft_missing()
+  check_track_group_npzfile()
+  # prepare_neg_ft_missing()
   # prepare_neg_ft_on_all_splits()
   # prepare_neg_vgg19()
   # prepare_toi_ft_for_tst()
