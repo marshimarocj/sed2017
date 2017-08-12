@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.svm import LinearSVC, SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score
+import liblinear.liblinear
 
 import sample
 
@@ -853,6 +854,46 @@ def predict_on_eev():
   np.savez_compressed(out_file, predicts=predicts, ids=ids)
 
 
+def predict_liblinear_on_eev():
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  vlad_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  model_file = os.path.join(root_dir, 'expr', 'twostream', 'vlad.neg.0.model')
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('name')
+  args = parser.parse_args()
+
+  name = args.name
+
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full', name + '.neg.0.raw.npz')
+
+  model = liblinear.liblinear.load_model(model_file)
+
+  files = [os.path.join(vlad_dir, '%s.25.forward.backward.square.pos.0.75.npz'%name)] + \
+    [os.path.join(vlad_dir, '%s.25.forward.backward.square.neg.0.50.%d.npz'%(name, split)) for split in range(10)]
+  ids = []
+  predicts = []
+  for file in files:
+    print file
+    data = np.load(file)
+    _ids = data['ids']
+    _vlads = data['vlads']
+    num = _ids.shape[0]
+    for i in range(num):
+      id = _ids[i]
+      vlad = _vlads[i]
+      ft_dict = {}
+      for j, ele in enumerate(vlad):
+        if ele > 0:
+          ft_dict[j+1] = ele
+      x, _ = liblinear.gen_feature_nodearray(ft_dict)
+      label = liblinear.liblinear.predict(model, x)
+
+      ids.append(id)
+      predicts.append(label)
+  np.savez_compressed(out_file, predicts=predicts, ids=ids)
+
+
 def predict_on_tst2017():
   root_dir = '/home/jiac/data2/sed' # gpu9
   lst_file = os.path.join(root_dir, '2017.refined.lst')
@@ -980,7 +1021,8 @@ if __name__ == '__main__':
   # train_model()
   # train_final_model()
   # val_model()
-  predict_on_eev()
+  # predict_on_eev()
+  predict_liblinear_on_eev()
   # gen_predict_script()
   # eval_full()
   # predict_on_tst2017()
