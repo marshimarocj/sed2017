@@ -378,7 +378,7 @@ def prepare_trn_data():
 
 def prepare_trn_txt():
   # root_dir = '/home/jiac/data/sed2017' # rocks
-  root_dir = '/home/jiac/data/sed2017' # xiaojun
+  root_dir = '/home/jiac/data/sed' # xiaojun
   trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
   out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.trn')
 
