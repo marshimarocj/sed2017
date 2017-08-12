@@ -896,7 +896,6 @@ def predict_liblinear_on_eev():
       dec_values = (c_double * 5)()
       liblinear.liblinear.predict_values(model, x, dec_values)
       predict = dec_values[:5]
-      print predict
 
       ids.append(id)
       predicts.append(predict)
