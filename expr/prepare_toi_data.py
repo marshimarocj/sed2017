@@ -195,7 +195,6 @@ def shuffle_neg():
 
 
 def prepare_neg_ft():
-  # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
@@ -303,11 +302,13 @@ def remove_neg_data_in_dev_for_consistency():
 
 
 def prepare_neg_ft_on_all_splits():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  ft_root_dir = os.path.join(root_dir, 'c3d')
+  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   lst_files = [
     # os.path.join(root_dir, 'eev08-1.lst'),
@@ -338,7 +339,8 @@ def prepare_neg_ft_on_all_splits():
     track_db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     ft_dir = os.path.join(ft_root_dir, name)
     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d')
+    # _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d')
+    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
     # _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='vgg')
 
 
