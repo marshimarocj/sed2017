@@ -978,13 +978,13 @@ def predict_on_tst2017():
 
 
 def eval_full():
-  root_dir = '/home/jiac/data/sed2017' # rocks
-  # root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
-  pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
-  # predict_dir = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full')
-  # pos_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+  # predict_dir = os.path.join(root_dir, 'expr', 'twostream', 'eev08_full')
+  # pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+  predict_dir = os.path.join(root_dir, 'expr', 'c3d', 'eev08_full')
+  pos_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
 
   videonames = []
   with open(lst_file) as f:
@@ -1008,9 +1008,9 @@ def eval_full():
   labels = []
   for videoname in videonames:
     print videoname
-    # predict_file = os.path.join(predict_dir, videoname + '.npz')
+    predict_file = os.path.join(predict_dir, videoname + '.npz')
     # predict_file = os.path.join(predict_dir, videoname + '.raw.npz')
-    predict_file = os.path.join(predict_dir, videoname + '.neg.0.raw.npz')
+    # predict_file = os.path.join(predict_dir, videoname + '.neg.0.raw.npz')
     data = np.load(predict_file)
     _predicts = data['predicts']
     _ids = data['ids']
@@ -1044,7 +1044,7 @@ if __name__ == '__main__':
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
   # prepare_trn_data()
-  prepare_trn_txt()
+  # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
@@ -1054,5 +1054,5 @@ if __name__ == '__main__':
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
-  # eval_full()
+  eval_full()
   # predict_on_tst2017()
