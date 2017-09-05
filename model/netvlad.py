@@ -233,4 +233,27 @@ class TrnTst(framework.model.trntst.TrnTst):
 
 
 class PathCfg(framework.model.trntst.PathCfg):
-  pass
+  def __init__(self):
+    framework.model.trntst.PathCfg.__init__(self)
+    self.trn_video_lst_file = ''
+    self.val_video_lst_file = ''
+    self.ft_track_group_dir = ''
+    self.label_dir = ''
+    self.label2lid_file = ''
+
+
+class Reader(framework.model.data.Reader):
+  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, label2lid_file):
+    self.ft_track_group_dir = ft_grack_group_dir
+    self.label_dir = label_dir
+
+    self.video_names = []
+    with open(video_lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        video_names.append(name)
+
+    with open(label2lid_file) as f:
+      for line in f:
+
