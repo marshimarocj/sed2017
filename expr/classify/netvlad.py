@@ -45,6 +45,8 @@ def class_instance_stat():
 
     for track_len in track_lens:
       for name in video_names:
+        if 'CAM4' in name:
+          continue
         print track_len, name
         label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
         id2label = {}
