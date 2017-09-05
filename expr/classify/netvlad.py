@@ -103,6 +103,8 @@ def num_descriptor_toi_stat():
         for line in f:
           line = line.strip()
           name, _ = os.path.splitext(line)
+          if 'CAM4' in name:
+            continue
 
           ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
           data = np.load(ft_file)
