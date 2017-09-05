@@ -75,9 +75,12 @@ def class_instance_stat():
           print n
           ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, n))
           data = np.load(ft_file)
-          ids = data['ids']
-          neg_ids = set(ids.tolist())
-          label2cnt[n] = len(neg_ids)
+          if 'ids' in data:
+            ids = data['ids']
+            neg_ids = set(ids.tolist())
+            label2cnt[n] = len(neg_ids)
+          else:
+            label2cnt[n] = 0
 
         out['%s_%d'%(name, track_len)] = label2cnt
   with open(out_file, 'w') as fout:
