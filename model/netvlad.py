@@ -243,7 +243,8 @@ class PathCfg(framework.model.trntst.PathCfg):
 
 
 class Reader(framework.model.data.Reader):
-  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, label2lid_file):
+  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, label2lid_file,
+      neg_lst = [0]):
     self.ft_track_group_dir = ft_grack_group_dir
     self.label_dir = label_dir
 
@@ -254,6 +255,8 @@ class Reader(framework.model.data.Reader):
         name, _ = os.path.splitext(line)
         video_names.append(name)
 
+    self.label2lid = {}
     with open(label2lid_file) as f:
-      for line in f:
+      self.label2lid = cPickle.load(f)
 
+  def num_record(self):
