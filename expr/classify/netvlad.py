@@ -78,4 +78,5 @@ def class_instance_stat():
 
 
 if __name__ == "__main__":
-  generate_label2lid_file()
+  # generate_label2lid_file()
+  class_instance_stat()
