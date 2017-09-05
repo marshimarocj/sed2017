@@ -42,7 +42,7 @@ def class_instance_stat():
         video_names.append(name)
 
     for track_len in track_lens:
-      for name in names:
+      for name in video_names:
         print track_len, name
         label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
         id2label = {}
