@@ -243,10 +243,13 @@ class PathCfg(framework.model.trntst.PathCfg):
 
 
 class Reader(framework.model.data.Reader):
-  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, label2lid_file,
-      neg_lst = [0]):
+  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
+      label2lid_file, meta_file, 
+      neg_lst=[0], track_lens=[25, 50], shuffle=True):
     self.ft_track_group_dir = ft_grack_group_dir
     self.label_dir = label_dir
+    self.neg_lst = neg_lst
+    self.track_lens = track_lens
 
     self.video_names = []
     with open(video_lst_file) as f:
@@ -262,5 +265,39 @@ class Reader(framework.model.data.Reader):
     with open(label2lid_file) as f:
       self.label2lid = cPickle.load(f)
 
+    self.meta = {}
+    with open(meta_file) as f:
+      self.meta = cPickle.load(f)
+
+  def _load_positive_ft_label(self):
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        label_file = os.path.join(self.label_dir, 
+          '%s.%d.forward.backward.square.0.75.pos'%(video_name, track_len))
+        id2lid = {}
+        with open(label_file) as f:
+          for line in f:
+            line = line.strip()
+            data = line.split(' ')
+            id = int(data[0])
+            lid = label2lid[data[1]]
+            id2lid[id] = lid
+
+        ft_file = os.path.join(self.ft_track_group_dir, 
+          '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
+        data = np.load(ft_file)
+
   def num_record(self):
-    pass
+    num = 0
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        name = '%s_%d'%(video_name, track_len)
+        label2num = self.meta[name]
+        for label in self.label2lid:
+          if label in label2num:
+            num += label2num[label]
+        for neg_split in self.neg_lst:
+          num += label2num[neg_split]
+    return num
+
+  def yield_trn_batch(self, batch_size):

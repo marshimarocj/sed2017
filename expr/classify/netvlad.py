@@ -87,6 +87,38 @@ def class_instance_stat():
     cPickle.dump(out, fout)
 
 
+def num_descriptor_toi_stat():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+
+  track_lens = [25, 50]
+  for track_len in track_lens:
+    nums = []
+    for lst_file in lst_files:
+      with open(lst_file) as f:
+        for line in f:
+          line = line.strip()
+          name, _ = os.path.splitext(line)
+
+          ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+          data = np.load(ft_file)
+          if 'ids' not in data:
+            continue
+          ids = data['ids']
+          id2cnt = {}
+          for id in ids:
+            if id not in id2cnt:
+              id2cnt[id] = 0
+            id2cnt[id] += 1
+          nums += id2cnt.values()
+    print track_len, np.median(nums), np.mean(nums), np.percentile(nums, 10), np.percentile(nums, 90)
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
-  class_instance_stat()
+  # class_instance_stat()
+  num_descriptor_toi_stat()
