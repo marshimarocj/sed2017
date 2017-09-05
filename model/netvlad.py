@@ -253,6 +253,9 @@ class Reader(framework.model.data.Reader):
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
+        if 'CAM4' in name:
+          continue
+
         video_names.append(name)
 
     self.label2lid = {}
@@ -260,3 +263,4 @@ class Reader(framework.model.data.Reader):
       self.label2lid = cPickle.load(f)
 
   def num_record(self):
+    pass

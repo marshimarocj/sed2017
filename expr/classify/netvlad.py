@@ -58,11 +58,13 @@ def class_instance_stat():
             label = data[1]
             id2label[id] = label
 
+        label2cnt = {}
+
+        print 'pos'
         ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
         data = np.load(ft_file)
         ids = data['ids']
         pos_ids = set(ids.tolist())
-        label2cnt = {}
         for id in pos_ids:
           label = id2label[id]
           if label not in label2cnt:
@@ -70,6 +72,7 @@ def class_instance_stat():
           label2cnt[label] += 1
 
         for n in range(10):
+          print n
           ft_file = os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, n))
           data = np.load(ft_file)
           ids = data['ids']
