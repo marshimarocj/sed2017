@@ -264,6 +264,9 @@ def prepare_init_center_file():
   np.savez_compressed(out_file, centers=centers)
 
 
+def prepare_neg_for_val():
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()

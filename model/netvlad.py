@@ -369,7 +369,6 @@ class Reader(framework.model.data.Reader):
 
     prepare_neg_files(self)
     cam_neg_files = self.cam2neg_files.values()
-    print self.cam2neg_files
     if shuffle:
       for neg_files in cam_neg_files:
         random.shuffle(neg_files)
