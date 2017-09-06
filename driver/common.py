@@ -5,6 +5,7 @@ import datetime
 def gen_dir_struct_info(path_cfg, path_cfg_file):
   path_cfg.load(path_cfg_file)
 
+  output_dir = path_cfg.output_dir
   log_dir = os.path.join(output_dir, 'log')
   if not os.path.exists(log_dir): 
     os.makedirs(log_dir)
