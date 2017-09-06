@@ -366,7 +366,7 @@ class Reader(framework.model.data.Reader):
     neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=self.shuffle)
 
     num_pos = len(self.pos_idxs)
-    for i in range(0, num, batch_size):
+    for i in range(0, num_pos, batch_size):
       idxs = self.pos_idxs[i:i+batch_size]
       num = idxs.shape[0]
       pos_fts = self.pos_fts[idxs]
