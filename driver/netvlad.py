@@ -30,7 +30,7 @@ def gen_dir_struct_info(path_cfg_file):
 
 
 def load_and_fill_model_cfg(path_cfg, model_cfg_file):
-  model_cfg = model.netvlad.Config()
+  model_cfg = model.netvlad.ModelConfig()
   model_cfg.load(model_cfg_file)
   data = np.load(path_cfg.init_weight_file)
   model_cfg.centers = data['centers']
@@ -40,7 +40,7 @@ def load_and_fill_model_cfg(path_cfg, model_cfg_file):
 
 
 def load_and_fill_wbmodel_cfg(path_cfg, model_cfg_file):
-  model_cfg = model.netvlad.ConfigWB()
+  model_cfg = model.netvlad.ModelWBConfig()
   model_cfg.load(model_cfg_file)
   data = np.load(path_cfg.init_weight_file)
   model_cfg.centers = data['centers']

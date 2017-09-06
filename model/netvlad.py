@@ -47,6 +47,13 @@ class ModelCfg(framework.model.proto.FullModelConfig):
     self.proto_cfg.load(data['proto'])
 
 
+class ModelWBCfg(ModelCfg):
+  def __init__(self):
+    ModelCfg.__init__(self)
+
+    self.proto_cfg = ConfigWB()
+
+
 class NetVladEncoder(framework.model.proto.ModelProto):
   namespace = 'netvlad.NetVladEncoder'
 
