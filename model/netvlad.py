@@ -4,6 +4,7 @@ import random
 import numpy as np
 
 import framework.model.proto
+import framework.model.trntst
 
 
 class Config(framework.model.proto.ProtoConfig):
