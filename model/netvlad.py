@@ -22,6 +22,18 @@ class Config(framework.model.proto.ProtoConfig):
     self.alpha = np.empty((0,))
 
 
+class ConfigWB(framework.model.proto.ProtoConfig):
+  def __init__(self):
+    self.dim_ft = 0
+    self.num_ft = 0
+    self.num_center = 0
+    self.dim_output = 0
+    self.trn_neg2pos_in_batch = 10
+    self.val_neg2pos_in_batch = 1
+
+    self.centers = np.empty((0,)) # (dim_ft, num_center)
+
+
 class ModelCfg(framework.model.proto.FullModelConfig):
   def __init__(self):
     framework.model.proto.FullModelConfig.__init__(self)
@@ -75,13 +87,14 @@ class NetVladEncoder(framework.model.proto.ModelProto):
         scale = 1.0 / (self._config.dim_ft ** 0.5)
         self.alpha = tf.Variable(
           np.array(self._config.alpha, dtype=np.float32), name='alpha')
+
         dim_vlad = self._config.dim_ft * self._config.num_center
         scale = 1.0 / (dim_vlad ** 0.5)
         self.fc_W = tf.get_variable('fc_W',
           shape=(dim_vlad, self._config.dim_output), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(scale, scale))
         self.fc_B = tf.get_variable('fc_B',
-          shape=(self._config.dim_output), dtype=tf.float32,
+          shape=(self._config.dim_output,), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
 
   def build_inference_graph_in_tst(self, basegraph):
@@ -89,9 +102,57 @@ class NetVladEncoder(framework.model.proto.ModelProto):
       with tf.variable_scope(self.name_scope):
         w = 2.0 * self.alpha * self.centers # (dim_ft, num_center)
         b = - self.alpha * tf.reduce_sum(self.centers**2, axis=0)# (num_center)
-        b = tf.expand_dims(b, 0)
         fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
         logits = tf.nn.xw_plus_b(fts, w, b) # (None*num_ft, num_center)
+        a = tf.softmax(logits) 
+
+        a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
+        fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, num_center)
+        centers = tf.expand_dims(centers, 0) # (1, dim_ft, num_center)
+        V_ijk = a * (fts - centers) # (None*num_ft, dim_ft, num_center)
+        mask = tf.reshape(self._ft_masks, (-1, 1, 1))
+        V_ijk *= mask
+        dim_vlad = self._config.dim_ft* self._config.num_center
+        V_ijk = tf.reshape(V_ijk, (-1, self._config.num_ft, dim_vlad))
+        V_jk = tf.reduce_sum(V_ijk, 1)
+
+        self._feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
+
+  def build_inference_graph_in_trn_tst(self, basegraph):
+    self.build_inference_graph_in_tst(basegraph)
+
+
+class NetVladWBEncoder(NetVladEncoder):
+  namespace = 'netvlad.NetVladWBEncoder'
+
+  # @override
+  def build_parameter_graph(self, basegraph):
+    with basegraph.as_default():
+      with tf.variable_scope(self.name_scope):
+        self.centers = tf.Variable(
+          np.array(self._config.centers, dtype=np.float32), name='centers')
+        scale = 1.0 / (self._config.dim_ft ** 0.5)
+        self.w = tf.get_variable('w',
+          shape=(self._config.dim_ft, self._config.num_center), dtype=tf.float32,
+          initializer=tf.random_uniform_initialzer(-scale, scale))
+        self.b = tf.get_variable('b',
+          shape=(self._config.num_center,), dtype=tf.float32,
+          initializer=tf.random_uniform_initializer(-0.1, 0.1))
+
+        dim_vlad = self._config.dim_ft * self._config.num_center
+        scale = 1.0 / (dim_vlad ** 0.5)
+        self.fc_W = tf.get_variable('fc_W',
+          shape=(dim_vlad, self._config.dim_output), dtype=tf.float32,
+          initializer=tf.random_uniform_initializer(-scale, scale))
+        self.fc_B = tf.get_variable('fc_B',
+          shape=(self._config.dim_output), dtype=tf.float32,
+          initializer=tf.random_uniform_initializer(-0.1, 0.1))
+
+  def build_inference_graph_in_tst(self, basegraph):
+    with basegraph.as_default():
+      with tf.variable_scope(self.name_scope):
+        fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
+        logits = tf.nn.xw_plus_b(fts, self.w, self.b) # (None*num_ft, num_center)
         a = tf.softmax(logits) 
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
@@ -192,6 +253,14 @@ class NetVladModel(framework.model.proto.FullModel):
     }
 
 
+class NetVladWBModel(NetVladModel):
+  name_scope = 'netvlad.NetVladWBModel'
+
+  def get_model_proto(self):
+    nv = NetVladWBEncoder(self.config.proto_cfg)
+    return nv
+
+
 class TrnTst(framework.model.trntst.TrnTst):
   def feed_data_and_trn(self, data, sess):
     op_dict = self.model.op_in_trn()
@@ -253,6 +322,8 @@ class PathCfg(framework.model.trntst.PathCfg):
     self.output_dir = ''
     self.neg_lst = []
     self.track_lens = []
+    self.init_weight_file = ''
+    self.tst_video_name = ''
 
 
 class Reader(framework.model.data.Reader):
@@ -320,16 +391,15 @@ class Reader(framework.model.data.Reader):
 
 
 class TstReader(framework.model.data.Reader):
-  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
+  def __init__(self, tst_video_name, ft_track_group_dir, 
       label2lid_file, model_cfg,
       neg_lst=[0], track_lens=[25, 50]):
     self.ft_track_group_dir = ft_track_group_dir
-    self.label_dir = label_dir
     self.cfg = model_cfg
     self.neg_lst = neg_lst
     self.track_lens = track_lens
 
-    self.video_names = []
+    self.video_names = [tst_video_name]
     with open(video_lst_file) as f:
       for line in f:
         line = line.strip()

@@ -147,18 +147,20 @@ def encode_vlad():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
-  root_dir = '/home/jiac/data/sed2017' # rocks
-  # # root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed' # danny
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
-  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.pkl')
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
-    # os.path.join(root_dir, 'eev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
     # os.path.join(root_dir, '2017.refined.lst'),
   ]
   # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad')
   # out_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'vlad')
 
@@ -181,15 +183,15 @@ def encode_vlad():
   for name in names:
     for track_len in track_lens:
       files = [
-        # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
         # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
+        # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
         # os.path.join(ft_root_dir, '%s.%d.forward.square.npz'%(name, track_len))
       ]
       out_files = [
-        # os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+        os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
         # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-        os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split)) for split in range(1, 10)
+        # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split)) for split in range(1, 10)
         # os.path.join(out_dir, '%s.%d.forward.square.npz'%(name, track_len))
       ]
       print name
@@ -252,8 +254,8 @@ def encode_vlad_rocks():
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  cluster_centers()
+  # cluster_centers()
   # check_track_group_npzfile()
-  # encode_vlad()
+  encode_vlad()
   # gen_script()
   # encode_vlad_rocks()
