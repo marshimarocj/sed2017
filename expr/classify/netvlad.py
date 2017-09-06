@@ -177,7 +177,8 @@ def prepare_lst_files():
 def prepare_cfg():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
-    os.path.join(root_dir, 'meta', 'trn.lst'),
+    # os.path.join(root_dir, 'meta', 'trn.lst'),
+    os.path.join(root_dir, 'meta', 'val.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
@@ -323,7 +324,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_reader()
   # prepare_init_center_file()
-  prepare_neg_for_val()
+  # prepare_neg_for_val()
