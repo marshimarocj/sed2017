@@ -239,12 +239,12 @@ def tst_reader():
   print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
   print reader.pos_idxs[:10]
 
-  batch_size = 100
-  for epoch in range(20):
-    print 'epoch', epoch
-    for fts, masks, labels in reader.yield_trn_batch(batch_size):
-      print fts.shape, masks.shape, labels.shape
-    # print np.where(labels > 0)[1]
+  # batch_size = 100
+  # for epoch in range(20):
+  #   print 'epoch', epoch
+  #   for fts, masks, labels in reader.yield_trn_batch(batch_size):
+  #     print fts.shape, masks.shape, labels.shape
+  #   # print np.where(labels > 0)[1]
 
   # batch_size = 100
   # for fts, masks in reader.yield_tst_batch(batch_size):
@@ -269,6 +269,6 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
-  # tst_reader()
+  # prepare_cfg()
+  tst_reader()
   # prepare_init_center_file()

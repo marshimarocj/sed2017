@@ -369,6 +369,7 @@ class Reader(framework.model.data.Reader):
 
     prepare_neg_files(self)
     cam_neg_files = self.cam2neg_files.values()
+    print self.cam2neg_files
     if shuffle:
       for neg_files in cam_neg_files:
         random.shuffle(neg_files)
@@ -427,8 +428,8 @@ class TstReader(framework.model.data.Reader):
     self.cam2neg_files = {}
 
     load_positive_ft_label(self)
-    self._prepare_neg_files()
-    neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=False)
+    print 'positive load complete'
+    prepare_neg_files(self)
 
   # assumption: will only process one video
   def yield_tst_batch(self, batch_size):
