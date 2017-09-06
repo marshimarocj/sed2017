@@ -220,7 +220,8 @@ def tst_reader():
   path_cfg.load(path_cfg_file)
 
   reader = model.netvlad.Reader(
-    path_cfg.val_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+    # path_cfg.val_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+    path_cfg.trn_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
     path_cfg.label2lid_file, model_cfg, 
     neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
 
