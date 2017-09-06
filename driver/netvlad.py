@@ -69,11 +69,11 @@ if __name__ == '__main__':
     trntst = model.netvlad.TrnTst(model_cfg, path_cfg, _model)
 
     trn_reader = model.netvlad.Reader(
-      path_cfg.trn_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+      path_cfg.trn_video_lst_file, path_cfg.trn_ft_track_group_dir, path_cfg.label_dir,
       path_cfg.label2lid_file, model_cfg,
       neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens, shuffle=True)
     val_reader = model.netvlad.Reader(
-      path_cfg.val_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+      path_cfg.val_video_lst_file, path_cfg.val_ft_track_group_dir, path_cfg.label_dir,
       path_cfg.label2lid_file, model_cfg,
       neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens, shuffle=False)
     if path_cfg.model_file != '':
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     trntst = model.netvlad.TrnTst(model_cfg, path_cfg, _model)
 
     tst_reader = model.netvlad.TstReader(
-      path_cfg.tst_video_name, path_cfg.ft_track_group_dir,
+      path_cfg.tst_video_name, path_cfg.trn_ft_track_group_dir,
       path_cfg.label2lid_file, model_cfg,
       neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)

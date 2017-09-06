@@ -180,7 +180,8 @@ def prepare_cfg():
     os.path.join(root_dir, 'meta', 'trn.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
-  ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
   num_center = 16
@@ -205,7 +206,8 @@ def prepare_cfg():
   path_cfg = {
     'trn_video_lst_file': lst_files[0],
     'val_video_lst_file': lst_files[1],
-    'ft_track_group_dir': ft_toi_dir, 
+    'trn_ft_track_group_dir': trn_ft_toi_dir, 
+    'val_ft_track_group_dir': val_ft_toi_dir, 
     'label_dir': label_dir,
     'label2lid_file': label2lid_file,
     'output_dir': out_prefix,
@@ -293,6 +295,9 @@ def prepare_neg_for_val():
         num_pos = len(ids)
         del data
 
+        out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
+        os.symlink(pos_ft_file, out_file)
+
         neg_ft_file = os.path.join(track_group_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         data = np.load(neg_ft_file)
         ids = data['ids']
@@ -318,7 +323,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_reader()
   # prepare_init_center_file()
-  prepare_neg_for_val()
+  # prepare_neg_for_val()

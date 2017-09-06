@@ -324,7 +324,8 @@ class PathCfg(framework.model.trntst.PathCfg):
     framework.model.trntst.PathCfg.__init__(self)
     self.trn_video_lst_file = ''
     self.val_video_lst_file = ''
-    self.ft_track_group_dir = ''
+    self.trn_ft_track_group_dir = ''
+    self.val_ft_track_group_dir = ''
     self.label_dir = ''
     self.label2lid_file = ''
     self.output_dir = ''
