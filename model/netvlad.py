@@ -497,12 +497,13 @@ class NegInstanceProvider(object):
         self.cur_idxs[c] = 0
         neg_file = self.cam_neg_files[c][self.cur_file_idxs[c]]
         neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.cfg, self.shuffle)
-        del self.cam_fts[c]
-        del self.cam_masks[c]
-        del self.cam_idxs[c]
+        past_fts = self.cam_fts[c]
+        past_masks = self.cam_masks[c]
+        past_idxs = self.cam_idxs[c]
         self.cam_fts[c] = neg_fts
         self.cam_masks[c] = neg_masks
         self.cam_idxs[c] = neg_idxs
+        del past_fts, past_masks, past_idxs
       for i in range(num):
         idx = self.cam_idxs[c][self.cur_idxs[c] + i]
         ft = self.cam_fts[c][idx]
