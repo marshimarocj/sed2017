@@ -437,7 +437,7 @@ class NegInstanceProvider(object):
   def __init__(self, cam_neg_files, cfg, shuffle=True):
     self.num_cam = len(cam_neg_files)
     self.cam_neg_files = cam_neg_files # loop queue
-    self.cur_file_idxs = [0 for _ in range(num_cam)]
+    self.cur_file_idxs = [0 for _ in range(self.num_cam)]
     self.num_files = [len(cam_neg_file) for cam_neg_file in cam_neg_files]
     self.cfg = cfg
     self.shuffle = shuffle
@@ -445,7 +445,7 @@ class NegInstanceProvider(object):
     self.cam_fts = []
     self.cam_masks = []
     self.cam_idxs = []
-    self.cur_idxs = [0 for _ in range(num_cam)]
+    self.cur_idxs = [0 for _ in range(self.num_cam)]
     for c in range(self.num_cam):
       neg_file = self.cam_neg_files[c][0]
       neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.shuffle)
@@ -455,10 +455,10 @@ class NegInstanceProvider(object):
       self.cam_idxs.append(neg_idxs)
 
   def next_batch(self, batch_size):
-    num = batch_size / num_cam
+    num = batch_size / self.num_cam
     fts = []
     masks = []
-    for c in range(num_cam):
+    for c in range(self.num_cam):
       if self.cur_idxs[c] + num > len(self.cam_fts[c]):
         self.cur_file_idxs[c] = (self.cur_file_idxs[c] + 1) % self.num_files[c]
         self.cur_idxs[c] = 0
@@ -479,7 +479,7 @@ class NegInstanceProvider(object):
       self.cur_idxs[c] += num
     fts = np.array(fts)
     masks = np.array(masks)
-    label = np.zeros((num*num_cam, self.cfg.num_class), dtype=np.int32)
+    label = np.zeros((num*self.num_cam, self.cfg.num_class), dtype=np.int32)
     label[:, 0] = 1
     return fts, masks, labels
 
