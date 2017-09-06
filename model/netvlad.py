@@ -5,6 +5,7 @@ import numpy as np
 
 import framework.model.proto
 import framework.model.trntst
+import framework.model.data
 
 
 class Config(framework.model.proto.ProtoConfig):
