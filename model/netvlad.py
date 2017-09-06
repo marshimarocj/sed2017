@@ -271,7 +271,7 @@ class Reader(framework.model.data.Reader):
         line = line.strip()
         name, _ = os.path.splitext(line)
 
-        video_names.append(name)
+        self.video_names.append(name)
 
     self.label2lid = {}
     with open(label2lid_file) as f:
