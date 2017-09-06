@@ -265,6 +265,52 @@ def prepare_init_center_file():
 
 
 def prepare_neg_for_val():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
+
+  track_lens = [25, 50]
+
+  for lst_file in lst_files:
+    video_names = []
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          video_names.append(name)
+
+    for video_name in video_names:
+      print video_name
+      for track_len in track_lens:
+        pos_ft_file = os.path.join(track_group, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
+        data = np.load(pos_ft_file)
+        ids = set(data['ids'].tolist())
+        num_pos = len(ids)
+        del data
+
+        neg_ft_file = os.path.join(track_group, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
+        data = np.load(neg_ft_file)
+        ids = data['ids']
+        fts = data['fts']
+        centers = data['centers']
+        frames = data['frames']
+
+        num = idx.shape[0]
+        previd = ids[0]
+        cnt = 0
+        for i in range(num):
+          if ids[i] != previd:
+            cnt += 1
+            previd = ids[i]
+            if cnt == num_pos:
+              break
+        out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
+        np.save(out_file, ids=ids[:i], fts=fts[:i], centers=centers[:i], frames=frames[:i])
 
 
 if __name__ == "__main__":
@@ -273,5 +319,6 @@ if __name__ == "__main__":
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  tst_reader()
+  # tst_reader()
   # prepare_init_center_file()
+  prepare_neg_for_val()
