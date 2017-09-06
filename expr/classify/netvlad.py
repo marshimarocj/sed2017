@@ -229,7 +229,7 @@ def tst_reader():
   print reader.pos_idxs[:10]
 
   batch_size = 10
-  for fts, masks, labels in reader.yield_trn_batch(self, batch_size):
+  for fts, masks, labels in reader.yield_trn_batch(batch_size):
     print fts.shape, masks.shape, labels.shape
     print labels
 
