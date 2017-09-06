@@ -302,8 +302,9 @@ class Reader(framework.model.data.Reader):
             line = line.strip()
             data = line.split(' ')
             id = int(data[0])
-            lid = self.label2lid[data[1]]
-            id2lid[id] = lid
+            if data[1] in self.label2lid:
+              lid = self.label2lid[data[1]]
+              id2lid[id] = lid
 
         ft_file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
