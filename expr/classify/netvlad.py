@@ -25,7 +25,7 @@ def gen_proto_cfg(num_ft, dim_ft, num_center):
     'num_ft': num_ft,
     'num_center': num_center,
     'dim_output': 2048,
-    'trn_neg2pos_in_batch': 10,
+    'trn_neg2pos_in_batch': 5,
     'val_neg2pos_in_batch': 1,
   }
 
@@ -239,5 +239,5 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
-  tst_reader()
+  prepare_cfg()
+  # tst_reader()
