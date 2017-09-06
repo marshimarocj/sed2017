@@ -233,8 +233,8 @@ def tst_reader():
   path_cfg.load(path_cfg_file)
 
   reader = model.netvlad.Reader(
-    # path_cfg.val_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
-    path_cfg.trn_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+    path_cfg.val_video_lst_file, path_cfg.val_ft_track_group_dir, path_cfg.label_dir,
+    # path_cfg.trn_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
     path_cfg.label2lid_file, model_cfg, 
     neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
 
@@ -242,12 +242,12 @@ def tst_reader():
   print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
   print reader.pos_idxs[:10]
 
-  # batch_size = 100
-  # for epoch in range(20):
-  #   print 'epoch', epoch
-  #   for fts, masks, labels in reader.yield_trn_batch(batch_size):
-  #     print fts.shape, masks.shape, labels.shape
-  #   # print np.where(labels > 0)[1]
+  batch_size = 100
+  for epoch in range(20):
+    print 'epoch', epoch
+    for fts, masks, labels in reader.yield_val_batch(batch_size):
+      print fts.shape, masks.shape, labels.shape
+    # print np.where(labels > 0)[1]
 
   # batch_size = 100
   # for fts, masks in reader.yield_tst_batch(batch_size):
@@ -324,7 +324,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
-  # tst_reader()
+  # prepare_cfg()
+  tst_reader()
   # prepare_init_center_file()
   # prepare_neg_for_val()
