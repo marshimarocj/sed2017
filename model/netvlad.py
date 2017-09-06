@@ -3,6 +3,7 @@ import random
 import cPickle
 
 import numpy as np
+import tensorflow as tf
 
 import framework.model.proto
 import framework.model.trntst
