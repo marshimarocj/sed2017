@@ -415,8 +415,8 @@ class Reader(framework.model.data.Reader):
     for neg_files in cam_neg_files:
       for neg_file in neg_files:
         print 'load', neg_file
-        fts, masks, idxs = load_neg_chunk(neg_file, self.cfg, False)
-        num = idxs.shape[0]
+        fts, masks, _ = load_neg_chunk(neg_file, self.cfg, False)
+        num = len(fts)
         for i in range(0, num, batch_size):
           _fts = []
           _masks = []
