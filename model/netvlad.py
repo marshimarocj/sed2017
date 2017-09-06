@@ -165,9 +165,7 @@ class NetVladWBEncoder(NetVladEncoder):
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
         fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, 1)
-        print fts.get_shape()
         centers = tf.expand_dims(self.centers, 0) # (1, dim_ft, num_center)
-        print centers.get_shape()
         diff = fts - centers # (None*num_ft, dim_ft, num_center)
         V_ijk = a * diff # (None*num_ft, dim_ft, num_center)
         mask = tf.reshape(self._ft_masks, (-1, 1, 1))
