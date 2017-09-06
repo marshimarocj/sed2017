@@ -211,7 +211,7 @@ def prepare_cfg():
     'output_dir': out_prefix,
     'neg_lst': neg_lst,
     'track_lens': track_lens,
-    'init_weight_file': 
+    'init_weight_file': init_weight_file,
   }
   path_cfg_file = '%s.path.json'%out_prefix
   with open(path_cfg_file, 'w') as fout:
