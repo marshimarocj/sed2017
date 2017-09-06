@@ -116,7 +116,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
         fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, num_center)
-        centers = tf.expand_dims(centers, 0) # (1, dim_ft, num_center)
+        centers = tf.expand_dims(self.centers, 0) # (1, dim_ft, num_center)
         V_ijk = a * (fts - centers) # (None*num_ft, dim_ft, num_center)
         mask = tf.reshape(self._ft_masks, (-1, 1, 1))
         V_ijk *= mask
@@ -165,7 +165,7 @@ class NetVladWBEncoder(NetVladEncoder):
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
         fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, num_center)
-        centers = tf.expand_dims(centers, 0) # (1, dim_ft, num_center)
+        centers = tf.expand_dims(self.centers, 0) # (1, dim_ft, num_center)
         V_ijk = a * (fts - centers) # (None*num_ft, dim_ft, num_center)
         mask = tf.reshape(self._ft_masks, (-1, 1, 1))
         V_ijk *= mask
