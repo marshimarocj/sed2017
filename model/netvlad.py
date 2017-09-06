@@ -1,3 +1,8 @@
+import os
+import random
+
+import numpy as np
+
 import framework.model.proto
 
 
@@ -7,6 +12,8 @@ class Config(framework.model.proto.ProtoConfig):
     self.num_ft = 0
     self.num_center = 0
     self.dim_output = 0
+    self.trn_neg2pos_in_batch = 10
+    self.val_neg2pos_in_batch = 1
 
     self.centers = np.empty((0,)) # (dim_ft, num_center)
     self.alpha = np.empty((0,))
@@ -244,20 +251,20 @@ class PathCfg(framework.model.trntst.PathCfg):
 
 class Reader(framework.model.data.Reader):
   def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
-      label2lid_file, meta_file, 
+      label2lid_file, meta_file, cfg,
       neg_lst=[0], track_lens=[25, 50], shuffle=True):
     self.ft_track_group_dir = ft_grack_group_dir
     self.label_dir = label_dir
+    self.cfg = cfg
     self.neg_lst = neg_lst
     self.track_lens = track_lens
+    self.shuffle = shuffle
 
     self.video_names = []
     with open(video_lst_file) as f:
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
-        if 'CAM4' in name:
-          continue
 
         video_names.append(name)
 
@@ -269,7 +276,20 @@ class Reader(framework.model.data.Reader):
     with open(meta_file) as f:
       self.meta = cPickle.load(f)
 
+    self.pos_fts = []
+    self.pos_masks = []
+    self.pos_labels = []
+    self.pos_idxs = []
+
+    self.cam2neg_files = {}
+
+    self._load_positive_ft_label()
+    self._prepare_neg_files
+
   def _load_positive_ft_label(self):
+    self.pos_fts = []
+    self.pos_masks = []
+    self.pos_labels = []
     for video_name in self.video_names:
       for track_len in self.track_lens:
         label_file = os.path.join(self.label_dir, 
@@ -286,18 +306,209 @@ class Reader(framework.model.data.Reader):
         ft_file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
         data = np.load(ft_file)
+        ids = data['ids']
+        fts = data['fts']
+        num = ids.shape[0]
+        prev_id = ids[0]
+        ft_buffer = []
+        for i in range(num):
+          id = ids[i]
+          if id != prev_id:
+            if id in id2lid:
+              pos_ft, pos_mask = norm_ft_buffer(
+                ft_buffer, self.cfg.proto_cfg.num_ft, self.cfg.proto_cfg.dim_ft)
+              self.pos_fts.append(pos_ft)
+              self.pos_masks.append(pos_mask)
+              label = np.zeros((self.cfg.num_class,), dtype=np.int32)
+              label[id2lid[prev_id]] = 1
+              self.pos_labels.append(label)
+
+            ft_buffer = []
+            prev_id = id
+          ft_buffer.append(fts[i])
+
+        if id in id2lid:
+          pos_ft, pos_mask = norm_ft_buffer(
+            ft_buffer, self.cfg.num_ft, self.cfg.dim_ft)
+          self.pos_fts.append(pos_ft)
+          self.pos_masks.append(pos_mask)
+          self.pos_labels.append(id2lid[prev_id])
+    self.pos_fts = np.array(self.pos_fts)
+    self.pos_masks = np.array(self.pos_masks)
+    self.pos_labels = np.array(self.pos_labels)
+    self.pos_idxs = np.arange(self.pos_fts.shape[0])
+
+  def _prepare_neg_files(self):
+    self.cam2neg_files = {}
+    for video_name in self.video_names:
+      pos = video_name.rfind('_')
+      cam = video_name[pos+1:]
+      if cam not in self.cam2neg_files:
+        self.cam2neg_files[cam] = []
+      for track_len in self.track_lens:
+        for neg_split in self.neg_lst:
+          file = os.path.join(self.ft_track_group_dir, 
+            '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(video_name, track_len, neg_split))
+          self.cam2neg_files[cam].append(file)
 
   def num_record(self):
-    num = 0
-    for video_name in self.video_names:
-      for track_len in self.track_lens:
-        name = '%s_%d'%(video_name, track_len)
-        label2num = self.meta[name]
-        for label in self.label2lid:
-          if label in label2num:
-            num += label2num[label]
-        for neg_split in self.neg_lst:
-          num += label2num[neg_split]
-    return num
+    return len(self.pos_idxs)
 
   def yield_trn_batch(self, batch_size):
+    cam_neg_files = self.cam2neg_files.values()
+    if self.shuffle:
+      np.random.shuffle(self.pos_idxs)
+      for neg_files in cam_neg_files:
+        random.shuffle(neg_files)
+    neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=self.shuffle)
+
+    num_pos = len(self.pos_idxs)
+    for i in range(0, num, batch_size):
+      idxs = self.pos_idxs[i:i+batch_size]
+      num = idxs.shape[0]
+      pos_fts = self.pos_fts[idxs]
+      pos_masks = self.pos_masks[idxs]
+      pos_labels = self.pos_labels[idxs]
+      neg_fts, neg_masks, neg_labels = neg_instance_provider.next_batch(
+        batch_size * self.cfg.trn_neg2pos_in_batch)
+      fts = np.concatenate([pos_fts, neg_fts], axis=0)
+      masks = np.concatenate([pos_masks, neg_masks], axis=0)
+      labels = np.concatenate([pos_labels, neg_labels], axis=0)
+      yield fts, masks, labels
+
+  def yield_val_batch(self, batch_size):
+    cam_neg_files = self.cam2neg_files.values()
+    neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=False)
+
+    num_pos = len(self.pos_idxs)
+    for i in range(0, num_pos, batch_size):
+      idxs = self.pos_idxs[i:i+batch_size]
+      num = idxs.shape[0]
+      pos_fts = self.pos_fts[idxs]
+      pos_masks = self.pos_masks[idxs]
+      pos_labels = self.pos_labels[idxs]
+      neg_fts, neg_masks, neg_labels = neg_instance_provider.next_batch(
+        batch_size * self.cfg.val_neg2pos_in_batch)
+      fts = np.concatenate([pos_fts, neg_fts], axis=0)
+      masks = np.concatenate([pos_masks, neg_masks], axis=0)
+      labels = np.concatenate([pos_labels, neg_labels], axis=0)
+      yield fts, masks, labels
+
+  # assumption: will only process one video
+  def yield_tst_batch(self, batch_size):
+    cam_neg_files = self.cam2neg_files.values()
+
+    # pos instances
+    num_pos = len(self.pos_idxs)
+    for i in range(0, num_pos, batch_size):
+      idxs = self.pos_idxs[i:i+batch_size]
+      fts = self.pos_fts[idxs]
+      masks = self.pos_masks[idxs]
+      yield fts, masks
+
+    # neg instances
+    for neg_files in cam_neg_files:
+      for neg_file in neg_files:
+        fts, masks, idxs = load_neg_chunk(neg_file, False)
+        fts = np.array(fts)
+        masks = np.array(fts)
+        idxs = np.array(fts)
+        num = idxs.shape[0]
+        for i in range(num):
+          yield fts[i:i+batch_size], masks[i:i+batch_size]
+
+
+def norm_ft_buffer(ft_buffer, num_ft, dim_ft):
+  ft = np.zeros(num_ft, dim_ft)
+  mask = np.zeros(num_ft, dtype=np.int32)
+  num_valid = min(len(ft_buffer), num_ft)
+  idxs = range(len(ft_buffer))
+  random.shuffle(idxs)
+  ft[:num_valid] = np.array(ft_buffer)[idxs[:num_valid]]
+  mask[:num_valid] = 1
+  return ft, mask
+
+
+# iterate files under each camera separately
+class NegInstanceProvider(object):
+  def __init__(self, cam_neg_files, cfg, shuffle=True):
+    self.num_cam = len(cam_neg_files)
+    self.cam_neg_files = cam_neg_files # loop queue
+    self.cur_file_idxs = [0 for _ in range(num_cam)]
+    self.num_files = [len(cam_neg_file) for cam_neg_file in cam_neg_files]
+    self.cfg = cfg
+    self.shuffle = shuffle
+
+    self.cam_fts = []
+    self.cam_masks = []
+    self.cam_idxs = []
+    self.cur_idxs = [0 for _ in range(num_cam)]
+    for c in range(self.num_cam):
+      neg_file = self.cam_neg_files[c][0]
+      neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.shuffle)
+
+      self.cam_fts.append(neg_fts)
+      self.cam_masks.append(neg_masks)
+      self.cam_idxs.append(neg_idxs)
+
+  def next_batch(self, batch_size):
+    num = batch_size / num_cam
+    fts = []
+    masks = []
+    for c in range(num_cam):
+      if self.cur_idxs[c] + num > len(self.cam_fts[c]):
+        self.cur_file_idxs[c] = (self.cur_file_idxs[c] + 1) % self.num_files[c]
+        self.cur_idxs[c] = 0
+        neg_file = self.cam_neg_files[c][self.cur_file_idxs[c]]
+        neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.shuffle)
+        del self.cam_fts[c]
+        del self.cam_masks[c]
+        del self.cam_idxs[c]
+        self.cam_fts[c] = neg_fts
+        self.cam_masks[c] = neg_masks
+        self.cam_idxs[c] = neg_idxs
+      for i in range(num):
+        idx = self.cam_idxs[self.cur_idxs[c] + i]
+        ft = self.cam_fts[c][idx]
+        mask = self.cam_masks[c][idx]
+        fts.append(ft)
+        masks.append(mask)
+      self.cur_idxs[c] += num
+    fts = np.array(fts)
+    masks = np.array(masks)
+    label = np.zeros((num*num_cam, self.cfg.num_class), dtype=np.int32)
+    label[:, 0] = 1
+    return fts, masks, labels
+
+
+def load_neg_chunk(neg_file, shuffle):
+  neg_fts = []
+  neg_masks = []
+  neg_idxs = []
+
+  data = np.load(neg_file)
+  ids = data['ids']
+  fts = data['fts']
+  previd = ids[0]
+  num = ids.shape[0]
+  ft_buffer = []
+  for i in range(num):
+    id = ids[i]
+    if id != previd:
+      neg_ft, neg_mask = norm_ft_buffer(
+        ft_buffer, cfg.num_ft, cfg.dim_ft)
+      neg_fts.append(neg_ft)
+      neg_masks.append(neg_mask)
+
+      ft_buffer = []
+      previd = id
+    ft_buffer.append(fts[i])
+  neg_ft, neg_mask = norm_ft_buffer(
+    ft_buffer, cfg.num_ft, cfg.dim_ft)
+  neg_fts.append(neg_ft)
+  neg_masks.append(neg_mask)
+  neg_idxs = range(len(neg_fts))
+  if shuffle:
+    random.shuffle(neg_idxs)
+
+  return neg_fts, neg_masks, neg_idxs

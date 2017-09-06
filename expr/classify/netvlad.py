@@ -1,7 +1,11 @@
 import os
 import cPickle
+import sys
+sys.path.append('../')
 
 import numpy as np
+
+import model.netvlad
 
 
 '''func
@@ -12,6 +16,24 @@ event2lid = {
   'Pointing': 3,
   'PersonRuns': 4 
 }
+
+
+def gen_proto_cfg(num_ft, dim_ft, num_center):
+  return {
+    'dim_ft': dim_ft,
+    'num_ft': num_ft,
+    'num_center': num_center,
+    'dim_output': 2048,
+    'trn_neg2pos_in_batch': 10,
+    'val_neg2pos_in_batch': 1,
+  }
+
+
+def gen_model_cfg(proto_cfg):
+  return {
+    'proto': proto_cfg,
+    'num_class': 5,
+  }
 
 
 '''expr
@@ -120,7 +142,41 @@ def num_descriptor_toi_stat():
     print track_len, np.median(nums), np.mean(nums), np.percentile(nums, 10), np.percentile(nums, 90)
 
 
+def prepare_lst_files():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  out_files = [
+    os.path.join(root_dir, 'meta', 'trn.lst'),
+    os.path.join(root_dir, 'meta', 'val.lst'),
+  ]
+
+  with open(lst_files[0]) as f, open(out_files[0], 'w') as fout:
+    for line in f:
+      if 'CAM4' not in line:
+        fout.write(line)
+  with open(lst_files[1]) as f, open(out_files[1], 'w') as fout:
+    for l, line in f:
+      if l == 5:
+        break
+      if 'CAM4' not in line:
+        fout.write(line)
+
+
+def prepare_cfg():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_files = [
+  ]
+
+
+def tst_reader():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
-  num_descriptor_toi_stat()
+  # num_descriptor_toi_stat()
+  prepare_lst_files()
