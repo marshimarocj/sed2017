@@ -300,7 +300,7 @@ def prepare_neg_for_val():
         centers = data['centers']
         frames = data['frames']
 
-        num = idx.shape[0]
+        num = ids.shape[0]
         previd = ids[0]
         cnt = 0
         for i in range(num):
