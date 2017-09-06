@@ -258,7 +258,7 @@ class Reader(framework.model.data.Reader):
   def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
       label2lid_file, model_cfg,
       neg_lst=[0], track_lens=[25, 50], shuffle=True):
-    self.ft_track_group_dir = ft_grack_group_dir
+    self.ft_track_group_dir = ft_track_group_dir
     self.label_dir = label_dir
     self.cfg = model_cfg
     self.neg_lst = neg_lst
