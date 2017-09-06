@@ -142,7 +142,7 @@ class NetVladWBEncoder(NetVladEncoder):
         scale = 1.0 / (self._config.dim_ft ** 0.5)
         self.w = tf.get_variable('w',
           shape=(self._config.dim_ft, self._config.num_center), dtype=tf.float32,
-          initializer=tf.random_uniform_initialzer(-scale, scale))
+          initializer=tf.random_uniform_initializer(-scale, scale))
         self.b = tf.get_variable('b',
           shape=(self._config.num_center,), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
