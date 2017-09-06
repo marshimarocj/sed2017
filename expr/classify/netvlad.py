@@ -184,12 +184,14 @@ def prepare_cfg():
 
   out_prefix = os.path.join(out_dir, 'netvlad.%s.%s'%(
     '_'.join([str(d) for d in neg_lst]), '_'.join([str(d) for d in track_lens])))
+  if not os.path.exists(out_prefix):
+    os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
   model_cfg = gen_model_cfg(proto_cfg)
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
-    json.dump(model_cfg, fout)
+    json.dump(model_cfg, fout, indent=2)
 
   path_cfg = {
     'trn_video_lst_file': lst_files[0],
@@ -203,7 +205,7 @@ def prepare_cfg():
   }
   path_cfg_file = '%s.path.json'%out_prefix
   with open(path_cfg_file, 'w') as fout:
-    json.dump(path_cfg, fout)
+    json.dump(path_cfg, fout, indent=2)
 
 
 def tst_reader():
