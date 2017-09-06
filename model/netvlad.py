@@ -412,7 +412,7 @@ class Reader(framework.model.data.Reader):
     # neg instances
     for neg_files in cam_neg_files:
       for neg_file in neg_files:
-        fts, masks, idxs = load_neg_chunk(neg_file, False)
+        fts, masks, idxs = load_neg_chunk(neg_file, self.cfg, False)
         fts = np.array(fts)
         masks = np.array(fts)
         idxs = np.array(fts)
@@ -448,7 +448,7 @@ class NegInstanceProvider(object):
     self.cur_idxs = [0 for _ in range(self.num_cam)]
     for c in range(self.num_cam):
       neg_file = self.cam_neg_files[c][0]
-      neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.shuffle)
+      neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.cfg, self.shuffle)
 
       self.cam_fts.append(neg_fts)
       self.cam_masks.append(neg_masks)
@@ -463,7 +463,7 @@ class NegInstanceProvider(object):
         self.cur_file_idxs[c] = (self.cur_file_idxs[c] + 1) % self.num_files[c]
         self.cur_idxs[c] = 0
         neg_file = self.cam_neg_files[c][self.cur_file_idxs[c]]
-        neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.shuffle)
+        neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.cfg, self.shuffle)
         del self.cam_fts[c]
         del self.cam_masks[c]
         del self.cam_idxs[c]
@@ -484,7 +484,7 @@ class NegInstanceProvider(object):
     return fts, masks, labels
 
 
-def load_neg_chunk(neg_file, shuffle):
+def load_neg_chunk(neg_file, cfg, shuffle):
   neg_fts = []
   neg_masks = []
   neg_idxs = []
