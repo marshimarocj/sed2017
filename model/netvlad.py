@@ -481,8 +481,8 @@ class NegInstanceProvider(object):
       self.cur_idxs[c] += num
     fts = np.array(fts)
     masks = np.array(masks)
-    label = np.zeros((num*self.num_cam, self.cfg.num_class), dtype=np.int32)
-    label[:, 0] = 1
+    labels = np.zeros((num*self.num_cam, self.cfg.num_class), dtype=np.int32)
+    labels[:, 0] = 1
     return fts, masks, labels
 
 
