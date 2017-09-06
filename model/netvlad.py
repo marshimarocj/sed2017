@@ -335,7 +335,9 @@ class Reader(framework.model.data.Reader):
             ft_buffer, self.cfg.proto_cfg.num_ft, self.cfg.proto_cfg.dim_ft)
           self.pos_fts.append(pos_ft)
           self.pos_masks.append(pos_mask)
-          self.pos_labels.append(id2lid[prev_id])
+          label = np.zeros((self.cfg.num_class,), dtype=np.int32)
+          label[id2lid[prev_id]] = 1
+          self.pos_labels.append(label)
     self.pos_fts = np.array(self.pos_fts)
     self.pos_masks = np.array(self.pos_masks)
     self.pos_labels = np.array(self.pos_labels)
