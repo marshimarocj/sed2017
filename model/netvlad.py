@@ -332,7 +332,7 @@ class Reader(framework.model.data.Reader):
 
         if id in id2lid:
           pos_ft, pos_mask = norm_ft_buffer(
-            ft_buffer, self.cfg.num_ft, self.cfg.dim_ft)
+            ft_buffer, self.cfg.proto_cfg.num_ft, self.cfg.proto_cfg.dim_ft)
           self.pos_fts.append(pos_ft)
           self.pos_masks.append(pos_mask)
           self.pos_labels.append(id2lid[prev_id])
@@ -373,7 +373,7 @@ class Reader(framework.model.data.Reader):
       pos_masks = self.pos_masks[idxs]
       pos_labels = self.pos_labels[idxs]
       neg_fts, neg_masks, neg_labels = neg_instance_provider.next_batch(
-        batch_size * self.cfg.trn_neg2pos_in_batch)
+        batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch)
       fts = np.concatenate([pos_fts, neg_fts], axis=0)
       masks = np.concatenate([pos_masks, neg_masks], axis=0)
       labels = np.concatenate([pos_labels, neg_labels], axis=0)
@@ -391,7 +391,7 @@ class Reader(framework.model.data.Reader):
       pos_masks = self.pos_masks[idxs]
       pos_labels = self.pos_labels[idxs]
       neg_fts, neg_masks, neg_labels = neg_instance_provider.next_batch(
-        batch_size * self.cfg.val_neg2pos_in_batch)
+        batch_size * self.cfg.proto_cfg.val_neg2pos_in_batch)
       fts = np.concatenate([pos_fts, neg_fts], axis=0)
       masks = np.concatenate([pos_masks, neg_masks], axis=0)
       labels = np.concatenate([pos_labels, neg_labels], axis=0)
@@ -499,7 +499,7 @@ def load_neg_chunk(neg_file, shuffle):
     id = ids[i]
     if id != previd:
       neg_ft, neg_mask = norm_ft_buffer(
-        ft_buffer, cfg.num_ft, cfg.dim_ft)
+        ft_buffer, cfg.proto_cfg.num_ft, cfg.proto_cfg.dim_ft)
       neg_fts.append(neg_ft)
       neg_masks.append(neg_mask)
 
@@ -507,7 +507,7 @@ def load_neg_chunk(neg_file, shuffle):
       previd = id
     ft_buffer.append(fts[i])
   neg_ft, neg_mask = norm_ft_buffer(
-    ft_buffer, cfg.num_ft, cfg.dim_ft)
+    ft_buffer, cfg.proto_cfg.num_ft, cfg.proto_cfg.dim_ft)
   neg_fts.append(neg_ft)
   neg_masks.append(neg_mask)
   neg_idxs = range(len(neg_fts))
