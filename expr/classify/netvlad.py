@@ -234,8 +234,8 @@ def tst_reader():
   #   print np.where(labels > 0)[1]
 
   batch_size = 100
-  for fts, masks, labels in reader.yield_tst_batch(batch_size):
-    print fts.shape, masks.shape, labels.shape
+  for fts, masks in reader.yield_tst_batch(batch_size):
+    print fts.shape, masks.shape
 
 
 if __name__ == "__main__":
