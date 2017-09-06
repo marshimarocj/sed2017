@@ -287,13 +287,13 @@ def prepare_neg_for_val():
     for video_name in video_names:
       print video_name
       for track_len in track_lens:
-        pos_ft_file = os.path.join(track_group, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
+        pos_ft_file = os.path.join(track_group_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
         data = np.load(pos_ft_file)
         ids = set(data['ids'].tolist())
         num_pos = len(ids)
         del data
 
-        neg_ft_file = os.path.join(track_group, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
+        neg_ft_file = os.path.join(track_group_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         data = np.load(neg_ft_file)
         ids = data['ids']
         fts = data['fts']
