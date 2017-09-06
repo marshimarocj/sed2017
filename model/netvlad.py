@@ -195,8 +195,8 @@ class NetVladModel(framework.model.proto.FullModel):
         self._ft_masks = tf.placeholder(
           tf.float32, shape=(None, self.config.proto_cfg.num_ft), name='ft_masks')
 
-    self.model_proto.fts = self._fts
-    self.model_proto.ft_masks = self._ft_masks
+    self.model_proto._fts = self._fts
+    self.model_proto._ft_masks = self._ft_masks
 
   def add_trn_tst_input(self, basegraph):
     with basegraph.as_default():
@@ -208,8 +208,8 @@ class NetVladModel(framework.model.proto.FullModel):
         self._labels = tf.placeholder(
           tf.int32, shape=(None, self.config.num_class), name='labels')
 
-    self.model_proto.fts = self._fts
-    self.model_proto.ft_masks = self._ft_masks
+    self.model_proto._fts = self._fts
+    self.model_proto._ft_masks = self._ft_masks
 
   def _build_parameter_graph(self, basegraph):
     framework.model.proto.FullModel._build_parameter_graph(self, basegraph)
