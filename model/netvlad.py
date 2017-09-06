@@ -302,7 +302,7 @@ class Reader(framework.model.data.Reader):
             line = line.strip()
             data = line.split(' ')
             id = int(data[0])
-            lid = label2lid[data[1]]
+            lid = self.label2lid[data[1]]
             id2lid[id] = lid
 
         ft_file = os.path.join(self.ft_track_group_dir, 
