@@ -5,6 +5,7 @@ import json
 sys.path.append('../../')
 
 import numpy as np
+from sklearn.cluster import KMeans
 
 import model.netvlad
 
@@ -241,10 +242,24 @@ def tst_reader():
   #   print fts.shape, masks.shape
 
 
+def prepare_init_center_file():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  center_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.pkl')
+  out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.npz')
+
+  with open(center_file) as f:
+    kmeans = cPickle.load(f)
+  centers = kmeans.cluster_centers_
+  centers = centers.T
+
+  np.savez_compressed(out_file, centers=centers)
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  tst_reader()
+  # tst_reader()
+  prepare_init_center_file()

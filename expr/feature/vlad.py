@@ -183,14 +183,14 @@ def encode_vlad():
   for name in names:
     for track_len in track_lens:
       files = [
-        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-        # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+        # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+        os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
         # os.path.join(ft_root_dir, '%s.%d.forward.backward.square.neg.0.50.%s.npz'%(name, track_len, split)) for split in range(1, 10)
         # os.path.join(ft_root_dir, '%s.%d.forward.square.npz'%(name, track_len))
       ]
       out_files = [
-        os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-        # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+        # os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+        os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
         # os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, split)) for split in range(1, 10)
         # os.path.join(out_dir, '%s.%d.forward.square.npz'%(name, track_len))
       ]
