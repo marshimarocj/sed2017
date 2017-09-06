@@ -422,8 +422,8 @@ class Reader(framework.model.data.Reader):
 
 
 def norm_ft_buffer(ft_buffer, num_ft, dim_ft):
-  ft = np.zeros(num_ft, dim_ft)
-  mask = np.zeros(num_ft, dtype=np.int32)
+  ft = np.zeros((num_ft, dim_ft))
+  mask = np.zeros((num_ft,), dtype=np.int32)
   num_valid = min(len(ft_buffer), num_ft)
   idxs = range(len(ft_buffer))
   random.shuffle(idxs)
