@@ -256,11 +256,11 @@ class PathCfg(framework.model.trntst.PathCfg):
 
 class Reader(framework.model.data.Reader):
   def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
-      label2lid_file, meta_file, cfg,
+      label2lid_file, model_cfg,
       neg_lst=[0], track_lens=[25, 50], shuffle=True):
     self.ft_track_group_dir = ft_grack_group_dir
     self.label_dir = label_dir
-    self.cfg = cfg
+    self.cfg = model_cfg
     self.neg_lst = neg_lst
     self.track_lens = track_lens
     self.shuffle = shuffle
@@ -277,10 +277,6 @@ class Reader(framework.model.data.Reader):
     with open(label2lid_file) as f:
       self.label2lid = cPickle.load(f)
 
-    self.meta = {}
-    with open(meta_file) as f:
-      self.meta = cPickle.load(f)
-
     self.pos_fts = []
     self.pos_masks = []
     self.pos_labels = []
@@ -289,7 +285,7 @@ class Reader(framework.model.data.Reader):
     self.cam2neg_files = {}
 
     self._load_positive_ft_label()
-    self._prepare_neg_files
+    self._prepare_neg_files()
 
   def _load_positive_ft_label(self):
     self.pos_fts = []

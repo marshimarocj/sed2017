@@ -210,6 +210,28 @@ def prepare_cfg():
 
 def tst_reader():
   root_dir = '/home/jiac/data/sed' # xiaojun
+  model_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.model.json')
+  path_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.path.json')
+
+  model_cfg = model.netvlad.ModelCfg()
+  model_cfg.load(model_cfg_file)
+
+  path_cfg = model.netvlad.PathCfg()
+  path_cfg.load(path_cfg_file)
+
+  reader = model.netvlad.Reader(
+    path_cfg.val_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+    path_cfg.label2lid_file, model_cfg, 
+    neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
+
+  print 'init complete'
+  print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
+  print reader.pos_idxs[:10]
+
+  batch_size = 10
+  for fts, masks, labels in reader.yield_trn_batch(self, batch_size):
+    print fts.shape, masks.shape, labels.shape
+    print labels
 
 
 if __name__ == "__main__":
@@ -217,4 +239,5 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
+  tst_reader()
