@@ -319,6 +319,63 @@ def prepare_neg_for_val():
         np.savez_compressed(out_file, ids=ids[:i], fts=fts[:i], centers=centers[:i], frames=frames[:i])
 
 
+def split_neg_for_trn():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+
+  num_id_in_chunk = 1000
+
+  for lst_file in lst_files:
+    video_names = []
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if 'CAM4' not in name:
+          video_names.append(name)
+
+    for video_name in video_names:
+      print video_name
+      for track_len in track_lens:
+        neg_ft_file = os.path.join(track_group_dir, 
+          '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
+        data = np.load(neg_ft_file)
+        ids = data['ids']
+        fts = data['fts']
+        frames = data['frames']
+        centers = data['centers']
+        num = ids.shape[0]
+
+        _ids, _fts, _frames, _centers = [], [], [], []
+        chunk = 0
+        previd = ids[0]
+        cnt = 0
+        for i in range(num):
+          if ids[i] != previd:
+            previd = ids[i]
+            cnt += 1
+
+            if cnt % num_id_in_chunk == 0:
+              out_file = os.path.join(out_dir, 
+                '%s.%d.forward.backward.square.neg.0.50.0.%d.npz'%(video_name, track_len, chunk))
+              np.savez_compressed(out_file, ids=_ids, fts=_fts, frames=_frames, centers=_centers)
+              chunk += 1
+              del _ids, _fts, _frames, _centers
+              _ids, _fts, _frames, _centers = [], [], [], []
+          _ids.append(ids[i])
+          _fts.append(fts[i])
+          _frames.append(frames[i])
+          _centers.append(centers[i])
+        out_file = os.path.join(out_dir,
+          '%s.%d.forward.backward.square.neg.0.50.0.%d.npz'%(video_name, track_len, chunk))
+        np.savez_compressed(out_file, ids=_ids, fts=_fts, frames=_frames, centers=_centers)
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
@@ -327,4 +384,5 @@ if __name__ == "__main__":
   # prepare_cfg()
   # tst_reader()
   # prepare_init_center_file()
-  prepare_neg_for_val()
+  # prepare_neg_for_val()
+  split_neg_for_trn()
