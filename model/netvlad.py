@@ -246,7 +246,7 @@ class NetVladModel(framework.model.proto.FullModel):
   def add_loss(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        loss_op = np.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self._labels, logits=self.logit_op))
+        loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self._labels, logits=self.logit_op))
 
     return loss_op
 
