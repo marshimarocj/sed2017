@@ -112,7 +112,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
         b = - self.alpha * tf.reduce_sum(self.centers**2, axis=0)# (num_center)
         fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
         logits = tf.nn.xw_plus_b(fts, w, b) # (None*num_ft, num_center)
-        a = tf.softmax(logits) 
+        a = tf.nn.softmax(logits) 
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
         fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, num_center)
@@ -161,7 +161,7 @@ class NetVladWBEncoder(NetVladEncoder):
       with tf.variable_scope(self.name_scope):
         fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
         logits = tf.nn.xw_plus_b(fts, self.w, self.b) # (None*num_ft, num_center)
-        a = tf.softmax(logits) 
+        a = tf.nn.softmax(logits) 
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
         fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, num_center)
