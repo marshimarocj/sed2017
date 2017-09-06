@@ -178,7 +178,7 @@ def prepare_cfg():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
     # os.path.join(root_dir, 'meta', 'trn.lst'),
-    os.path.join(root_dir, 'meta', 'val.lst'),
+    os.path.join(root_dir, 'meta', 'debug.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
