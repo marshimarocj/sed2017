@@ -426,6 +426,7 @@ class Reader(framework.model.data.Reader):
           _fts = np.array(_fts)
           _masks = np.array(_masks)
           yield _fts, _masks
+        del fts, masks
 
 
 def norm_ft_buffer(ft_buffer, num_ft, dim_ft):
