@@ -588,6 +588,7 @@ class NegInstanceProvider(object):
           self.cam_masks[c] = neg_masks
           self.cam_idxs[c] = neg_idxs
           del past_fts, past_masks, past_idxs
+          _num = min(_num, len(self.cam_fts[c]))
       # print len(self.cam_idxs[c]), self.cur_idxs[c], num
       for i in range(_num):
         idx = self.cam_idxs[c][self.cur_idxs[c] + i]
@@ -598,7 +599,7 @@ class NegInstanceProvider(object):
       self.cur_idxs[c] += _num
     fts = np.array(fts)
     masks = np.array(masks)
-    labels = np.zeros((num*self.num_cam, self.cfg.num_class), dtype=np.int32)
+    labels = np.zeros((fts.shape[0], self.cfg.num_class), dtype=np.int32)
     labels[:, 0] = 1
     return fts, masks, labels
 
