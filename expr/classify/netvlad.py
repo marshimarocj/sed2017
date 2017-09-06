@@ -310,7 +310,7 @@ def prepare_neg_for_val():
             if cnt == num_pos:
               break
         out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
-        np.save(out_file, ids=ids[:i], fts=fts[:i], centers=centers[:i], frames=frames[:i])
+        np.savez_compressed(out_file, ids=ids[:i], fts=fts[:i], centers=centers[:i], frames=frames[:i])
 
 
 if __name__ == "__main__":
