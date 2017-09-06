@@ -32,7 +32,7 @@ class ModelCfg(framework.model.proto.FullModelConfig):
     self.proto_cfg.load(data['proto'])
 
 
-class NetVladEncoder(framework.proto.ModelProto):
+class NetVladEncoder(framework.model.proto.ModelProto):
   namespace = 'netvlad.NetVladEncoder'
 
   def __init__(self, config):
