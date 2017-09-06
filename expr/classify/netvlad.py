@@ -231,7 +231,7 @@ def tst_reader():
   batch_size = 10
   for fts, masks, labels in reader.yield_trn_batch(batch_size):
     print fts.shape, masks.shape, labels.shape
-    print labels
+    print np.where(labels > 0)[1]
 
 
 if __name__ == "__main__":
@@ -239,5 +239,5 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
-  # tst_reader()
+  # prepare_cfg()
+  tst_reader()
