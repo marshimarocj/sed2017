@@ -1,6 +1,7 @@
 import os
 import cPickle
 import sys
+import json
 sys.path.append('../../')
 
 import numpy as np
@@ -168,7 +169,41 @@ def prepare_lst_files():
 def prepare_cfg():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
+    os.path.join(root_dir, 'meta', 'trn.lst'),
+    os.path.join(root_dir, 'meta', 'val.lst'),
   ]
+  ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
+  out_dir = os.path.join(root_dir, 'model', 'netvlad')
+  num_ft = 100
+  dim_ft = 1024
+  num_center = 16
+  neg_lst = [0]
+  track_lens = [50]
+
+  out_prefix = os.path.join(out_dir, 'netvlad.%s.%s'%(
+    '_'.join([str(d) for d in neg_lst]), '_'.join([str(d) for d in track_lens])))
+
+  proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
+  model_cfg = gen_model_cfg(proto_cfg)
+  model_cfg_file = '%s.model.json'%out_prefix
+  with open(model_cfg_file, 'w') as fout:
+    json.dump(model_cfg, fout)
+
+  path_cfg = {
+    'trn_video_lst_file': lst_files[0],
+    'val_video_lst_file': lst_files[1],
+    'ft_track_group_dir': ft_toi_dir, 
+    'label_dir': label_dir,
+    'label2lid_file': label2lid_file,
+    'output_dir': out_prefix,
+    'neg_lst': neg_lst,
+    'track_lens': track_lens,
+  }
+  path_cfg_file = '%s.path.json'%out_prefix
+  with open(path_cfg_file, 'w') as fout:
+    json.dump(path_cfg, fout)
 
 
 def tst_reader():
@@ -179,4 +214,5 @@ if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
   # num_descriptor_toi_stat()
-  prepare_lst_files()
+  # prepare_lst_files()
+  prepare_cfg()

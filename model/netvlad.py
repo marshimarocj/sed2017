@@ -249,6 +249,9 @@ class PathCfg(framework.model.trntst.PathCfg):
     self.ft_track_group_dir = ''
     self.label_dir = ''
     self.label2lid_file = ''
+    self.output_dir = ''
+    self.neg_lst = []
+    self.track_lens = []
 
 
 class Reader(framework.model.data.Reader):
