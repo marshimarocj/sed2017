@@ -164,9 +164,10 @@ class NetVladWBEncoder(NetVladEncoder):
         a = tf.nn.softmax(logits) 
 
         a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
-        fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, num_center)
+        fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, 1)
         centers = tf.expand_dims(self.centers, 0) # (1, dim_ft, num_center)
-        V_ijk = a * (fts - centers) # (None*num_ft, dim_ft, num_center)
+        diff = fts - centers # (None*num_ft, dim_ft, num_center)
+        V_ijk = a * diff # (None*num_ft, dim_ft, num_center)
         mask = tf.reshape(self._ft_masks, (-1, 1, 1))
         V_ijk *= mask
         dim_vlad = self._config.dim_ft* self._config.num_center
