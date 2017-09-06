@@ -35,6 +35,13 @@ def gen_model_cfg(proto_cfg):
   return {
     'proto': proto_cfg,
     'num_class': 5,
+
+    'learning_rate': 1e-4,
+    'monitor_iter': 50,
+    'trn_batch_size': 32,
+    'tst_batch_size': 128,
+    'val_iter': -1,
+    'num_epoch': 20,
   }
 
 
