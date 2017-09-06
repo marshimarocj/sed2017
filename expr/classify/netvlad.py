@@ -176,10 +176,11 @@ def prepare_cfg():
   ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
+  num_center = 16
+  init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'model', 'netvlad')
   num_ft = 100
   dim_ft = 1024
-  num_center = 16
   neg_lst = [0]
   track_lens = [50]
 
@@ -203,6 +204,7 @@ def prepare_cfg():
     'output_dir': out_prefix,
     'neg_lst': neg_lst,
     'track_lens': track_lens,
+    'init_weight_file': 
   }
   path_cfg_file = '%s.path.json'%out_prefix
   with open(path_cfg_file, 'w') as fout:
@@ -260,6 +262,6 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_reader()
-  prepare_init_center_file()
+  # prepare_init_center_file()
