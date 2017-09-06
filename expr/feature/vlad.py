@@ -3,7 +3,7 @@ import itertools
 import cPickle
 import argparse
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import numpy as np
 from sklearn.cluster import KMeans
