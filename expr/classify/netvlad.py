@@ -329,6 +329,7 @@ def split_neg_for_trn():
   out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
 
   num_id_in_chunk = 1000
+  track_lens = [25, 50]
 
   for lst_file in lst_files:
     video_names = []
