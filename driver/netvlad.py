@@ -54,10 +54,10 @@ if __name__ == '__main__':
 
   path_cfg = gen_dir_struct_info(opts.path_cfg_file)
   if bool(opts.is_wb):
-    model_cfg = load_and_fill_wbmodel_cfg(path_cfg, model_cfg_file)
+    model_cfg = load_and_fill_wbmodel_cfg(path_cfg, opts.model_cfg_file)
     _model = model.netvlad.NetVladWBModel(model_cfg)
   else:
-    model_cfg = load_and_fill_model_cfg(path_cfg, model_cfg_file)
+    model_cfg = load_and_fill_model_cfg(path_cfg, opts.model_cfg_file)
     _model = model.netvlad.NetVladModel(model_cfg)
 
   if opts.is_train:
