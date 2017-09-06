@@ -454,6 +454,8 @@ class NegInstanceProvider(object):
       self.cam_masks.append(neg_masks)
       self.cam_idxs.append(neg_idxs)
 
+      print 'load', neg_file
+
   def next_batch(self, batch_size):
     num = batch_size / self.num_cam
     fts = []
