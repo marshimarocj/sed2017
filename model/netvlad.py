@@ -422,6 +422,7 @@ class Reader(framework.model.data.Reader):
         num = idxs.shape[0]
         for i in range(0, num, batch_size):
           yield fts[i:i+batch_size], masks[i:i+batch_size]
+        del fts, masks, idxs
 
 
 def norm_ft_buffer(ft_buffer, num_ft, dim_ft):
