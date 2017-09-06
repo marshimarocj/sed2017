@@ -572,26 +572,30 @@ class NegInstanceProvider(object):
     fts = []
     masks = []
     for c in range(self.num_cam):
+      _num = num
       if self.cur_idxs[c] + num > len(self.cam_fts[c]):
-        self.cur_file_idxs[c] = (self.cur_file_idxs[c] + 1) % self.num_files[c]
-        self.cur_idxs[c] = 0
-        neg_file = self.cam_neg_files[c][self.cur_file_idxs[c]]
-        neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.cfg, self.shuffle)
-        past_fts = self.cam_fts[c]
-        past_masks = self.cam_masks[c]
-        past_idxs = self.cam_idxs[c]
-        self.cam_fts[c] = neg_fts
-        self.cam_masks[c] = neg_masks
-        self.cam_idxs[c] = neg_idxs
-        del past_fts, past_masks, past_idxs
+        if self.cur_idxs[c] == 0:
+          _num = len(self.cam_fts[c])
+        else:
+          self.cur_file_idxs[c] = (self.cur_file_idxs[c] + 1) % self.num_files[c]
+          self.cur_idxs[c] = 0
+          neg_file = self.cam_neg_files[c][self.cur_file_idxs[c]]
+          neg_fts, neg_masks, neg_idxs = load_neg_chunk(neg_file, self.cfg, self.shuffle)
+          past_fts = self.cam_fts[c]
+          past_masks = self.cam_masks[c]
+          past_idxs = self.cam_idxs[c]
+          self.cam_fts[c] = neg_fts
+          self.cam_masks[c] = neg_masks
+          self.cam_idxs[c] = neg_idxs
+          del past_fts, past_masks, past_idxs
       # print len(self.cam_idxs[c]), self.cur_idxs[c], num
-      for i in range(num):
+      for i in range(_num):
         idx = self.cam_idxs[c][self.cur_idxs[c] + i]
         ft = self.cam_fts[c][idx]
         mask = self.cam_masks[c][idx]
         fts.append(ft)
         masks.append(mask)
-      self.cur_idxs[c] += num
+      self.cur_idxs[c] += _num
     fts = np.array(fts)
     masks = np.array(masks)
     labels = np.zeros((num*self.num_cam, self.cfg.num_class), dtype=np.int32)
