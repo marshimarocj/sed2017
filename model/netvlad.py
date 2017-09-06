@@ -420,7 +420,7 @@ class Reader(framework.model.data.Reader):
         masks = np.array(fts)
         idxs = np.array(fts)
         num = idxs.shape[0]
-        for i in range(num):
+        for i in range(0, num, batch_size):
           yield fts[i:i+batch_size], masks[i:i+batch_size]
 
 
