@@ -414,6 +414,7 @@ class Reader(framework.model.data.Reader):
     # neg instances
     for neg_files in cam_neg_files:
       for neg_file in neg_files:
+        print 'load', neg_file
         fts, masks, idxs = load_neg_chunk(neg_file, self.cfg, False)
         fts = np.array(fts)
         masks = np.array(fts)

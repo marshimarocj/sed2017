@@ -228,10 +228,14 @@ def tst_reader():
   print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
   print reader.pos_idxs[:10]
 
-  batch_size = 10
-  for fts, masks, labels in reader.yield_trn_batch(batch_size):
+  # batch_size = 10
+  # for fts, masks, labels in reader.yield_trn_batch(batch_size):
+  #   print fts.shape, masks.shape, labels.shape
+  #   print np.where(labels > 0)[1]
+
+  batch_size = 100
+  for fts, masks, labels in reader.yield_tst_batch(batch_size):
     print fts.shape, masks.shape, labels.shape
-    print np.where(labels > 0)[1]
 
 
 if __name__ == "__main__":
