@@ -416,13 +416,16 @@ class Reader(framework.model.data.Reader):
       for neg_file in neg_files:
         print 'load', neg_file
         fts, masks, idxs = load_neg_chunk(neg_file, self.cfg, False)
-        fts = np.array(fts)
-        masks = np.array(fts)
-        idxs = np.array(fts)
         num = idxs.shape[0]
         for i in range(0, num, batch_size):
-          yield fts[i:i+batch_size], masks[i:i+batch_size]
-        del fts, masks, idxs
+          _fts = []
+          _masks = []
+          for j in range(i, min(num, i+batch_size)):
+            _fts.append(fts[i])
+            _masks.append(masks[i])
+          _fts = np.array(_fts)
+          _masks = np.array(_masks)
+          yield _fts, _masks
 
 
 def norm_ft_buffer(ft_buffer, num_ft, dim_ft):
