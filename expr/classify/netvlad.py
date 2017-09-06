@@ -158,7 +158,7 @@ def prepare_lst_files():
       if 'CAM4' not in line:
         fout.write(line)
   with open(lst_files[1]) as f, open(out_files[1], 'w') as fout:
-    for l, line in f:
+    for l, line in enumerate(f):
       if l == 5:
         break
       if 'CAM4' not in line:
