@@ -473,7 +473,7 @@ class NegInstanceProvider(object):
         self.cam_masks[c] = neg_masks
         self.cam_idxs[c] = neg_idxs
       for i in range(num):
-        idx = self.cam_idxs[self.cur_idxs[c] + i]
+        idx = self.cam_idxs[c][self.cur_idxs[c] + i]
         ft = self.cam_fts[c][idx]
         mask = self.cam_masks[c][idx]
         fts.append(ft)
