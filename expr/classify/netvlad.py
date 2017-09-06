@@ -364,7 +364,6 @@ def split_neg_for_trn():
             if cnt % num_id_in_chunk == 0:
               out_file = os.path.join(out_dir, 
                 '%s.%d.forward.backward.square.neg.0.50.0.%d.npz'%(video_name, track_len, chunk))
-              print cnt, len(set(_ids))
               np.savez_compressed(out_file, ids=_ids, fts=_fts, frames=_frames, centers=_centers)
               chunk += 1
               del _ids, _fts, _frames, _centers
