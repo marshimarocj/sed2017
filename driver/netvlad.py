@@ -8,6 +8,7 @@ sys.path.append('../')
 import numpy as np
 
 import model.netvlad
+import common
 
 
 def build_parser():
