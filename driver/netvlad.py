@@ -33,8 +33,8 @@ def load_and_fill_model_cfg(path_cfg, model_cfg_file):
   model_cfg = model.netvlad.ModelCfg()
   model_cfg.load(model_cfg_file)
   data = np.load(path_cfg.init_weight_file)
-  model_cfg.centers = data['centers']
-  model_cfg.alpha = data['alpha']
+  model_cfg.proto_cfg.centers = data['centers']
+  model_cfg.proto_cfg.alpha = data['alpha']
 
   return model_cfg
 
@@ -43,7 +43,7 @@ def load_and_fill_wbmodel_cfg(path_cfg, model_cfg_file):
   model_cfg = model.netvlad.ModelWBCfg()
   model_cfg.load(model_cfg_file)
   data = np.load(path_cfg.init_weight_file)
-  model_cfg.centers = data['centers']
+  model_cfg.proto_cfg.centers = data['centers']
 
   return model_cfg
 
