@@ -116,9 +116,10 @@ def cluster_centers():
   root_dir = '/home/jiac/data/sed' # danny
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
-  out_file = os.path.join(ft_root_dir, 'kmeans.center.32.pkl')
+  # num_center = 32
+  num_center = 16
+  out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
 
-  num_center = 32
   kmeans = KMeans(n_clusters=num_center)
 
   data = np.load(sample_file)
@@ -251,8 +252,8 @@ def encode_vlad_rocks():
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  # cluster_centers()
-  check_track_group_npzfile()
+  cluster_centers()
+  # check_track_group_npzfile()
   # encode_vlad()
   # gen_script()
   # encode_vlad_rocks()
