@@ -81,7 +81,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
 
   @ft_masks.setter
   def ft_masks(self, val):
-    self._fts_masks = val
+    self._ft_masks = val
 
   @property
   def feature_op(self):
@@ -395,7 +395,7 @@ class Reader(framework.model.data.Reader):
       yield fts, masks, labels
 
   def yield_val_batch(self, batch_size):
-    generator = self.yield_trn_batch(batch)
+    generator = self.yield_trn_batch(batch_size)
     for fts, masks, labels in generator:
       yield fts, masks, labels
 
