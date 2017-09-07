@@ -299,7 +299,7 @@ def prepare_init_center_file():
 def prepare_neg_for_val():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
-    os.path.join(root_dir, 'dev08-1.lst'),
+    # os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
   track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
@@ -325,8 +325,8 @@ def prepare_neg_for_val():
         num_pos = len(ids)
         del data
 
-        # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
-        # os.symlink(pos_ft_file, out_file)
+        out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
+        os.symlink(pos_ft_file, out_file)
 
         neg_ft_file = os.path.join(track_group_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         data = np.load(neg_ft_file)
@@ -335,14 +335,14 @@ def prepare_neg_for_val():
         centers = data['centers']
         frames = data['frames']
 
-        num = max(ids.shape[0], 200)
+        num = max(num_pos, 500)
         previd = ids[0]
         cnt = 0
         for i in range(num):
           if ids[i] != previd:
             cnt += 1
             previd = ids[i]
-            if cnt == num_pos:
+            if cnt == num:
               break
         out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         np.savez_compressed(out_file, ids=ids[:i], fts=fts[:i], centers=centers[:i], frames=frames[:i])
@@ -475,9 +475,9 @@ if __name__ == "__main__":
   # prepare_lst_files()
   # prepare_cfg()
   # tst_trn_reader()
-  tst_val_reader()
+  # tst_val_reader()
   # prepare_init_center_file()
-  # prepare_neg_for_val()
+  prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
