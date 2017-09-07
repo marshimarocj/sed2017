@@ -4,7 +4,7 @@ import cPickle
 import shutil
 import itertools
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import numpy as np
 
