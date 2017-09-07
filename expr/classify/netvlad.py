@@ -176,12 +176,13 @@ def prepare_lst_files():
 
 def prepare_cfg():
   root_dir = '/home/jiac/data/sed' # xiaojun
-  lst_files = [
-    # os.path.join(root_dir, 'meta', 'trn.lst'),
-    os.path.join(root_dir, 'meta', 'debug.lst'),
+  video_lst_files = [
+    os.path.join(root_dir, 'meta', 'trn.lst'),
+    # os.path.join(root_dir, 'meta', 'debug.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
-  trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
@@ -190,8 +191,9 @@ def prepare_cfg():
   out_dir = os.path.join(root_dir, 'model', 'netvlad')
   num_ft = 100
   dim_ft = 1024
-  neg_lst = [0]
-  track_lens = [50]
+  tst_neg_lst = [0]
+  # track_lens = [25, 50]
+  track_lens = [25]
 
   out_prefix = os.path.join(out_dir, 'netvlad.%s.%s'%(
     '_'.join([str(d) for d in neg_lst]), '_'.join([str(d) for d in track_lens])))
@@ -207,12 +209,13 @@ def prepare_cfg():
   path_cfg = {
     'trn_video_lst_file': lst_files[0],
     'val_video_lst_file': lst_files[1],
+    'trn_neg_lst_file': trn_neg_lst_file,
     'trn_ft_track_group_dir': trn_ft_toi_dir, 
     'val_ft_track_group_dir': val_ft_toi_dir, 
     'label_dir': label_dir,
     'label2lid_file': label2lid_file,
     'output_dir': out_prefix,
-    'neg_lst': neg_lst,
+    'tst_neg_lst': tst_neg_lst,
     'track_lens': track_lens,
     'init_weight_file': init_weight_file,
   }
@@ -221,7 +224,7 @@ def prepare_cfg():
     json.dump(path_cfg, fout, indent=2)
 
 
-def tst_reader():
+def tst_trn_reader():
   root_dir = '/home/jiac/data/sed' # xiaojun
   model_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.model.json')
   path_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.path.json')
@@ -232,11 +235,11 @@ def tst_reader():
   path_cfg = model.netvlad.PathCfg()
   path_cfg.load(path_cfg_file)
 
-  reader = model.netvlad.Reader(
-    path_cfg.val_video_lst_file, path_cfg.val_ft_track_group_dir, path_cfg.label_dir,
-    # path_cfg.trn_video_lst_file, path_cfg.ft_track_group_dir, path_cfg.label_dir,
+  reader = model.netvlad.TrnReader(
+    path_cfg.trn_video_lst_file, path_cfg.trn_neg_lst_file,
+    path_cfg.trn_ft_track_group_dir, path_cfg.label_dir,
     path_cfg.label2lid_file, model_cfg, 
-    neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
+    track_lens=path_cfg.track_lens)
 
   print 'init complete'
   print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
@@ -245,13 +248,38 @@ def tst_reader():
   batch_size = 100
   for epoch in range(20):
     print 'epoch', epoch
-    for fts, masks, labels in reader.yield_val_batch(batch_size):
+    for fts, masks, labels in reader.yield_trn_batch(batch_size):
       print fts.shape, masks.shape, labels.shape
     # print np.where(labels > 0)[1]
 
   # batch_size = 100
   # for fts, masks in reader.yield_tst_batch(batch_size):
   #   print fts.shape, masks.shape
+
+
+def tst_val_reader():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  model_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.model.json')
+  path_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.path.json')
+
+  model_cfg = model.netvlad.ModelCfg()
+  model_cfg.load(model_cfg_file)
+
+  path_cfg = model.netvlad.PathCfg()
+  path_cfg.load(path_cfg_file)
+
+  reader = model.netvlad.ValReader(
+    path_cfg.val_video_lst_file, path_cfg.val_ft_track_group_dir, path_cfg.label_dir,
+    path_cfg.label2lid_file, model_cfg,
+    track_lens=path_cfg.tack_lens)
+
+  print 'init complete'
+  print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
+  print reader.pos_idxs[:10]
+
+  batch_size = 100
+  for fts, masks, labels in reader.yield_val_batch(batch_size):
+    print fts.shape, masks.shape, labels.shape
 
 
 def prepare_init_center_file():
@@ -426,10 +454,10 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_reader()
   # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
-  gen_neg_lst_for_trn()
+  # gen_neg_lst_for_trn()

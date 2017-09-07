@@ -325,26 +325,25 @@ class PathCfg(framework.model.trntst.PathCfg):
   def __init__(self):
     framework.model.trntst.PathCfg.__init__(self)
     self.trn_video_lst_file = ''
+    self.trn_neg_lst_file = ''
     self.val_video_lst_file = ''
     self.trn_ft_track_group_dir = ''
     self.val_ft_track_group_dir = ''
     self.label_dir = ''
     self.label2lid_file = ''
     self.output_dir = ''
-    self.neg_lst = []
     self.track_lens = []
     self.init_weight_file = ''
     self.tst_video_name = ''
+    self.tst_neg_lst = []
 
 
-class Reader(framework.model.data.Reader):
-  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
-      label2lid_file, model_cfg,
-      neg_lst=[0], track_lens=[25, 50], shuffle=True):
+class TrnReader(framework.model.data.Reader):
+  def __init__(self, video_lst_file, neg_lst_file, ft_track_group_dir, label_dir, 
+      label2lid_file, model_cfg, track_lens=[25, 50]):
     self.ft_track_group_dir = ft_track_group_dir
     self.label_dir = label_dir
     self.cfg = model_cfg
-    self.neg_lst = neg_lst
     self.track_lens = track_lens
 
     self.video_names = []
@@ -367,15 +366,25 @@ class Reader(framework.model.data.Reader):
     self.cam2neg_files = {}
 
     load_positive_ft_label(self)
-    if shuffle:
-      np.random.shuffle(self.pos_idxs)
+    np.random.shuffle(self.pos_idxs)
 
-    prepare_neg_files(self)
+    self._prepare_neg_files(self, neg_lst_file)
     cam_neg_files = self.cam2neg_files.values()
-    if shuffle:
-      for neg_files in cam_neg_files:
-        random.shuffle(neg_files)
+    for neg_files in cam_neg_files:
+      random.shuffle(neg_files)
     self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=shuffle)
+
+  def _prepare_neg_files(self, neg_lst_file):
+    self.cam2neg_files = {}
+    with open(neg_lst_file) as f:
+      for line in f:
+        line = line.strip()
+        begin = line.rfind('_')
+        end = line.find('.')
+        cam = line[begin+1:end]
+        if cam not in self.cam2neg_files:
+          self.cam2neg_files[cam] = []
+        self.cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
 
   def num_record(self):
     return self.pos_idxs.shape[0]
@@ -395,9 +404,68 @@ class Reader(framework.model.data.Reader):
       labels = np.concatenate([pos_labels, neg_labels], axis=0)
       yield fts, masks, labels
 
+
+class ValReader(framework.model.data.Reader):
+  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
+      label2lid_file, model_cfg, track_lens=[25, 50]):
+    self.ft_track_group_dir = ft_track_group_dir
+    self.label_dir = label_dir
+    self.cfg = model_cfg
+    self.track_lens = track_lens
+
+    self.video_names = []
+    with open(video_lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+
+        self.video_names.append(name)
+
+    self.label2lid = {}
+    with open(label2lid_file) as f:
+      self.label2lid = cPickle.load(f)
+
+    self.pos_fts = []
+    self.pos_masks = []
+    self.pos_labels = []
+    self.pos_idxs = []
+
+    self.cam2neg_files = {}
+
+    load_positive_ft_label(self)
+
+    self._prepare_neg_files()
+    cam_neg_files = self.cam2neg_files.values()
+    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=shuffle)
+
+  def _prepare_neg_files(self):
+    self.cam2neg_files = {}
+    for video_name in self.video_names:
+      pos = video_name.rfind('_')
+      cam = video_name[pos+1:]
+      if cam not in self.cam2neg_files:
+        self.cam2neg_files[cam] = []
+      for track_len in self.track_lens:
+        file = os.path.join(self.ft_track_group_dir, 
+          '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
+        self.cam2neg_files[cam].append(file)
+
+  def num_record(self):
+    return self.pos_idxs.shape[0]
+
   def yield_val_batch(self, batch_size):
-    generator = self.yield_trn_batch(batch_size)
-    for fts, masks, labels in generator:
+    num_pos = self.pos_idxs.shape[0]
+    for i in range(0, num_pos, batch_size):
+      idxs = self.pos_idxs[i:i+batch_size]
+      num = idxs.shape[0]
+      pos_fts = self.pos_fts[idxs]
+      pos_masks = self.pos_masks[idxs]
+      pos_labels = self.pos_labels[idxs]
+      neg_fts, neg_masks, neg_labels = self.neg_instance_provider.next_batch(
+        batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch)
+      fts = np.concatenate([pos_fts, neg_fts], axis=0)
+      masks = np.concatenate([pos_masks, neg_masks], axis=0)
+      labels = np.concatenate([pos_labels, neg_labels], axis=0)
       yield fts, masks, labels
 
 
@@ -431,7 +499,20 @@ class TstReader(framework.model.data.Reader):
 
     load_positive_ft_label(self)
     print 'positive load complete'
-    prepare_neg_files(self)
+    self._prepare_neg_files()
+
+  def _prepare_neg_files(self):
+    self.cam2neg_files = {}
+    for video_name in self.video_names:
+      pos = video_name.rfind('_')
+      cam = video_name[pos+1:]
+      if cam not in self.cam2neg_files:
+        self.cam2neg_files[cam] = []
+      for track_len in self.track_lens:
+        for neg_split in self.tst_neg_lst:
+          file = os.path.join(self.ft_track_group_dir, 
+            '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(video_name, track_len, neg_split))
+          self.cam2neg_files[cam].append(file)
 
   # assumption: will only process one video
   def yield_tst_batch(self, batch_size):
@@ -528,20 +609,6 @@ def load_positive_ft_label(reader):
   reader.pos_masks = np.array(reader.pos_masks)
   reader.pos_labels = np.array(reader.pos_labels)
   reader.pos_idxs = np.arange(reader.pos_fts.shape[0])
-
-
-def prepare_neg_files(reader):
-  reader.cam2neg_files = {}
-  for video_name in reader.video_names:
-    pos = video_name.rfind('_')
-    cam = video_name[pos+1:]
-    if cam not in reader.cam2neg_files:
-      reader.cam2neg_files[cam] = []
-    for track_len in reader.track_lens:
-      for neg_split in reader.neg_lst:
-        file = os.path.join(reader.ft_track_group_dir, 
-          '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(video_name, track_len, neg_split))
-        reader.cam2neg_files[cam].append(file)
 
 
 # iterate files under each camera separately
