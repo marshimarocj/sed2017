@@ -447,9 +447,9 @@ class ValReader(framework.model.data.Reader):
         _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
         _neg_labels = np.zeros((len(_neg_fts), self.cfg.num_class), dtype=np.int32)
         _neg_labels[:, 0] = 1
-        neg_fts += _neg_fts
-        neg_masks += _neg_masks
-        neg_labels.append(_neg_labels)
+        self.neg_fts += _neg_fts
+        self.neg_masks += _neg_masks
+        self.neg_labels.append(_neg_labels)
     self.neg_fts = np.array(neg_fts)
     self.neg_masks = np.array(neg_masks)
     self.neg_labels = np.concatenate(neg_labels, axis=0)
