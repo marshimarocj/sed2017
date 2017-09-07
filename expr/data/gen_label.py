@@ -481,7 +481,7 @@ def refine_label_for_cell2ear():
     else:
       out.append(d)
   with open(out_file, 'w') as fout:
-    json.dump(out, fout)
+    json.dump(out, fout, indent=2)
 
 
 if __name__ == '__main__':
