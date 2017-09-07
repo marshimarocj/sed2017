@@ -480,6 +480,7 @@ def refine_label_for_cell2ear():
         out.append(d)
     else:
       out.append(d)
+  print len(data), len(out)
   with open(out_file, 'w') as fout:
     json.dump(out, fout, indent=2)
 
