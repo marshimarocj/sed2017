@@ -657,6 +657,7 @@ class NegInstanceProvider(object):
           self.cam_idxs[c] = neg_idxs
           del past_fts, past_masks, past_idxs
           _num = min(_num, len(self.cam_fts[c]))
+          print 'load', neg_file
       # print len(self.cam_idxs[c]), self.cur_idxs[c], num
       for i in range(_num):
         idx = self.cam_idxs[c][self.cur_idxs[c] + i]
