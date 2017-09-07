@@ -207,8 +207,8 @@ def prepare_cfg():
     json.dump(model_cfg, fout, indent=2)
 
   path_cfg = {
-    'trn_video_lst_file': lst_files[0],
-    'val_video_lst_file': lst_files[1],
+    'trn_video_lst_file': video_lst_files[0],
+    'val_video_lst_file': video_lst_files[1],
     'trn_neg_lst_file': trn_neg_lst_file,
     'trn_ft_track_group_dir': trn_ft_toi_dir, 
     'val_ft_track_group_dir': val_ft_toi_dir, 
