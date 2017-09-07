@@ -372,7 +372,7 @@ class TrnReader(framework.model.data.Reader):
     cam_neg_files = self.cam2neg_files.values()
     for neg_files in cam_neg_files:
       random.shuffle(neg_files)
-    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=shuffle)
+    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=True)
 
   def _prepare_neg_files(self, neg_lst_file):
     self.cam2neg_files = {}
@@ -436,7 +436,7 @@ class ValReader(framework.model.data.Reader):
 
     self._prepare_neg_files()
     cam_neg_files = self.cam2neg_files.values()
-    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=shuffle)
+    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=False)
 
   def _prepare_neg_files(self):
     self.cam2neg_files = {}
