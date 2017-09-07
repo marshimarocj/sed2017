@@ -206,7 +206,8 @@ def find_track_frame_intersected_with_bbox():
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  out_dir = os.path.join(root_dir, 'pseudo_label')
+  # out_dir = os.path.join(root_dir, 'pseudo_label')
+  out_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
 
   track_len = 25
   # track_len = 50
@@ -224,8 +225,8 @@ def find_track_frame_intersected_with_bbox():
           names.append(name)
 
   # names = ['LGW_20071112_E1_CAM2']
-  # for name in names:
-  for name in names[17:]:
+  for name in names:
+  # for name in names[17:]:
     labels = video2labels[name]
     # db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
     db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
@@ -490,8 +491,8 @@ def refine_label_for_cell2ear():
 
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
-  # find_track_frame_intersected_with_bbox()
-  generate_pos_neg_lst()
+  find_track_frame_intersected_with_bbox()
+  # generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
