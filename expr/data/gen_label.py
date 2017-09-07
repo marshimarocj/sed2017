@@ -115,13 +115,15 @@ def calc_iou(box_lhs, boxs, union_or_left=False):
 '''
 def find_track_interval_intersected_with_bbox():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  bbox_file = os.path.join(root_dir, 'box_label', 'train.label.json')
+  # bbox_file = os.path.join(root_dir, 'box_label', 'train.label.json')
+  bbox_file = os.path.join(root_dir, 'box_label', 'train.label.cell2ear.refine.json')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  out_dir = os.path.join(root_dir, 'pseudo_label')
+  # out_dir = os.path.join(root_dir, 'pseudo_label')
+  out_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
 
   # direction = 'forward'
   # direction = 'backward'
@@ -146,8 +148,8 @@ def find_track_interval_intersected_with_bbox():
     labels = video2labels[name]
     # track_file = os.path.join(track_dir, '%s.%d.%s.npz'%(name, track_len, direction))
     # track_map_file = os.path.join(track_dir, '%s.%d.%s.map'%(name, track_len, direction))
-    db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
-    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
+    # db_file = os.path.join(track_dir, '%s.%d.forward.backward.npz'%(name, track_len))
+    db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     print name
 
     # track_db = api.db.TrackDb(track_map_file, track_file, track_len)
@@ -190,8 +192,8 @@ def find_track_interval_intersected_with_bbox():
         'event': pseudo_pos_label.event
       })
 
-    out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.2f.interval.pkl'%(name, track_len, iou_threshold))
-    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.2f.interval.pkl'%(name, track_len, iou_threshold))
+    # out_file = os.path.join(out_dir, '%s.%d.forward.backward.%.2f.interval.pkl'%(name, track_len, iou_threshold))
+    out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.%.2f.interval.pkl'%(name, track_len, iou_threshold))
     with open(out_file, 'w') as fout:
       cPickle.dump(out, fout)
 
@@ -486,10 +488,10 @@ def refine_label_for_cell2ear():
 
 
 if __name__ == '__main__':
-  # find_track_interval_intersected_with_bbox()
+  find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
   # generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
-  refine_label_for_cell2ear()
+  # refine_label_for_cell2ear()
