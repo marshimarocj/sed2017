@@ -395,6 +395,32 @@ def lnk_pos_for_trn():
         os.symlink(src_file, dst_file)
 
 
+def gen_neg_lst_for_trn():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_file = os.path.join(root_dir, 'meta', 'trn.lst')
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  out_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+
+  video_names = set()
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      video_names.add(name)
+
+  names = os.listdir(ft_dir)
+  out = []
+  for name in names:
+    pos = name.find('.')
+    video_name = name[:pos]
+    if video_name in video_names and 'neg' in name:
+      out.append(name)
+
+  with open(out_file, 'w') as fout:
+    for name in out:
+      fout.write(name + '\n')
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
@@ -405,4 +431,5 @@ if __name__ == "__main__":
   # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
-  lnk_pos_for_trn()
+  # lnk_pos_for_trn()
+  gen_neg_lst_for_trn()
