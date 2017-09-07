@@ -258,8 +258,8 @@ def tst_trn_reader():
 
 def tst_val_reader():
   root_dir = '/home/jiac/data/sed' # xiaojun
-  model_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.model.json')
-  path_cfg_file = os.path.join(root_dir, 'model', 'netvlad', 'netvlad.0.50.path.json')
+  model_cfg_file = os.path.join(root_dir, 'expr', 'netvlad', 'netvlad.0.50.model.json')
+  path_cfg_file = os.path.join(root_dir, 'expr', 'netvlad', 'netvlad.0.50.path.json')
 
   model_cfg = model.netvlad.ModelCfg()
   model_cfg.load(model_cfg_file)
