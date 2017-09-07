@@ -435,8 +435,6 @@ class ValReader(framework.model.data.Reader):
     load_positive_ft_label(self)
 
     self._prepare_neg_files()
-    cam_neg_files = self.cam2neg_files.values()
-    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=False)
 
   def _prepare_neg_files(self):
     self.cam2neg_files = {}
@@ -454,6 +452,8 @@ class ValReader(framework.model.data.Reader):
     return self.pos_idxs.shape[0]
 
   def yield_val_batch(self, batch_size):
+    cam_neg_files = self.cam2neg_files.values()
+    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=False)
     num_pos = self.pos_idxs.shape[0]
     for i in range(0, num_pos, batch_size):
       idxs = self.pos_idxs[i:i+batch_size]

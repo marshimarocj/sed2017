@@ -450,7 +450,8 @@ def gen_neg_lst_for_trn():
 
 def neg_lst_split_by_track_len():
   root_dir = '/home/jiac/data/sed' # xiaojun
-  lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  # lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  lst_file = os.path.join(root_dir, 'meta', 'val_neg.lst')
   out_files = [
     os.path.join(root_dir, 'meta', 'trn_neg.25.lst'),
     os.path.join(root_dir, 'meta', 'trn_neg.50.lst'),
@@ -470,7 +471,7 @@ if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
   # num_descriptor_toi_stat()
-  prepare_lst_files()
+  # prepare_lst_files()
   # prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
@@ -479,4 +480,4 @@ if __name__ == "__main__":
   # split_neg_for_trn()
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
-  # neg_lst_split_by_track_len()
+  neg_lst_split_by_track_len()
