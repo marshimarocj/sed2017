@@ -449,16 +449,35 @@ def gen_neg_lst_for_trn():
       fout.write(name + '\n')
 
 
+def neg_lst_split_by_track_len():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  out_files = [
+    os.path.join(root_dir, 'meta', 'trn_neg.25.lst'),
+    os.path.join(root_dir, 'meta', 'trn_neg.50.lst'),
+  ]
+
+  with open(lst_file) as f, open(out_files[0], 'w') as fout25, open(out_files[1], 'w') as fout50:
+    for line in f:
+      line = line.strip()
+      data = line.split('.')
+      if data[1] == '25':
+        fout25.write(line + '\n')
+      else:
+        fout50.write(line + '\n')
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  tst_trn_reader()
+  # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
+  neg_lst_split_by_track_len()
