@@ -168,8 +168,6 @@ def prepare_lst_files():
         fout.write(line)
   with open(lst_files[1]) as f, open(out_files[1], 'w') as fout:
     for l, line in enumerate(f):
-      if l == 5:
-        break
       if 'CAM4' not in line:
         fout.write(line)
 
@@ -472,8 +470,8 @@ if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
   # num_descriptor_toi_stat()
-  # prepare_lst_files()
-  prepare_cfg()
+  prepare_lst_files()
+  # prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
