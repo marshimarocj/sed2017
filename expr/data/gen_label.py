@@ -461,10 +461,34 @@ def generate_pos_neg_lst():
           fout.write('%d\n'%tid)
 
 
+def refine_label_for_cell2ear():
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  bbox_file = os.path.join(root_dir, 'box_label', 'train.label.json')
+  out_file = os.path.join(root_dir, 'box_label', 'train.label.cell2ear.refine.json')
+
+  threshold = 62
+
+  with open(bbox_file) as f:
+    data = json.load(f)
+  out = []
+  for d in data:
+    if d['event'] == 'CellToEar':
+      begin = d['begin']
+      end = d['end']
+      duration = end - begin
+      if duration <= threshold:
+        out.append(d)
+    else:
+      out.append(d)
+  with open(out_file, 'w') as fout:
+    json.dump(out, fout)
+
+
 if __name__ == '__main__':
   # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
-  generate_pos_neg_lst()
+  # generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
+  refine_label_for_cell2ear()
