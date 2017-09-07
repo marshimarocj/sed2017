@@ -189,7 +189,7 @@ def prepare_cfg():
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
   num_center = 16
   init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
-  out_dir = os.path.join(root_dir, 'model', 'netvlad')
+  out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
   dim_ft = 1024
   tst_neg_lst = [0]
