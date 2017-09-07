@@ -434,39 +434,53 @@ class ValReader(framework.model.data.Reader):
 
     load_positive_ft_label(self)
 
-    self._prepare_neg_files()
+    self._load_negative_ft_label()
 
-  def _prepare_neg_files(self):
-    self.cam2neg_files = {}
-    for video_name in self.video_names:
-      pos = video_name.rfind('_')
-      cam = video_name[pos+1:]
-      if cam not in self.cam2neg_files:
-        self.cam2neg_files[cam] = []
+  def _load_negative_ft_label(self):
+    self.neg_fts = []
+    self.neg_masks = []
+    self.neg_labels = []
+    for video_name in video_names:
       for track_len in self.track_lens:
-        file = os.path.join(self.ft_track_group_dir, 
+        file = os.path.join(self.ft_track_group_dir,
           '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
-        self.cam2neg_files[cam].append(file)
+        _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
+        _neg_labels = np.zeros((_neg_fts.shape[0], self.cfg.num_class), dtype=np.int32)
+        _neg_labels[:, 0] = 1
+        neg_fts.append(_neg_fts)
+        neg_masks.append(_neg_masks)
+        neg_labels.append(_neg_labels)
+    self.neg_fts = np.concatenate(neg_fts, axis=0)
+    self.neg_masks = np.concatenate(neg_masks, axis=0)
+    self.neg_labels = np.concatenate(neg_labels, axis=0)
+    self.neg_idxs = np.range(self.neg_fts.shape[0])
 
   def num_record(self):
     return self.pos_idxs.shape[0]
 
   def yield_val_batch(self, batch_size):
-    cam_neg_files = self.cam2neg_files.values()
-    self.neg_instance_provider = NegInstanceProvider(cam_neg_files, self.cfg, shuffle=False)
     num_pos = self.pos_idxs.shape[0]
+    num_batch = (num_pos + batch_size -1) / batch_size
+    neg_batch_size = self.neg_fts.shape[0] / num_batch
+    idx_batch = 0
     for i in range(0, num_pos, batch_size):
       idxs = self.pos_idxs[i:i+batch_size]
       num = idxs.shape[0]
       pos_fts = self.pos_fts[idxs]
       pos_masks = self.pos_masks[idxs]
       pos_labels = self.pos_labels[idxs]
-      neg_fts, neg_masks, neg_labels = self.neg_instance_provider.next_batch(
-        batch_size * self.cfg.proto_cfg.val_neg2pos_in_batch)
+
+      neg_fts = self.neg_fts[idx_batch*neg_batch_size:(idx_batch+1)*neg_batch_size]
+      neg_masks = self.neg_masks[idx_batch*neg_batch_size:(idx_batch+1)*neg_batch_size]
+      neg_labels = self.neg_labels[idx_batch*neg_batch_size:(idx_batch+1)*neg_batch_size]
+
       fts = np.concatenate([pos_fts, neg_fts], axis=0)
       masks = np.concatenate([pos_masks, neg_masks], axis=0)
       labels = np.concatenate([pos_labels, neg_labels], axis=0)
+
       yield fts, masks, labels
+
+      idx_batch += 1
 
 
 class TstReader(framework.model.data.Reader):
