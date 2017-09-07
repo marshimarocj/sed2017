@@ -377,6 +377,24 @@ def split_neg_for_trn():
         np.savez_compressed(out_file, ids=_ids, fts=_fts, frames=_frames, centers=_centers)
 
 
+def lnk_pos_for_trn():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_file = os.path.join(root_dir, 'meta', 'trn.lst')
+  src_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  dst_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+
+  track_lens = [25, 50]
+
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      for track_len in track_lens:
+        src_file = os.path.join(src_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+        dst_file = os.path.join(dst_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+        os.symlink(src_file, dst_file)
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
@@ -386,4 +404,5 @@ if __name__ == "__main__":
   # tst_reader()
   # prepare_init_center_file()
   # prepare_neg_for_val()
-  split_neg_for_trn()
+  # split_neg_for_trn()
+  lnk_pos_for_trn()
