@@ -423,8 +423,8 @@ def generate_pos_neg_lst():
   label_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
-  track_len = 25
-  # track_len = 50
+  # track_len = 25
+  track_len = 50
 
   names = []
   for lst_file in lst_files:
