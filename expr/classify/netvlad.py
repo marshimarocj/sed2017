@@ -323,8 +323,8 @@ def prepare_neg_for_val():
         num_pos = len(ids)
         del data
 
-        out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
-        os.symlink(pos_ft_file, out_file)
+        # out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(video_name, track_len))
+        # os.symlink(pos_ft_file, out_file)
 
         neg_ft_file = os.path.join(track_group_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         data = np.load(neg_ft_file)
