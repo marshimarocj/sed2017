@@ -462,7 +462,7 @@ class ValReader(framework.model.data.Reader):
       pos_masks = self.pos_masks[idxs]
       pos_labels = self.pos_labels[idxs]
       neg_fts, neg_masks, neg_labels = self.neg_instance_provider.next_batch(
-        batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch)
+        batch_size * self.cfg.proto_cfg.val_neg2pos_in_batch)
       fts = np.concatenate([pos_fts, neg_fts], axis=0)
       masks = np.concatenate([pos_masks, neg_masks], axis=0)
       labels = np.concatenate([pos_labels, neg_labels], axis=0)
