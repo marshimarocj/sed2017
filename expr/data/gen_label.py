@@ -418,7 +418,8 @@ def generate_pos_neg_lst():
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  label_dir = os.path.join(root_dir, 'pseudo_label')
+  # label_dir = os.path.join(root_dir, 'pseudo_label')
+  label_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
   track_dir = os.path.join(root_dir, 'tracking', 'person')
 
   track_len = 25
@@ -488,9 +489,9 @@ def refine_label_for_cell2ear():
 
 
 if __name__ == '__main__':
-  find_track_interval_intersected_with_bbox()
+  # find_track_interval_intersected_with_bbox()
   # find_track_frame_intersected_with_bbox()
-  # generate_pos_neg_lst()
+  generate_pos_neg_lst()
   # recall()
   # normalize_match_name()
   # event_matched_tracks()
