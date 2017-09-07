@@ -333,7 +333,7 @@ def prepare_neg_for_val():
         centers = data['centers']
         frames = data['frames']
 
-        num = max(num_pos, 500)
+        num = num_pos*2
         previd = ids[0]
         cnt = 0
         for i in range(ids.shape[0]):
