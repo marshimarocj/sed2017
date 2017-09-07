@@ -193,8 +193,8 @@ def prepare_cfg():
   num_ft = 100
   dim_ft = 1024
   tst_neg_lst = [0]
-  track_lens = [25, 50]
-  # track_lens = [50]
+  # track_lens = [25, 50]
+  track_lens = [50]
 
   out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
     '_'.join([str(d) for d in track_lens])))
