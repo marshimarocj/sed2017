@@ -440,7 +440,7 @@ class ValReader(framework.model.data.Reader):
     self.neg_fts = []
     self.neg_masks = []
     self.neg_labels = []
-    for video_name in video_names:
+    for video_name in self.video_names:
       for track_len in self.track_lens:
         file = os.path.join(self.ft_track_group_dir,
           '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
