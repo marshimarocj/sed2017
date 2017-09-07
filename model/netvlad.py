@@ -368,7 +368,7 @@ class TrnReader(framework.model.data.Reader):
     load_positive_ft_label(self)
     np.random.shuffle(self.pos_idxs)
 
-    self._prepare_neg_files(self, neg_lst_file)
+    self._prepare_neg_files(neg_lst_file)
     cam_neg_files = self.cam2neg_files.values()
     for neg_files in cam_neg_files:
       random.shuffle(neg_files)
