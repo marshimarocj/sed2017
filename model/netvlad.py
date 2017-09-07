@@ -55,6 +55,13 @@ class ModelWBCfg(ModelCfg):
     self.proto_cfg = ConfigWB()
 
 
+class ModelWBFocalLossCfg(ModelWBCfg):
+  def __init__(self):
+    ModelWBCfg.__init__(self)
+    self.gamma = 2
+    self.alpha = .25
+
+
 class NetVladEncoder(framework.model.proto.ModelProto):
   namespace = 'netvlad.NetVladEncoder'
 
@@ -269,6 +276,22 @@ class NetVladWBModel(NetVladModel):
   def get_model_proto(self):
     nv = NetVladWBEncoder(self.config.proto_cfg)
     return nv
+
+
+class NetVladWBFocalLossModel(NetVladWBModel):
+  name_scope = 'netvlad.NetVladWBFocalLossModel'
+
+  def add_loss(self, basegraph):
+    with basegraph.as_default():
+      with tf.variable_scope(self.name_scope):
+        log_p = tf.nn.log_softmax(self.logit_op)
+        p = tf.nn.softmax(self.logit_op)
+        loss_op = - tf.pow(1-p, self._config.gamma) * log_p
+        # TODO
+        loss_op = tf.reduce_mean(loss_op)
+        self.append_op2monitor('loss', loss_op)
+
+    return loss_op
 
 
 class TrnTst(framework.model.trntst.TrnTst):
