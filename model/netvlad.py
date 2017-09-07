@@ -450,9 +450,9 @@ class ValReader(framework.model.data.Reader):
         self.neg_fts += _neg_fts
         self.neg_masks += _neg_masks
         self.neg_labels.append(_neg_labels)
-    self.neg_fts = np.array(neg_fts)
-    self.neg_masks = np.array(neg_masks)
-    self.neg_labels = np.concatenate(neg_labels, axis=0)
+    self.neg_fts = np.array(self.neg_fts)
+    self.neg_masks = np.array(self.neg_masks)
+    self.neg_labels = np.concatenate(self.neg_labels, axis=0)
     self.neg_idxs = np.range(self.neg_fts.shape[0])
 
   def num_record(self):
