@@ -271,7 +271,7 @@ def tst_val_reader():
   reader = model.netvlad.ValReader(
     path_cfg.val_video_lst_file, path_cfg.val_ft_track_group_dir, path_cfg.label_dir,
     path_cfg.label2lid_file, model_cfg,
-    track_lens=path_cfg.tack_lens)
+    track_lens=path_cfg.track_lens)
 
   print 'init complete'
   print reader.pos_fts.shape, reader.pos_masks.shape, reader.pos_labels.shape
@@ -455,8 +455,8 @@ if __name__ == "__main__":
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  # tst_trn_reader()
-  tst_val_reader()
+  tst_trn_reader()
+  # tst_val_reader()
   # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
