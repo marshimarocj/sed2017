@@ -195,8 +195,8 @@ def prepare_cfg():
   # track_lens = [25, 50]
   track_lens = [25]
 
-  out_prefix = os.path.join(out_dir, 'netvlad.%s.%s'%(
-    '_'.join([str(d) for d in neg_lst]), '_'.join([str(d) for d in track_lens])))
+  out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
+    '_'.join([str(d) for d in track_lens])))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
