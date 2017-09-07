@@ -338,7 +338,7 @@ def prepare_neg_for_val():
         num = max(num_pos, 500)
         previd = ids[0]
         cnt = 0
-        for i in range(num):
+        for i in range(ids.shape[0]):
           if ids[i] != previd:
             cnt += 1
             previd = ids[i]
