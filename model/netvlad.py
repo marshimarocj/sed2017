@@ -445,13 +445,13 @@ class ValReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir,
           '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
-        _neg_labels = np.zeros((_neg_fts.shape[0], self.cfg.num_class), dtype=np.int32)
+        _neg_labels = np.zeros((len(_neg_fts), self.cfg.num_class), dtype=np.int32)
         _neg_labels[:, 0] = 1
-        neg_fts.append(_neg_fts)
-        neg_masks.append(_neg_masks)
+        neg_fts += _neg_fts
+        neg_masks += _neg_masks
         neg_labels.append(_neg_labels)
-    self.neg_fts = np.concatenate(neg_fts, axis=0)
-    self.neg_masks = np.concatenate(neg_masks, axis=0)
+    self.neg_fts = np.array(neg_fts)
+    self.neg_masks = np.array(neg_masks)
     self.neg_labels = np.concatenate(neg_labels, axis=0)
     self.neg_idxs = np.range(self.neg_fts.shape[0])
 
