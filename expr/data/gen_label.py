@@ -127,8 +127,8 @@ def find_track_interval_intersected_with_bbox():
 
   # direction = 'forward'
   # direction = 'backward'
-  track_len = 25
-  # track_len = 50
+  # track_len = 25
+  track_len = 50
   groundtruth_threshold_func = gen_groundtruth_threshold_func(track_len)
   # iou_threshold = 0.5
   iou_threshold = 0.75
