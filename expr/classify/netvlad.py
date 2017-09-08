@@ -179,8 +179,8 @@ def prepare_cfg():
     # os.path.join(root_dir, 'meta', 'debug.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
-  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
+  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
