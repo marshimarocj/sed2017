@@ -97,14 +97,17 @@ def prepare_trn_tst_pos_data():
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
   out_files = [
-  #   os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
-  #   os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
+    # os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.npz'),
+    # os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.npz')
     # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
     # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
-    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+    # os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
+    # os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.pos.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.cell2ear.refine.vlad.pos.npz')
   ]
-  label_dir = os.path.join(root_dir, 'pseudo_label')
+  # label_dir = os.path.join(root_dir, 'pseudo_label')
+  label_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
   # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
   ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
@@ -1041,7 +1044,7 @@ def eval_full():
 
 
 if __name__ == '__main__':
-  # prepare_trn_tst_pos_data()
+  prepare_trn_tst_pos_data()
   # sample_neg_ids()
   # prepare_tst_pos_data_with_tracklen_fixed()
   # prepare_tst_neg_data_with_tracklen_fixed()
@@ -1057,5 +1060,5 @@ if __name__ == '__main__':
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
-  eval_full()
+  # eval_full()
   # predict_on_tst2017()
