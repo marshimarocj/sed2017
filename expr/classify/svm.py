@@ -704,7 +704,7 @@ def train_model():
   print 'load complete'
 
   model = LinearSVC(verbose=1)
-  model = SVC(verbose=1, probability=True)
+  # model = SVC(verbose=1, probability=True)
   # model = LogisticRegression(solver='lbfgs', verbose=1)
   model.fit(fts, labels)
 
