@@ -180,7 +180,8 @@ def prepare_cfg():
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
+  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
+  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
   label_dir = os.path.join(root_dir, 'pseudo_label')
@@ -478,7 +479,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -486,4 +487,4 @@ if __name__ == "__main__":
   # split_neg_for_trn()
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
-  neg_lst_split_by_track_len()
+  # neg_lst_split_by_track_len()
