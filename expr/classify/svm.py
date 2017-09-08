@@ -688,7 +688,7 @@ def train_model():
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'lr.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.cell2ear.refine.cell2ear.refineCellToEar.Embrace.Pointing.PersonRuns.pkl')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.cell2ear.refine.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   # trn_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'dev08.vlad.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
@@ -706,7 +706,7 @@ def train_model():
   model = LinearSVC(verbose=1)
   model = SVC(verbose=1, probability=True)
   # model = LogisticRegression(solver='lbfgs', verbose=1)
-  # model.fit(fts, labels)
+  model.fit(fts, labels)
 
   with open(out_file, 'w') as fout:
     cPickle.dump(model, fout)
@@ -778,7 +778,7 @@ def val_model():
   neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.cell2ear.refine.CellToEar.Embrace.Pointing.PersonRuns.pkl')
-  
+
   # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.neg.5.npz')
   # model_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
@@ -1070,7 +1070,7 @@ if __name__ == '__main__':
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  # train_model()
+  train_model()
   # train_final_model()
   val_model()
   # predict_on_eev()
