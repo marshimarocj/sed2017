@@ -461,22 +461,27 @@ class ValReader(framework.model.data.Reader):
     self._load_negative_ft_label()
 
   def _load_negative_ft_label(self):
-    self.neg_fts = []
-    self.neg_masks = []
-    self.neg_labels = []
+    num = 0
     for video_name in self.video_names:
       for track_len in self.track_lens:
         file = os.path.join(self.ft_track_group_dir,
           '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
         _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
-        _neg_labels = np.zeros((len(_neg_fts), self.cfg.num_class), dtype=np.int32)
-        _neg_labels[:, 0] = 1
-        self.neg_fts += _neg_fts
-        self.neg_masks += _neg_masks
-        self.neg_labels.append(_neg_labels)
-    self.neg_fts = np.array(self.neg_fts)
-    self.neg_masks = np.array(self.neg_masks)
-    self.neg_labels = np.concatenate(self.neg_labels, axis=0)
+        num += _neg_fts.shape[0]
+
+    self.neg_fts = np.zeros((num, self.cfg.proto_cfg.num_ft, self.cfg.proto_cfg.dim_ft))
+    self.neg_masks = np.zeros((num, self.cfg.proto_cfg.num_ft))
+    self.neg_labels = np.zeros((num, self.cfg.num_class), dtype=np.int32)
+    self.neg_labels[:, 0] = 1
+    base = 0
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        file = os.path.join(self.ft_track_group_dir,
+          '%s.%d.forward.backward.square.neg.0.50.0.npz'%(video_name, track_len))
+        _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
+        num = _neg_fts.shape[0]
+        self.neg_fts[base:base+num] = _neg_fts
+        self.neg_masks[base:base+num] = _neg_masks
     self.neg_idxs = np.arange(self.neg_fts.shape[0])
 
   def num_record(self):
