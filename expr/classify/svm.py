@@ -346,9 +346,12 @@ def prepare_trn_data():
   # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
   # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.npz')
-  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.pos.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.npz')
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.pos.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.npz')
+  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.cell2ear.refine.vlad.pos.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.cell2ear.refine.vlad.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
