@@ -454,13 +454,13 @@ def gen_neg_lst_for_trn():
 
 def neg_lst_split_by_track_len():
   root_dir = '/home/jiac/data/sed' # xiaojun
-  # lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  lst_file = os.path.join(root_dir, 'meta', 'val_neg.lst')
+  lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  # lst_file = os.path.join(root_dir, 'meta', 'val_neg.lst')
   out_files = [
-    # os.path.join(root_dir, 'meta', 'trn_neg.25.lst'),
-    # os.path.join(root_dir, 'meta', 'trn_neg.50.lst'),
-    os.path.join(root_dir, 'meta', 'val_neg.25.lst'),
-    os.path.join(root_dir, 'meta', 'val_neg.50.lst'),
+    os.path.join(root_dir, 'meta', 'trn_neg.25.lst'),
+    os.path.join(root_dir, 'meta', 'trn_neg.50.lst'),
+    # os.path.join(root_dir, 'meta', 'val_neg.25.lst'),
+    # os.path.join(root_dir, 'meta', 'val_neg.50.lst'),
   ]
 
   with open(lst_file) as f, open(out_files[0], 'w') as fout25, open(out_files[1], 'w') as fout50:
@@ -485,5 +485,5 @@ if __name__ == "__main__":
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
-  gen_neg_lst_for_trn()
-  # neg_lst_split_by_track_len()
+  # gen_neg_lst_for_trn()
+  neg_lst_split_by_track_len()
