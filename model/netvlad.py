@@ -390,6 +390,7 @@ class TrnReader(framework.model.data.Reader):
 
     load_positive_ft_label(self)
     np.random.shuffle(self.pos_idxs)
+    print 'positive load complete'
 
     self._prepare_neg_files(neg_lst_file)
     cam_neg_files = self.cam2neg_files.values()
