@@ -90,5 +90,5 @@ if __name__ == '__main__':
     tst_reader = model.netvlad.TstReader(
       opts.tst_video_name, path_cfg.trn_ft_track_group_dir,
       path_cfg.label2lid_file, model_cfg,
-      neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
+      track_lens=path_cfg.track_lens)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)
