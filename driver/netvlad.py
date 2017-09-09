@@ -82,7 +82,7 @@ if __name__ == '__main__':
   else:
     path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
     path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
-      'epoch-%d.%s.npy'%(opts.best_epoch, opts.tst_video_name))
+      'epoch-%d.%s.npz'%(opts.best_epoch, opts.tst_video_name))
     path_cfg.log_file = None
 
     trntst = model.netvlad.TrnTst(model_cfg, path_cfg, _model)

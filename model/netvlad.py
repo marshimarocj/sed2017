@@ -344,14 +344,17 @@ class TrnTst(framework.model.trntst.TrnTst):
     op_dict = self.model.op_in_tst()
     tst_batch_size = self.model_cfg.tst_batch_size
     logits = []
-    for fts, masks in tst_reader.yield_tst_batch(tst_batch_size):
+    gt_labels = []
+    for fts, masks, labels in tst_reader.yield_tst_batch(tst_batch_size):
       logit = sess.run(op_dict['logit_op'], feed_dict={
           self.model._fts: fts,
           self.model._ft_masks: masks,
         })
       logits.append(logit)
+      gt_labels.append(labels)
     logits = np.concatenate(logits, axis=0)
-    np.save(predict_file, logits)
+    gt_labels = np.concatenate(gt_labels, axis=0)
+    np.savez_compressed(predict_file, logits=logits, labels=gt_labels)
 
 
 class PathCfg(framework.model.trntst.PathCfg):
@@ -362,13 +365,13 @@ class PathCfg(framework.model.trntst.PathCfg):
     self.val_video_lst_file = ''
     self.trn_ft_track_group_dir = ''
     self.val_ft_track_group_dir = ''
+    self.tst_ft_track_group_dir = ''
     self.label_dir = ''
     self.label2lid_file = ''
     self.output_dir = ''
     self.track_lens = []
     self.init_weight_file = ''
     self.tst_video_name = ''
-    self.tst_neg_lst = []
 
 
 class TrnReader(framework.model.data.Reader):
@@ -555,20 +558,20 @@ class TstReader(framework.model.data.Reader):
 
     load_positive_ft_label(self)
     print 'positive load complete'
-    self._prepare_neg_files()
+    self._prepare_neg_ft_label(tst_video_name)
 
-  def _prepare_neg_files(self):
-    self.cam2neg_files = {}
-    for video_name in self.video_names:
-      pos = video_name.rfind('_')
-      cam = video_name[pos+1:]
-      if cam not in self.cam2neg_files:
-        self.cam2neg_files[cam] = []
-      for track_len in self.track_lens:
-        for neg_split in self.tst_neg_lst:
-          file = os.path.join(self.ft_track_group_dir, 
-            '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(video_name, track_len, neg_split))
-          self.cam2neg_files[cam].append(file)
+  def _load_neg_ft_label(self, tst_video_name):
+    self.neg_fts = []
+    self.neg_masks = []
+    self.neg_labels = []
+    for track_len in self.track_lens:
+      file = os.path.join(self.ft_track_group_dir, 
+        '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(tst_video_name, track_len))
+      _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
+      neg_fts += _neg_fts
+      neg_masks += _neg_masks
+    num = len(self.neg_fts)
+    self.neg_labels = np.zeros((num, self.cfg.num_class), dtype=np.int32)
 
   # assumption: will only process one video
   def yield_tst_batch(self, batch_size):
@@ -580,24 +583,16 @@ class TstReader(framework.model.data.Reader):
       idxs = self.pos_idxs[i:i+batch_size]
       fts = self.pos_fts[idxs]
       masks = self.pos_masks[idxs]
-      yield fts, masks
+      labels = self.pos_labels[idxs]
+      yield fts, masks, labels
 
     # neg instances
-    for neg_files in cam_neg_files:
-      for neg_file in neg_files:
-        print 'load', neg_file
-        fts, masks, _ = load_neg_chunk(neg_file, self.cfg, False)
-        num = len(fts)
-        for i in range(0, num, batch_size):
-          _fts = []
-          _masks = []
-          for j in range(i, min(num, i+batch_size)):
-            _fts.append(fts[i])
-            _masks.append(masks[i])
-          _fts = np.array(_fts)
-          _masks = np.array(_masks)
-          yield _fts, _masks
-        del fts, masks
+    num_neg = len(self.neg_fts)
+    for i in range(0, num_neg, batch_size):
+     fts = np.array(self.neg_fts[i:i+batch_size])
+     masks = np.array(self.neg_masks[i:i+batch_size])
+     labels = self.neg_labels[i:i+batch_size]
+     yield fts, masks, labels
 
 
 def norm_ft_buffer(ft_buffer, num_ft, dim_ft):

@@ -185,6 +185,7 @@ def prepare_cfg():
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
+  tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
   num_center = 16
@@ -193,8 +194,8 @@ def prepare_cfg():
   num_ft = 100
   dim_ft = 1024
   tst_neg_lst = [0]
-  track_lens = [25, 50]
-  # track_lens = [50]
+  # track_lens = [25, 50]
+  track_lens = [50]
   # track_lens = [25]
 
   out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
@@ -546,7 +547,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -555,4 +556,4 @@ if __name__ == "__main__":
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
-  prepare_tst_files()
+  # prepare_tst_files()
