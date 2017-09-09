@@ -195,8 +195,8 @@ def prepare_cfg():
   dim_ft = 1024
   tst_neg_lst = [0]
   # track_lens = [25, 50]
-  # track_lens = [50]
-  track_lens = [25]
+  track_lens = [50]
+  # track_lens = [25]
 
   out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
     '_'.join([str(d) for d in track_lens])))
@@ -215,6 +215,7 @@ def prepare_cfg():
     'trn_neg_lst_file': trn_neg_lst_file,
     'trn_ft_track_group_dir': trn_ft_toi_dir, 
     'val_ft_track_group_dir': val_ft_toi_dir, 
+    'tst_ft_track-group_dir': tst_ft_toi_dir,
     'label_dir': label_dir,
     'label2lid_file': label2lid_file,
     'output_dir': out_prefix,
