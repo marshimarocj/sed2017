@@ -21,13 +21,13 @@ event2lid = {
 
 
 def select_best_epoch(file):
-  best_epoch = data[0]['epoch'] 
-  min_loss = data[0]['loss']
   with open(file) as f:
     data = cPickle.load(f)
-    for d in data:
-      if d['loss'] < min_loss:
-        best_epoch = d['epoch']
+  best_epoch = data[0]['epoch'] 
+  min_loss = data[0]['loss']
+  for d in data:
+    if d['loss'] < min_loss:
+      best_epoch = d['epoch']
 
   return best_epoch
 
