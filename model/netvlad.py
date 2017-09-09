@@ -623,8 +623,8 @@ def load_positive_ft_label(reader):
       ids = data['ids']
       fts = data['fts']
       num = ids.shape[0]
+      print ft_file, ids.shape
       prev_id = ids[0]
-      print reader.ft_track_group_dir, ids.shape
       ft_buffer = []
       for i in range(num):
         id = ids[i]
