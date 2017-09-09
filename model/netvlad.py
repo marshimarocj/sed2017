@@ -551,7 +551,7 @@ class TstReader(framework.model.data.Reader):
 
     load_positive_ft_label(self)
     print 'positive load complete'
-    self._prepare_neg_ft_label(tst_video_name)
+    self._load_neg_ft_label(tst_video_name)
 
   def _load_neg_ft_label(self, tst_video_name):
     self.neg_fts = []
