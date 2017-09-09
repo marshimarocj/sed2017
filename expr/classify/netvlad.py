@@ -614,7 +614,7 @@ def eval():
       data = np.load(predict_file)
       _logits = data['logits']
       _predicts = mx.nd.softmax(mx.nd.array(_logits)).asnumpy()
-      _labels = data['label']
+      _labels = data['labels']
       predicts.append(_predicts)
       labels.append(_labels)
   predicts = np.concatenate(predicts, axis=0)
