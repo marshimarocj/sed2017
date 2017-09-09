@@ -529,9 +529,10 @@ class ValReader(framework.model.data.Reader):
 
 
 class TstReader(framework.model.data.Reader):
-  def __init__(self, tst_video_name, ft_track_group_dir, 
+  def __init__(self, tst_video_name, ft_track_group_dir, label_dir,
       label2lid_file, model_cfg, track_lens=[25, 50]):
     self.ft_track_group_dir = ft_track_group_dir
+    self.label_dir = label_dir
     self.cfg = model_cfg
     self.track_lens = track_lens
 
