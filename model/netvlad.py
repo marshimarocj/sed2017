@@ -341,7 +341,17 @@ class TrnTst(framework.model.trntst.TrnTst):
     pass
 
   def predict_in_tst(self, sess, tst_reader, predict_file):
-    pass
+    op_dict = self.model.op_in_tst()
+    tst_batch_size = self.model_cfg.tst_batch_size
+    logits = []
+    for fts, masks in tst_reader.yield_tst_batch(tst_batch_size):
+      logit = sess.run(op_dict['logit_op'], feed_dict={
+          self.model._fts: fts,
+          self.model._ft_masks: masks,
+        })
+      logits.append(logit)
+    logits = np.concatenate(logits, axis=0)
+    np.save(predict_file, logits)
 
 
 class PathCfg(framework.model.trntst.PathCfg):

@@ -477,6 +477,68 @@ def neg_lst_split_by_track_len():
         fout50.write(line + '\n')
 
 
+def prepare_tst_files():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_file = os.path.join(root_dir, 'meta', 'val.lst')
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group') 
+  pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
+  neg_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst') 
+
+  track_lens = [25, 50]
+
+  data = np.load(pos_file)
+  ids = data['ids']
+  names = data['names']
+  name2ids = {}
+  for id, name in zip(id, names):
+    if name not in name2ids:
+      name2ids[name] = set()
+    name2ids[name].add(id)
+
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+        if name not in name2ids:
+          continue
+        valid_ids = name2ids[name]
+
+        for track_len in track_lens:
+          print name, track_len
+          src_files = [
+            os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+            os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+          ]
+          dst_files = [
+            os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+            os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(name, track_len)),
+          ]
+
+          for src_file, dst_file in zip(src_files, dst_files):
+            data = np.load(src_file)
+            frames = data['frames']
+            fts = data['fts']
+            centers = data['centers']
+            ids = data['ids']
+            num = ids.shape[0]
+
+            out_frames = []
+            out_fts = []
+            out_centers = []
+            out_ids = []
+            for i in range(num):
+              if ids[i] in valid_ids:
+                out_frames.append(frames[i])
+                out_fts.append(fts[i])
+                out_centers.append(centers[i])
+                out_ids.append(ids[i])
+            np.savez_compressed(dst_file, 
+              frames=out_frames, fts=out_centers_fts, centers=out_centers, ids=out_ids)
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
@@ -488,6 +550,7 @@ if __name__ == "__main__":
   # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
-  lnk_pos_for_trn()
+  # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
+  prepare_tst_files()

@@ -20,6 +20,7 @@ def build_parser():
   parser.add_argument('--memory_fraction', dest='memory_fraction', type=float, default=1.0)
   parser.add_argument('--is_wb', dest='is_wb', type=int, default=True)
   parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=True)
+  parser.add_argument('--tst_video_name', dest='tst_video_name')
 
   return parser
 
@@ -81,13 +82,13 @@ if __name__ == '__main__':
   else:
     path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
     path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
-      'epoch-%d.%d.%d.json'%(opts.best_epoch, opts.gen_sent_mode, model_cfg.decoder_cfg.sent_pool_size))
+      'epoch-%d.%s.npy'%(opts.best_epoch, opts.tst_video_name))
     path_cfg.log_file = None
 
     trntst = model.netvlad.TrnTst(model_cfg, path_cfg, _model)
 
     tst_reader = model.netvlad.TstReader(
-      path_cfg.tst_video_name, path_cfg.trn_ft_track_group_dir,
+      opts.tst_video_name, path_cfg.trn_ft_track_group_dir,
       path_cfg.label2lid_file, model_cfg,
       neg_lst=path_cfg.neg_lst, track_lens=path_cfg.track_lens)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)
