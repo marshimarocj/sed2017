@@ -501,45 +501,44 @@ def prepare_tst_files():
   with open(lst_file) as f:
     for line in f:
       line = line.strip()
-      for line in f:
-        line = line.strip()
-        name, _ = os.path.splitext(line)
-        print name
-        if name not in name2ids:
-          continue
-        valid_ids = name2ids[name]
+      name, _ = os.path.splitext(line)
+      print name
+      if name not in name2ids:
+        continue
+      valid_ids = name2ids[name]
 
-        # for track_len in track_lens:
-        #   print name, track_len
-        #   src_files = [
-        #     os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-        #     os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
-        #   ]
-        #   dst_files = [
-        #     os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
-        #     os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(name, track_len)),
-        #   ]
+      for track_len in track_lens:
+        print name, track_len
+        src_files = [
+          os.path.join(ft_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+          os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
+        ]
+        dst_files = [
+          os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
+          os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(name, track_len)),
+        ]
 
-        #   for src_file, dst_file in zip(src_files, dst_files):
-        #     data = np.load(src_file)
-        #     frames = data['frames']
-        #     fts = data['fts']
-        #     centers = data['centers']
-        #     ids = data['ids']
-        #     num = ids.shape[0]
+        for src_file, dst_file in zip(src_files, dst_files):
+          data = np.load(src_file)
+          frames = data['frames']
+          fts = data['fts']
+          centers = data['centers']
+          ids = data['ids']
+          num = ids.shape[0]
 
-        #     out_frames = []
-        #     out_fts = []
-        #     out_centers = []
-        #     out_ids = []
-        #     for i in range(num):
-        #       if ids[i] in valid_ids:
-        #         out_frames.append(frames[i])
-        #         out_fts.append(fts[i])
-        #         out_centers.append(centers[i])
-        #         out_ids.append(ids[i])
-        #     np.savez_compressed(dst_file, 
-        #       frames=out_frames, fts=out_fts, centers=out_centers, ids=out_ids)
+          out_frames = []
+          out_fts = []
+          out_centers = []
+          out_ids = []
+          for i in range(num):
+            if ids[i] in valid_ids:
+              out_frames.append(frames[i])
+              out_fts.append(fts[i])
+              out_centers.append(centers[i])
+              out_ids.append(ids[i])
+          np.savez_compressed(dst_file, 
+            frames=out_frames, fts=out_fts, centers=out_centers, ids=out_ids)
+      break
 
 
 if __name__ == "__main__":
