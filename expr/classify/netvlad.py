@@ -513,7 +513,7 @@ def prepare_tst_files():
             os.path.join(ft_dir, '%s.%d.forward.backward.square.neg.0.50.0.npz'%(name, track_len)),
           ]
           dst_files = [
-            os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len))
+            os.path.join(out_dir, '%s.%d.forward.backward.square.pos.0.75.npz'%(name, track_len)),
             os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(name, track_len)),
           ]
 
