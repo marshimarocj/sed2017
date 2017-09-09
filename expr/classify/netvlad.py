@@ -215,7 +215,7 @@ def prepare_cfg():
     'trn_neg_lst_file': trn_neg_lst_file,
     'trn_ft_track_group_dir': trn_ft_toi_dir, 
     'val_ft_track_group_dir': val_ft_toi_dir, 
-    'tst_ft_track-group_dir': tst_ft_toi_dir,
+    'tst_ft_track_group_dir': tst_ft_toi_dir,
     'label_dir': label_dir,
     'label2lid_file': label2lid_file,
     'output_dir': out_prefix,
