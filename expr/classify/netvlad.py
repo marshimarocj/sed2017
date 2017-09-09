@@ -20,6 +20,18 @@ event2lid = {
 }
 
 
+def select_best_epoch(file):
+  best_epoch = data[0]['epoch'] 
+  min_loss = data[0]['loss']
+  with open(file) as f:
+    data = cPickle.load(f)
+    for d in data:
+      if d['loss'] < min_loss:
+        best_epoch = d['epoch']
+
+  return best_epoch
+
+
 def gen_proto_cfg(num_ft, dim_ft, num_center):
   return {
     'dim_ft': dim_ft,
@@ -543,12 +555,47 @@ def prepare_tst_files():
       break
 
 
+def gen_tst_script():
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  lst_file = os.path.join(root_dir, 'meta', 'val.lst')
+  expr_name = 'netvlad.0.50'
+  expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
+  model_cfg_file = '%s.model.json'%expr_dir
+  path_cfg_file = '%s.path.json'%expr_dir
+  out_file = '../../driver/tst.sh'
+
+  gpu = 1
+
+  val_file = os.path.join(expr_dir, 'log', 'val_metrics.pkl')
+  best_epoch = select_best_epoch(val_file)
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(namel)
+
+  with open(out_file, 'w') as fout:
+    fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
+    for name in names:
+      cmd = [
+        'python', 'netvlad.py', 
+        model_cfg_file, path_cfg_file, 
+        '--is_train', '0',
+        '--best_epoch' , str(best_epoch),
+        '--tst_video_name', name,
+      ]
+      fout.write(' '.join(cmd) + '\n')
+
+
 if __name__ == "__main__":
   # generate_label2lid_file()
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -558,3 +605,4 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
+  gen_tst_script()
