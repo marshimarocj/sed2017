@@ -533,7 +533,6 @@ class TstReader(framework.model.data.Reader):
       label2lid_file, model_cfg, track_lens=[25, 50]):
     self.ft_track_group_dir = ft_track_group_dir
     self.cfg = model_cfg
-    self.neg_lst = neg_lst
     self.track_lens = track_lens
 
     self.video_names = [tst_video_name]
