@@ -613,7 +613,7 @@ def eval():
       predict_file = os.path.join(predict_dir, 'epoch-%d.%s.npz'%(best_epoch, name))
       data = np.load(predict_file)
       _logits = data['logits']
-      _predicts = mx.nd.softmax(_logits).asnumpy()
+      _predicts = mx.nd.softmax(mx.nd.array(_logits)).asnumpy()
       _labels = data['label']
       predicts.append(_predicts)
       labels.append(_labels)
