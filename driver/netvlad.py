@@ -85,6 +85,8 @@ if __name__ == '__main__':
       'epoch-%d.%s.npz'%(opts.best_epoch, opts.tst_video_name))
     path_cfg.log_file = None
 
+    print opts.tst_video_name
+
     trntst = model.netvlad.TrnTst(model_cfg, path_cfg, _model)
 
     tst_reader = model.netvlad.TstReader(
