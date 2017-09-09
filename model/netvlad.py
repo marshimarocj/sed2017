@@ -536,12 +536,6 @@ class TstReader(framework.model.data.Reader):
     self.track_lens = track_lens
 
     self.video_names = [tst_video_name]
-    with open(video_lst_file) as f:
-      for line in f:
-        line = line.strip()
-        name, _ = os.path.splitext(line)
-
-        self.video_names.append(name)
 
     self.label2lid = {}
     with open(label2lid_file) as f:
