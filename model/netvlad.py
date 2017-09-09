@@ -561,8 +561,8 @@ class TstReader(framework.model.data.Reader):
       file = os.path.join(self.ft_track_group_dir, 
         '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(tst_video_name, track_len))
       _neg_fts, _neg_masks, _ = load_neg_chunk(file, self.cfg, False)
-      neg_fts += _neg_fts
-      neg_masks += _neg_masks
+      self.neg_fts += _neg_fts
+      self.neg_masks += _neg_masks
     num = len(self.neg_fts)
     self.neg_labels = np.zeros((num, self.cfg.num_class), dtype=np.int32)
 
