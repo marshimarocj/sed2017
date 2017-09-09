@@ -487,14 +487,15 @@ def prepare_tst_files():
 
   track_lens = [25, 50]
 
-  data = np.load(pos_file)
-  ids = data['ids']
-  names = data['names']
   name2ids = {}
-  for id, name in zip(ids, names):
-    if name not in name2ids:
-      name2ids[name] = set()
-    name2ids[name].add(id)
+  for file in [pos_file, neg_file]:
+    data = np.load(file)
+    ids = data['ids']
+    names = data['names']
+    for id, name in zip(ids, names):
+      if name not in name2ids:
+        name2ids[name] = set()
+      name2ids[name].add(id)
 
   with open(lst_file) as f:
     for line in f:
@@ -502,6 +503,7 @@ def prepare_tst_files():
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
+        print name
         if name not in name2ids:
           continue
         valid_ids = name2ids[name]
