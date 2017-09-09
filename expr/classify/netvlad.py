@@ -570,7 +570,8 @@ def gen_tst_script():
   gpu = 1
 
   val_file = os.path.join(expr_dir, 'log', 'val_metrics.pkl')
-  best_epoch = select_best_epoch(val_file)
+  # best_epoch = select_best_epoch(val_file)
+  best_epoch = 9
 
   names = []
   with open(lst_file) as f:
@@ -646,5 +647,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
-  eval()
+  gen_tst_script()
+  # eval()
