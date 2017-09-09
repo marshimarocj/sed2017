@@ -173,8 +173,8 @@ def prepare_lst_files():
 
 
 def prepare_cfg():
-  # root_dir = '/home/jiac/data/sed' # xiaojun
-  root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     # os.path.join(root_dir, 'meta', 'debug.lst'),
@@ -195,8 +195,8 @@ def prepare_cfg():
   dim_ft = 1024
   tst_neg_lst = [0]
   # track_lens = [25, 50]
-  # track_lens = [50]
-  track_lens = [25]
+  track_lens = [50]
+  # track_lens = [25]
 
   out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
     '_'.join([str(d) for d in track_lens])))
