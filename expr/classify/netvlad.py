@@ -491,7 +491,7 @@ def prepare_tst_files():
   ids = data['ids']
   names = data['names']
   name2ids = {}
-  for id, name in zip(id, names):
+  for id, name in zip(ids, names):
     if name not in name2ids:
       name2ids[name] = set()
     name2ids[name].add(id)
