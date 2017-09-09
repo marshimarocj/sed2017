@@ -536,7 +536,7 @@ def prepare_tst_files():
                 out_centers.append(centers[i])
                 out_ids.append(ids[i])
             np.savez_compressed(dst_file, 
-              frames=out_frames, fts=out_centers_fts, centers=out_centers, ids=out_ids)
+              frames=out_frames, fts=out_fts, centers=out_centers, ids=out_ids)
 
 
 if __name__ == "__main__":
