@@ -627,7 +627,7 @@ def eval():
     events[lid] = event
 
   for c in range(1, 5):
-    ap = average_precision_score(labels == c, predicts[:, c])
+    ap = average_precision_score(labels[:, c], predicts[:, c])
     print events[c], ap
 
 
