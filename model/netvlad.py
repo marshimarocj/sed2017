@@ -623,33 +623,33 @@ def load_positive_ft_label(reader):
       ids = data['ids']
       fts = data['fts']
       num = ids.shape[0]
-      print ft_file, ids.shape
-      prev_id = ids[0]
-      ft_buffer = []
-      for i in range(num):
-        id = ids[i]
-        if id != prev_id:
-          if id in id2lid:
-            pos_ft, pos_mask = norm_ft_buffer(
-              ft_buffer, reader.cfg.proto_cfg.num_ft, reader.cfg.proto_cfg.dim_ft)
-            reader.pos_fts.append(pos_ft)
-            reader.pos_masks.append(pos_mask)
-            label = np.zeros((reader.cfg.num_class,), dtype=np.int32)
-            label[id2lid[prev_id]] = 1
-            reader.pos_labels.append(label)
+      if num > 0:
+        prev_id = ids[0]
+        ft_buffer = []
+        for i in range(num):
+          id = ids[i]
+          if id != prev_id:
+            if id in id2lid:
+              pos_ft, pos_mask = norm_ft_buffer(
+                ft_buffer, reader.cfg.proto_cfg.num_ft, reader.cfg.proto_cfg.dim_ft)
+              reader.pos_fts.append(pos_ft)
+              reader.pos_masks.append(pos_mask)
+              label = np.zeros((reader.cfg.num_class,), dtype=np.int32)
+              label[id2lid[prev_id]] = 1
+              reader.pos_labels.append(label)
 
-          ft_buffer = []
-          prev_id = id
-        ft_buffer.append(fts[i])
+            ft_buffer = []
+            prev_id = id
+          ft_buffer.append(fts[i])
 
-      if id in id2lid:
-        pos_ft, pos_mask = norm_ft_buffer(
-          ft_buffer, reader.cfg.proto_cfg.num_ft, reader.cfg.proto_cfg.dim_ft)
-        reader.pos_fts.append(pos_ft)
-        reader.pos_masks.append(pos_mask)
-        label = np.zeros((reader.cfg.num_class,), dtype=np.int32)
-        label[id2lid[prev_id]] = 1
-        reader.pos_labels.append(label)
+        if id in id2lid:
+          pos_ft, pos_mask = norm_ft_buffer(
+            ft_buffer, reader.cfg.proto_cfg.num_ft, reader.cfg.proto_cfg.dim_ft)
+          reader.pos_fts.append(pos_ft)
+          reader.pos_masks.append(pos_mask)
+          label = np.zeros((reader.cfg.num_class,), dtype=np.int32)
+          label[id2lid[prev_id]] = 1
+          reader.pos_labels.append(label)
   reader.pos_fts = np.array(reader.pos_fts)
   reader.pos_masks = np.array(reader.pos_masks)
   reader.pos_labels = np.array(reader.pos_labels)
