@@ -558,7 +558,8 @@ def prepare_tst_files():
 def gen_tst_script():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
-  expr_name = 'netvlad.0.50'
+  # expr_name = 'netvlad.0.50'
+  expr_name = 'netvlad.0.25'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
