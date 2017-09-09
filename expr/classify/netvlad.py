@@ -575,7 +575,7 @@ def gen_tst_script():
       line = line.strip()
       name, _ = os.path.splitext(line)
       if 'CAM4' not in name:
-        names.append(namel)
+        names.append(name)
 
   with open(out_file, 'w') as fout:
     fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
