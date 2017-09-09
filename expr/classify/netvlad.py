@@ -207,8 +207,8 @@ def prepare_cfg():
   dim_ft = 1024
   tst_neg_lst = [0]
   # track_lens = [25, 50]
-  track_lens = [50]
-  # track_lens = [25]
+  # track_lens = [50]
+  track_lens = [25]
 
   out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
     '_'.join([str(d) for d in track_lens])))
@@ -596,7 +596,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -606,4 +606,4 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  gen_tst_script()
+  # gen_tst_script()
