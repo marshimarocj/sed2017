@@ -117,7 +117,8 @@ def cluster_centers():
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
   # num_center = 32
-  num_center = 16
+  # num_center = 16
+  num_center = 8
   out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
 
   kmeans = KMeans(n_clusters=num_center)
@@ -151,7 +152,8 @@ def encode_vlad():
   root_dir = '/home/jiac/data/sed' # danny
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
-  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.pkl')
+  # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.pkl')
+  kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.8.pkl')
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
@@ -160,7 +162,8 @@ def encode_vlad():
   # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
+  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.8')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'tst2017', 'vlad')
   # out_dir = os.path.join(root_dir, 'c3d', 'tst2017', 'vlad')
 

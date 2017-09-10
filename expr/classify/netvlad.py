@@ -59,6 +59,21 @@ def gen_model_cfg(proto_cfg):
   }
 
 
+def gen_focal_loss_model_cfg(proto_cfg):
+  return {
+    'proto': proto_cfg,
+    'num_class': 5,
+    'gamma': 2,
+
+    'learning_rate': 1e-4,
+    'monitor_iter': 50,
+    'trn_batch_size': 32,
+    'tst_batch_size': 128,
+    'val_iter': -1,
+    'num_epoch': 20,
+  }
+
+
 '''expr
 '''
 def generate_label2lid_file():
@@ -194,15 +209,17 @@ def prepare_cfg():
     # os.path.join(root_dir, 'meta', 'debug.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
-  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
+  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
   tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
-  num_center = 16
+  # num_center = 16
+  # num_center = 32
+  num_center = 8
   init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
@@ -211,14 +228,21 @@ def prepare_cfg():
   # track_lens = [25, 50]
   # track_lens = [50]
   track_lens = [25]
+  # gamma = 2
 
-  out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
-    '_'.join([str(d) for d in track_lens])))
+  out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center))
+  # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
+    # '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
   model_cfg = gen_model_cfg(proto_cfg)
+  # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
+  model_cfg['trn_batch_size'] = 16
+  model_cfg['tst_batch_size'] = 64
+  # model_cfg['gamma'] = gamma
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
@@ -304,8 +328,12 @@ def tst_val_reader():
 
 def prepare_init_center_file():
   root_dir = '/home/jiac/data/sed' # xiaojun
-  center_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.pkl')
-  out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.npz')
+  # center_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.pkl')
+  # out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.16.npz')
+  # center_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
+  # out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.npz')
+  center_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.8.pkl')
+  out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.8.npz')
 
   with open(center_file) as f:
     kmeans = cPickle.load(f)
@@ -561,7 +589,9 @@ def gen_tst_script():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
-  expr_name = 'netvlad.0.25'
+  # expr_name = 'netvlad.0.25'
+  # expr_name = 'netvlad.0.25.32'
+  expr_name = 'netvlad.0.25.8'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
@@ -571,6 +601,7 @@ def gen_tst_script():
 
   val_file = os.path.join(expr_dir, 'log', 'val_metrics.pkl')
   best_epoch = select_best_epoch(val_file)
+  # best_epoch = 9
 
   names = []
   with open(lst_file) as f:
@@ -596,11 +627,15 @@ def gen_tst_script():
 def eval():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
-  expr_name = 'netvlad.0.50'
+  # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
+  # expr_name = 'netvlad.0.25.32'
+  expr_name = 'netvlad.0.25.8'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
   best_epoch = 0
+  # best_epoch = 9
+  # best_epoch = 1
 
   predicts = []
   labels = []
