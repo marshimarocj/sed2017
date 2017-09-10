@@ -9,6 +9,7 @@ import tensorflow as tf
 def _bytes_feature(value):
   return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
+
 def _int64_feature(value):
   return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
@@ -18,7 +19,9 @@ def _int64_feature(value):
 def transform():
   root_dir = '/data/extDisk3/jiac/sed' # danny
   ft_dirs = [
-    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
+    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
   ]
 
   for ft_dir in ft_dirs:
