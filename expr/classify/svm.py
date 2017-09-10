@@ -109,8 +109,8 @@ def prepare_trn_tst_pos_data():
     os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.npz'),
     os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.pos.npz')
   ]
-  # label_dir = os.path.join(root_dir, 'pseudo_label')
-  label_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+  # label_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
   # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
