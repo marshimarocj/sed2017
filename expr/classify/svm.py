@@ -901,7 +901,7 @@ def val_model():
 
   for c in range(1, 5):
     ap = average_precision_score(labels == c, predicts[:, c])
-    print events[c], ap
+    print events[c], ap * 100
 
 
 def val_model_on_full():
