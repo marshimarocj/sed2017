@@ -220,7 +220,8 @@ def prepare_cfg():
   num_center = 16
   # num_center = 32
   # num_center = 8
-  init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
+  # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
+  init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
   dim_ft = 1024
@@ -240,7 +241,7 @@ def prepare_cfg():
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
-  # proto_cfg['l2_norm_input'] = True
+  proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
