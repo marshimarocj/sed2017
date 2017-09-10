@@ -88,29 +88,33 @@ def prepare_neg_instances(neg_ft_file, name, name2ids,
 '''expr
 '''
 def prepare_trn_tst_pos_data():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data/sed2017' # rocks
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
   out_files = [
-    os.path.join(root_dir, 'expr', 'c3d', 'dev08.cell2ear.refine.vlad.pos.npz'),
-    os.path.join(root_dir, 'expr', 'c3d', 'eev08.cell2ear.refine.vlad.pos.npz')
+    # os.path.join(root_dir, 'expr', 'c3d', 'dev08.cell2ear.refine.vlad.pos.npz'),
+    # os.path.join(root_dir, 'expr', 'c3d', 'eev08.cell2ear.refine.vlad.pos.npz')
     # os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.pos.npz'),
     # os.path.join(root_dir, 'expr', 'vgg19', 'eev08.vlad.pos.npz')
     # os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz'),
     # os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.npz')
     # os.path.join(root_dir, 'expr', 'twostream', 'dev08.cell2ear.refine.vlad.pos.npz'),
     # os.path.join(root_dir, 'expr', 'twostream', 'eev08.cell2ear.refine.vlad.pos.npz')
+    os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.npz'),
+    os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.pos.npz')
   ]
   # label_dir = os.path.join(root_dir, 'pseudo_label')
   label_dir = os.path.join(root_dir, 'pseudo_label.cell2ear.refine')
-  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  # ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # ft_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'vlad')
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
 
   track_lens = [25, 50]
 
@@ -1069,7 +1073,7 @@ def eval_full():
 
 
 if __name__ == '__main__':
-  # prepare_trn_tst_pos_data()
+  prepare_trn_tst_pos_data()
   # sample_neg_ids()
   # prepare_tst_pos_data_with_tracklen_fixed()
   # prepare_tst_neg_data_with_tracklen_fixed()
@@ -1081,7 +1085,7 @@ if __name__ == '__main__':
   # prepare_val_early_fusion_data()
   # train_model()
   # train_final_model()
-  val_model()
+  # val_model()
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
