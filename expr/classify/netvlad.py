@@ -232,7 +232,7 @@ def prepare_cfg():
 
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm.input.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
