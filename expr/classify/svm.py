@@ -352,7 +352,7 @@ def prepare_trn_data():
   # neg_trn_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19', 'dev08.vlad.npz')
 
-  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed2017' # rocks
   # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.npz')
   # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.npz')
@@ -365,8 +365,6 @@ def prepare_trn_data():
   # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.cell2ear.refine.vlad.pos.npz')
   # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.cell2ear.refine.vlad.npz')
-
-  root_dir = '/home/jiac/data/sed' # danny
   pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.npz')
   neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.neg.5.npz')
   out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.npz')
@@ -1095,12 +1093,12 @@ if __name__ == '__main__':
   # prepare_tst_pos_data_with_tracklen_fixed()
   # prepare_tst_neg_data_with_tracklen_fixed()
   # prepare_trn_tst_neg_data()
-  # prepare_trn_data()
+  prepare_trn_data()
   # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  train_model()
+  # train_model()
   # train_final_model()
   # val_model()
   # predict_on_eev()
