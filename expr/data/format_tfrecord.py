@@ -24,7 +24,7 @@ def transform():
   for ft_dir in ft_dirs:
     names = os.listdir(ft_dir)
     for name in names:
-      _name, _ = os.path.join(name)
+      _name, _ = os.path.splitext(name)
       src_file = os.path.join(ft_dir, name)
       dst_file = os.path.join(ft_dir, _name + '.tfrecords')
 
