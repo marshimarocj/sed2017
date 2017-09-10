@@ -663,7 +663,7 @@ def eval():
 
   for c in range(1, 5):
     ap = average_precision_score(labels[:, c], predicts[:, c])
-    print events[c], ap
+    print events[c], ap*100
 
 
 if __name__ == "__main__":
