@@ -240,13 +240,13 @@ def prepare_cfg():
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
+  proto_cfg['l2_norm_input'] = True
+  # proto_cfg['l2_norm_output'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
   # model_cfg['trn_batch_size'] = 16
   # model_cfg['tst_batch_size'] = 64
   # model_cfg['gamma'] = gamma
-  # model_cfg['l2_norm'] = True
-  model_cfg['l2_norm_input'] = True
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)

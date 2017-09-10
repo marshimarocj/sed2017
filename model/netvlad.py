@@ -20,7 +20,7 @@ class Config(framework.model.proto.ProtoConfig):
     self.val_neg2pos_in_batch = 1
 
     self.l2_norm_input = False
-    self.l2_norm = False 
+    self.l2_norm_output = False
 
     self.centers = np.empty((0,)) # (dim_ft, num_center)
     self.alpha = np.empty((0,))
@@ -36,7 +36,7 @@ class ConfigWB(framework.model.proto.ProtoConfig):
     self.val_neg2pos_in_batch = 1
 
     self.l2_norm_input = False
-    self.l2_norm = False
+    self.l2_norm_output = False
 
     self.centers = np.empty((0,)) # (dim_ft, num_center)
 
@@ -142,7 +142,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
         V_ijk = tf.reshape(V_ijk, (-1, self._config.num_ft, dim_vlad))
         V_jk = tf.reduce_sum(V_ijk, 1)
 
-        if self._config.l2_norm:
+        if self._config.l2_norm_output:
           V_jk = tf.nn.l2_normalize(V_jk, dim=1)
 
         self._feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
@@ -197,7 +197,7 @@ class NetVladWBEncoder(NetVladEncoder):
         V_ijk = tf.reshape(V_ijk, (-1, self._config.num_ft, dim_vlad))
         V_jk = tf.reduce_sum(V_ijk, 1) # (None, dim_vlad)
 
-        if self._config.l2_norm:
+        if self._config.l2_norm_output:
           V_jk = tf.nn.l2_normalize(V_jk, dim=1)
 
         self._feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
