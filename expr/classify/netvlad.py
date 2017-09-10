@@ -59,6 +59,21 @@ def gen_model_cfg(proto_cfg):
   }
 
 
+def gen_focal_loss_model_cfg(proto_cfg):
+  return {
+    'proto': proto_cfg,
+    'num_class': 5,
+    'gamma': 2,
+
+    'learning_rate': 1e-4,
+    'monitor_iter': 50,
+    'trn_batch_size': 32,
+    'tst_batch_size': 128,
+    'val_iter': -1,
+    'num_epoch': 20,
+  }
+
+
 '''expr
 '''
 def generate_label2lid_file():
@@ -212,16 +227,20 @@ def prepare_cfg():
   # track_lens = [25, 50]
   # track_lens = [50]
   track_lens = [25]
+  gamma = 2
 
-  out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
-    '_'.join([str(d) for d in track_lens]), num_center))
+  # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
-  model_cfg = gen_model_cfg(proto_cfg)
+  # model_cfg = gen_model_cfg(proto_cfg)
+  model_cfg = gen_focal_loss_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 16
   model_cfg['tst_batch_size'] = 64
+  model_cfg['gamma'] = gamma
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
@@ -566,7 +585,8 @@ def gen_tst_script():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
-  expr_name = 'netvlad.0.25'
+  # expr_name = 'netvlad.0.25'
+  expr_name = 'netvlad.0.25.32'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
@@ -575,8 +595,8 @@ def gen_tst_script():
   gpu = 1
 
   val_file = os.path.join(expr_dir, 'log', 'val_metrics.pkl')
-  # best_epoch = select_best_epoch(val_file)
-  best_epoch = 9
+  best_epoch = select_best_epoch(val_file)
+  # best_epoch = 9
 
   names = []
   with open(lst_file) as f:
@@ -643,7 +663,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -653,5 +673,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
+  gen_tst_script()
   # eval()

@@ -59,7 +59,10 @@ class ModelWBFocalLossCfg(ModelWBCfg):
   def __init__(self):
     ModelWBCfg.__init__(self)
     self.gamma = 2
-    self.alpha = .25
+    neg2pos = self.trn_neg2pos_in_batch
+    self.alphas = [1./(neg2pos+1)] + \
+      [(self.num_class-1) * neg2pos / float(neg2pos+1)for _ in range(self.num_class-1)]
+    self.alphas = np.array(self.alphas)
 
 
 class NetVladEncoder(framework.model.proto.ModelProto):
@@ -286,8 +289,10 @@ class NetVladWBFocalLossModel(NetVladWBModel):
       with tf.variable_scope(self.name_scope):
         log_p = tf.nn.log_softmax(self.logit_op)
         p = tf.nn.softmax(self.logit_op)
-        loss_op = - tf.pow(1-p, self._config.gamma) * log_p
-        # TODO
+        loss_op = - tf.pow(1-p, self._config.gamma) * log_p # (None, num_class)
+        alphas = tf.constant(self._config.alphas, dtype=tf.float32)
+        loss_op *= tf.expand_dims(alphas, 0)
+        loss_op = tf.reduce_sum(loss_op, axis=1)
         loss_op = tf.reduce_mean(loss_op)
         self.append_op2monitor('loss', loss_op)
 
