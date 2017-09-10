@@ -220,6 +220,8 @@ def prepare_cfg():
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
   model_cfg = gen_model_cfg(proto_cfg)
+  model_cfg['trn_batch_size'] = 16
+  model_cfg['tst_batch_size'] = 64
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
