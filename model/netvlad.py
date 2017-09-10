@@ -60,6 +60,8 @@ class ModelWBCfg(ModelCfg):
 
     self.proto_cfg = ConfigWB()
 
+    self.dropout = False
+
 
 class ModelWBFocalLossCfg(ModelWBCfg):
   def __init__(self):
@@ -252,6 +254,8 @@ class NetVladModel(framework.model.proto.FullModel):
 
   def _add_predict_layer(self, feature_op):
     feature_op = tf.nn.relu(feature_op)
+    if self._config.dropout:
+      feature_op = tf.nn.dropout(feature_op, 0.5)
     logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
     return logit_op
 
