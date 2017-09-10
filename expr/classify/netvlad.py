@@ -633,8 +633,8 @@ def eval():
   # expr_name = 'netvlad.0.25.8'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
-  best_epoch = 0
-  # best_epoch = 9
+  # best_epoch = 0
+  best_epoch = 9
   # best_epoch = 1
 
   predicts = []
