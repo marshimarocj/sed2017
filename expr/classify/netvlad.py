@@ -230,9 +230,9 @@ def prepare_cfg():
   track_lens = [25]
   # gamma = 2
 
-  # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
@@ -240,7 +240,7 @@ def prepare_cfg():
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
-  proto_cfg['l2_norm_input'] = True
+  # proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
