@@ -231,8 +231,9 @@ def prepare_cfg():
   # gamma = 2
 
   out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
-    '_'.join([str(d) for d in track_lens]), num_center, gamma))
+    # '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
