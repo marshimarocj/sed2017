@@ -29,6 +29,7 @@ def select_best_epoch(file):
   min_loss = data[0]['loss']
   for d in data:
     if d['loss'] < min_loss:
+      min_loss = d['loss']
       best_epoch = d['epoch']
 
   return best_epoch
