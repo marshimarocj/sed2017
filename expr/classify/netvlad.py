@@ -627,15 +627,15 @@ def gen_tst_script():
 def eval():
   root_dir = '/home/jiac/data/sed' # xiaojun
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
-  expr_name = 'netvlad.0.50'
+  # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
-  # expr_name = 'netvlad.0.25.32'
+  expr_name = 'netvlad.0.25.32'
   # expr_name = 'netvlad.0.25.8'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
-  best_epoch = 0
+  # best_epoch = 0
   # best_epoch = 9
-  # best_epoch = 1
+  best_epoch = 1
 
   predicts = []
   labels = []
