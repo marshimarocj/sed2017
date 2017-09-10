@@ -36,7 +36,7 @@ def transform():
       num = ids.shape[0]
 
       options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP) 
-      writer = tf.python_io.TFRecordWriter(dst_file, options=)
+      writer = tf.python_io.TFRecordWriter(dst_file, options=options)
       for i in range(num):
         id = int(ids[i])
         frame = int(frames[i])
