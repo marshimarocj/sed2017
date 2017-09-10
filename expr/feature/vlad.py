@@ -7,6 +7,7 @@ sys.path.append('../../')
 
 import numpy as np
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import normalize
 
 import api.db
 import sample
@@ -117,13 +118,15 @@ def cluster_centers():
   ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
   # num_center = 32
-  # num_center = 16
-  num_center = 8
-  out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
+  num_center = 16
+  # num_center = 8
+  # out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
+  out_file = os.path.join(ft_root_dir, 'kmeans.center.norm.%d.pkl'%num_center)
 
   kmeans = KMeans(n_clusters=num_center)
 
   data = np.load(sample_file)
+  data = normalize(data)
   kmeans.fit(data)
 
   # cluster_centers = kmeans.cluster_centers_
@@ -257,8 +260,8 @@ def encode_vlad_rocks():
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  # cluster_centers()
+  cluster_centers()
   # check_track_group_npzfile()
-  encode_vlad()
+  # encode_vlad()
   # gen_script()
   # encode_vlad_rocks()
