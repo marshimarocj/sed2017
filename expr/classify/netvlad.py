@@ -217,9 +217,9 @@ def prepare_cfg():
   tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
-  # num_center = 16
+  num_center = 16
   # num_center = 32
-  num_center = 8
+  # num_center = 8
   init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
@@ -230,7 +230,8 @@ def prepare_cfg():
   track_lens = [25]
   # gamma = 2
 
-  out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
@@ -240,9 +241,10 @@ def prepare_cfg():
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
-  model_cfg['trn_batch_size'] = 16
-  model_cfg['tst_batch_size'] = 64
+  # model_cfg['trn_batch_size'] = 16
+  # model_cfg['tst_batch_size'] = 64
   # model_cfg['gamma'] = gamma
+  model_cfg['l2_norm'] = True
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
@@ -671,7 +673,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -682,4 +684,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()
