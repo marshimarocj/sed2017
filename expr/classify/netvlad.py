@@ -194,15 +194,16 @@ def prepare_cfg():
     # os.path.join(root_dir, 'meta', 'debug.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
-  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
+  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
+  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
   tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
-  num_center = 16
+  # num_center = 16
+  num_center = 32
   init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
@@ -212,8 +213,8 @@ def prepare_cfg():
   # track_lens = [50]
   track_lens = [25]
 
-  out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
-    '_'.join([str(d) for d in track_lens])))
+  out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
@@ -640,10 +641,10 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
-  prepare_init_center_file()
+  # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
