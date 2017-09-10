@@ -379,9 +379,12 @@ def prepare_trn_data():
   # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.npz')
   # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.neg.5.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.npz')
-  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.pos.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.neg.5.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.npz')
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.pos.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.neg.5.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.npz')
+  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.25.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.25.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
@@ -1109,12 +1112,12 @@ def eval_full():
 
 
 if __name__ == '__main__':
-  # prepare_trn_tst_pos_data()
   # sample_neg_ids()
-  # prepare_pos_data_with_tracklen_fixed()
-  prepare_neg_data_with_tracklen_fixed()
+  # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
-  # prepare_trn_data()
+  # prepare_pos_data_with_tracklen_fixed()
+  # prepare_neg_data_with_tracklen_fixed()
+  prepare_trn_data()
   # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
