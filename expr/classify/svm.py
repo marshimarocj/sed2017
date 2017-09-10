@@ -393,9 +393,12 @@ def prepare_trn_data():
   # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.25.npz')
   # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.25.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.npz')
-  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.25.npz')
-  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.neg.5.25.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.16.npz')
+  # pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.25.npz')
+  # neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.neg.5.25.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.16.npz')
+  pos_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.pos.25.npz')
+  neg_trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.neg.5.25.npz')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.8.npz')
 
   data = np.load(pos_trn_file)
   pos_fts = data['fts']
