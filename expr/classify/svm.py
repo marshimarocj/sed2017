@@ -288,10 +288,12 @@ def prepare_pos_data_with_tracklen_fixed():
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.pos.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.pos.%d.npz'%track_len)
-  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.pos.%d.npz'%track_len)
+  # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.pos.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.8')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.pos.%d.npz'%track_len)
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.8')
 
   names = []
   with open(lst_file) as f:
@@ -331,10 +333,12 @@ def prepare_neg_data_with_tracklen_fixed():
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.16.neg.5.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.neg.5.%d.npz'%track_len)
-  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.neg.5.%d.npz'%track_len)
+  # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.16')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.8.neg.5.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.8')
+  out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.neg.5.%d.npz'%track_len)
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad.8')
 
   track_len2name2ids = load_sampled_neg_ids(neg_id_file)
 
