@@ -231,7 +231,8 @@ def prepare_cfg():
   # gamma = 2
 
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm.0.%s.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm.input.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
@@ -244,7 +245,8 @@ def prepare_cfg():
   # model_cfg['trn_batch_size'] = 16
   # model_cfg['tst_batch_size'] = 64
   # model_cfg['gamma'] = gamma
-  model_cfg['l2_norm'] = True
+  # model_cfg['l2_norm'] = True
+  model_cfg['l2_norm_input'] = True
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
@@ -677,10 +679,10 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
-  prepare_init_center_file()
+  # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()

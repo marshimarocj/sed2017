@@ -19,6 +19,7 @@ class Config(framework.model.proto.ProtoConfig):
     self.trn_neg2pos_in_batch = 10
     self.val_neg2pos_in_batch = 1
 
+    self.l2_norm_input = False
     self.l2_norm = False 
 
     self.centers = np.empty((0,)) # (dim_ft, num_center)
@@ -34,6 +35,7 @@ class ConfigWB(framework.model.proto.ProtoConfig):
     self.trn_neg2pos_in_batch = 10
     self.val_neg2pos_in_batch = 1
 
+    self.l2_norm_input = False
     self.l2_norm = False
 
     self.centers = np.empty((0,)) # (dim_ft, num_center)
@@ -125,6 +127,8 @@ class NetVladEncoder(framework.model.proto.ModelProto):
         w = 2.0 * self.alpha * self.centers # (dim_ft, num_center)
         b = - self.alpha * tf.reduce_sum(self.centers**2, axis=0)# (num_center)
         fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
+        if self._config.l2_norm_input:
+          fts = tf.nn.l2_normalize(fts, dim=1)
         logits = tf.nn.xw_plus_b(fts, w, b) # (None*num_ft, num_center)
         a = tf.nn.softmax(logits) 
 
@@ -177,6 +181,8 @@ class NetVladWBEncoder(NetVladEncoder):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
         fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
+        if self._config.l2_norm_input:
+          fts = tf.nn.l2_normalize(fts, dim=1)
         logits = tf.nn.xw_plus_b(fts, self.w, self.b) # (None*num_ft, num_center)
         a = tf.nn.softmax(logits) 
 
