@@ -27,6 +27,7 @@ def transform():
       _name, _ = os.path.splitext(name)
       src_file = os.path.join(ft_dir, name)
       dst_file = os.path.join(ft_dir, _name + '.tfrecords')
+      print name
 
       data = np.load(src_file)
       ids = data['ids']
