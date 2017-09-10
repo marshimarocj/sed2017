@@ -295,11 +295,13 @@ def prepare_pos_data_with_tracklen_fixed():
   np.savez_compressed(out_file, fts=pos_fts, labels=pos_labels, ids=pos_tids, names=pos_names)
 
 
-def prepare_tst_neg_data_with_tracklen_fixed():
+def prepare_neg_data_with_tracklen_fixed():
   # root_dir = '/data1/jiac/sed' # uranus
   root_dir = '/home/jiac/data/sed2017' # rocks
-  lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
+  # lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  # neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
+  lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  neg_id_file = os.path.join(root_dir, 'expr', 'neg.dev08.5.lst')
   track_len = 25
   # track_len = 50
   # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.%d.npz'%track_len)
