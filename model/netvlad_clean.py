@@ -466,7 +466,7 @@ class InstanceGenerator(input_tool.ShuffleBatchJoin):
     num = int(feature['num'].int64_list.value[0])
     dim_ft = int(feature['dim_ft'].int64_list.value[0])
 
-    fts = feature['ft'].byte_list.value[0]
+    fts = feature['ft'].bytes_list.value[0]
     fts = np.fromstring(fts, dtype=np.float32).reshape(num, dim_ft)
     ft, mask = _norm_ft_buffer(fts, self.num_ft, dim_ft)
 
