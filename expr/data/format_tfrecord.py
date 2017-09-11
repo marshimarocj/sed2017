@@ -111,8 +111,8 @@ def tst_load_tfrecords():
 
     feature = example.features.feature
     id = int(feature['id'].int64_list.value[0])
-    num = int(feature['num'])
-    dim_ft = int(feature['dim_ft'])
+    num = int(feature['num'].int64_list.value[0])
+    dim_ft = int(feature['dim_ft'].int64_list.value[0])
     dim_center = int(feature['dim_center'])
     fts = feature['ft'].bytes_list.value[0]
     fts = np.fromstring(fts, dtype=np.float32).reshape(num, dim_ft)
