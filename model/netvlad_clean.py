@@ -332,9 +332,9 @@ class TrnReader(framework.model.data.Reader):
         begin = line.rfind('_')
         end = line.find('.')
         cam = line[begin+1:end]
-        if cam not in self.cam2neg_files:
-          self.cam2neg_files[cam] = []
-        self.cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
+        if cam not in cam2neg_files:
+          cam2neg_files[cam] = []
+        cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
     self.negative_cam_generators = []
     for cam in cam2neg_files:
       neg_files = cam2neg_files[cam]
