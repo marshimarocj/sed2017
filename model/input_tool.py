@@ -70,7 +70,11 @@ class ShuffleBatchJoin(object):
     batch_data = []
     while not self.random_shuffle_queue.is_empty():
       batch_data.append(self.random_shuffle_queue.dequeue())
-    yield batch_data
+      if len(batch_data) == batch_size:
+        yield batch_data
+        batch_data = []
+    if len(batch_data) > 0:
+      yield batch_data
 
 
 # Note: never ending circular queue
@@ -98,4 +102,8 @@ class CircularShuffleBatchJoin(ShuffleBatchJoin):
       batch_data = []
       while not self.random_shuffle_queue.is_empty():
         batch_data.append(self.random_shuffle_queue.dequeue())
-      yield batch_data
+        if len(batch_data) == batch_size:
+          yield batch_data
+          batch_data = []
+      if len(batch_data) > 0:
+        yield batch_data
