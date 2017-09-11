@@ -27,6 +27,8 @@ def transform_by_grouping():
   for ft_dir in ft_dirs:
     names = os.listdir(ft_dir)
     for name in names:
+      if 'tfrecords' in name:
+        continue
       _name, _ = os.path.splitext(name)
       src_file = os.path.join(ft_dir, name)
       dst_file = os.path.join(ft_dir, _name + '.tfrecords')
@@ -86,6 +88,11 @@ def transform_by_grouping():
       writer.write(example.SerializeToString())
 
       writer.close()
+
+
+def tst_load_tfrecords():
+  root_dir = '/data/extDisk3/jiac/sed' # danny
+  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', '')
 
 
 if __name__ == '__main__':
