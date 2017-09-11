@@ -372,7 +372,7 @@ class ValReader(framework.model.data.Reader):
     self.cfg = model_cfg
     self.track_lens = track_lens
 
-    capacity = 128 
+    self.capacity = 128 
 
     self.video_names = []
     with open(video_lst_file) as f:
@@ -389,7 +389,7 @@ class ValReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
         pos_files.append(file)
-    positive_generator = InstanceGenerator(pos_files, capacity, False,
+    positive_generator = InstanceGenerator(pos_files, self.capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
     neg_files = []
@@ -398,7 +398,7 @@ class ValReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir,
           '%s.%d.forward.backward.square.neg.0.50.0.tfrecords'%(video_name, track_len))
         neg_files.append(file)
-    negative_generator = InstanceGenerator(neg_files, capacity, False,
+    negative_generator = InstanceGenerator(neg_files, self.capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
     for batch_data in positive_generator.next(batch_size):
