@@ -349,7 +349,6 @@ class TrnReader(framework.model.data.Reader):
     self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
 
-    num_pos = self.pos_idxs.shape[0]
     for pos_batch_data in self.positive_generator.next(batch_size):
       batch_data = pos_batch_data 
       num = batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch / len(self.negative_cam_generators) 
