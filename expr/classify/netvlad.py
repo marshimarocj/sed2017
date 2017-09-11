@@ -7,7 +7,7 @@ sys.path.append('../../')
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import average_precision_score
-# import mxnet as mx
+import mxnet as mx
 
 import model.netvlad
 
