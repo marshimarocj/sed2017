@@ -359,7 +359,7 @@ def generate_script():
   ]
 
   # num_process = 5
-  num_process = 1
+  num_process = 3
 
   names = []
   for lst_file in lst_files:
@@ -504,8 +504,8 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  prepare_pos_ft()
-  # generate_script()
+  # prepare_pos_ft()
+  generate_script()
   # gen_script_rocks()
   # retrieve_failed_jobs()
   # shuffle_neg()
