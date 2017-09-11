@@ -42,52 +42,51 @@ def transform_by_grouping():
       num = ids.shape[0]
 
       options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP) 
-      writer = tf.python_io.TFRecordWriter(dst_file, options=options)
-      prev_id = ids[0]
-      ft_in_track = []
-      frame_in_track = []
-      center_in_track = []
-      for i in range(num):
-        id = int(ids[i])
-        if id != prev_id:
-          _fts = np.array(ft_in_track).tostring()
-          _frames = np.array(frame_in_track).tostring()
-          _centers = np.array(center_in_track).tostring()
-          example = tf.train.Example(features=tf.train.Features(feature={
-            'id': _int64_feature(prev_id),
-            'frame': _bytes_feature(_frames),
-            'ft': _bytes_feature(_fts),
-            'center': _bytes_feature(_centers)
-            }))
-          writer.write(example.SerializeToString())
+      with tf.python_io.TFRecordWriter(dst_file, options=options) as writer:
+        prev_id = ids[0]
+        ft_in_track = []
+        frame_in_track = []
+        center_in_track = []
+        for i in range(num):
+          id = int(ids[i])
+          if id != prev_id:
+            _fts = np.array(ft_in_track, dtype=np.float32).tostring()
+            _frames = np.array(frame_in_track, dtype=np.float32).tostring()
+            _centers = np.array(center_in_track, dtype=np.float32).tostring()
+            example = tf.train.Example(features=tf.train.Features(feature={
+              'id': _int64_feature(prev_id),
+              'frame': _bytes_feature(_frames),
+              'ft': _bytes_feature(_fts),
+              'center': _bytes_feature(_centers)
+              }))
+            writer.write(example.SerializeToString())
 
-          del ft_in_track
-          del frame_in_track
-          del center_in_track
-          ft_in_track = []
-          frame_in_track = []
-          center_in_track = []
-          prev_id = id
+            del ft_in_track
+            del frame_in_track
+            del center_in_track
+            ft_in_track = []
+            frame_in_track = []
+            center_in_track = []
+            prev_id = id
 
-        frame = int(frames[i])
-        ft = fts[i]
-        center = centers[i]
-        frame_in_track.append(frame)
-        ft_in_track.append(ft)
-        center_in_track.append(center)
+          frame = int(frames[i])
+          ft = fts[i]
+          center = centers[i]
+          frame_in_track.append(frame)
+          ft_in_track.append(ft)
+          center_in_track.append(center)
 
-      _fts = np.array(ft_in_track, dtype=np.float32).tostring()
-      _frames = np.array(frame_in_track, dtype=np.float32).tostring()
-      _centers = np.array(center_in_track, dtype=np.float32).tostring()
-      example = tf.train.Example(features=tf.train.Features(feature={
-        'id': _int64_feature(prev_id),
-        'frame': _bytes_feature(_frames),
-        'ft': _bytes_feature(_fts),
-        'center': _bytes_feature(_centers)
-        }))
-      writer.write(example.SerializeToString())
-
-      writer.close()
+        _fts = np.array(ft_in_track, dtype=np.float32).tostring()
+        _frames = np.array(frame_in_track, dtype=np.float32).tostring()
+        _centers = np.array(center_in_track, dtype=np.float32).tostring()
+        example = tf.train.Example(features=tf.train.Features(feature={
+          'id': _int64_feature(prev_id),
+          'frame': _bytes_feature(_frames),
+          'ft': _bytes_feature(_fts),
+          'center': _bytes_feature(_centers)
+          }))
+        writer.write(example.SerializeToString())
+      break
 
 
 def tst_load_tfrecords():
@@ -107,5 +106,5 @@ def tst_load_tfrecords():
 
 
 if __name__ == '__main__':
-  # transform_by_grouping()
-  tst_load_tfrecords()
+  transform_by_grouping()
+  # tst_load_tfrecords()
