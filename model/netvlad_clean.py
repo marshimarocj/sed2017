@@ -370,7 +370,7 @@ class ValReader(framework.model.data.Reader):
     self.cfg = model_cfg
     self.track_lens = track_lens
 
-    capacity = 100
+    capacity = 128 
 
     self.video_names = []
     with open(video_lst_file) as f:
@@ -420,7 +420,7 @@ class TstReader(framework.model.data.Reader):
     self.cfg = model_cfg
     self.track_lens = track_lens
 
-    capacity = 100
+    capacity = 128
 
     self.video_names = [tst_video_name]
 
