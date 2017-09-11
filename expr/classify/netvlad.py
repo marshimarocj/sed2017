@@ -253,8 +253,8 @@ def prepare_cfg():
   proto_cfg['l2_norm_output'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
-  model_cfg['trn_batch_size'] = 16
-  model_cfg['tst_batch_size'] = 64
+  model_cfg['trn_batch_size'] = 8 
+  model_cfg['tst_batch_size'] = 16 
   # model_cfg['gamma'] = gamma
   # model_cfg['dropout'] = True
   model_cfg['num_epoch'] = 20
