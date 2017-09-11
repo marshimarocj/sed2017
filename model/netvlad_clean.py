@@ -390,7 +390,7 @@ class ValReader(framework.model.data.Reader):
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
         pos_files.append(file)
     positive_generator = InstanceGenerator(pos_files, self.capacity, False,
-      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+      num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
 
     neg_files = []
     for video_name in self.video_names:
@@ -399,7 +399,7 @@ class ValReader(framework.model.data.Reader):
           '%s.%d.forward.backward.square.neg.0.50.0.tfrecords'%(video_name, track_len))
         neg_files.append(file)
     negative_generator = InstanceGenerator(neg_files, self.capacity, False,
-      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+      num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
 
     for batch_data in positive_generator.next(batch_size):
       fts = np.array([d[0] for d in batch_data])
