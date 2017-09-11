@@ -338,7 +338,7 @@ class TrnReader(framework.model.data.Reader):
     self.negative_cam_generators = []
     for cam in cam2neg_files:
       neg_files = cam2neg_files[cam]
-      negative_cam_generator = CircularInstanceGenerator(neg_files, self.capacity, True,
+      negative_cam_generator = CircularInstanceGenerator(neg_files, self.capacity/5, True,
         num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
       self.negative_cam_generators.append(negative_cam_generator)
 
