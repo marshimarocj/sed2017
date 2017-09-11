@@ -321,7 +321,7 @@ class TrnReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
         self.pos_files.append(file)
-    self.positive_generator = InstanceGenerator(pos_files, capacity, True,
+    self.positive_generator = InstanceGenerator(self.pos_files, capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
     self.pos_cnt = self.positive_generator.num_record()
 
@@ -346,7 +346,7 @@ class TrnReader(framework.model.data.Reader):
     return self.pos_cnt
 
   def yield_trn_batch(self, batch_size):
-    self.positive_generator = InstanceGenerator(pos_files, capacity, True,
+    self.positive_generator = InstanceGenerator(self.pos_files, capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
     num_pos = self.pos_idxs.shape[0]
