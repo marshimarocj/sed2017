@@ -28,7 +28,7 @@ class RandomShuffleQueue(object):
 
 
 class ShuffleBatchJoin(object):
-  def __init__(self, files, capacity, shuffle_files, **kwargs):
+  def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
     self.capacity = capacity
     if shuffle:
       self.files = random.shuffle(files)
@@ -57,3 +57,30 @@ class ShuffleBatchJoin(object):
     while not self.random_shuffle_queue.is_empty():
       batch_data.append(self.random_shuffle_queue.dequeue())
     yield batch_data
+
+
+# Note: never ending circular queue
+# don't call by for loop
+# call next() instead
+class CircularShuffleBatchJoin(ShuffleBatchJoin):
+  def next(self, batch_size):
+    assert batch_size < self.capacity
+
+    while True:
+      for file in self.files:
+        options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
+        record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+        for string_record in record_iterator:
+          example = tf.train.Example()
+          example.ParserFromString(string_record)
+          data = self.generate_data_from_record(example)
+          if self.random_shuffle_queue.is_full():
+            batch_data = []
+            for i in range(batch_size):
+              batch_data.append(self.random_shuffle_queue.dequeue())
+            yield batch_data
+          self.random_shuffle_queue.enqueue(data)
+      batch_data = []
+      while not self.random_shuffle_queue.is_empty():
+        batch_data.append(self.random_shuffle_queue.dequeue())
+      yield batch_data

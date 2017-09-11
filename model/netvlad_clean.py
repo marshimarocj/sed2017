@@ -126,6 +126,11 @@ class NetVladEncoder(framework.model.proto.ModelProto):
 class NetVladModel(framework.model.proto.FullModel):
   name_scope = 'netvlad.NetVladModel'
 
+  def __init__(self, config):
+    framework.model.proto.FullModel.__init__(config)
+    self.logit_op = tf.no_op()
+    self.predict_op = tf.no_op()
+
   def get_model_proto(self):
     nv = NetVladEncoder(self.config.proto_cfg)
     return nv
@@ -180,6 +185,7 @@ class NetVladModel(framework.model.proto.FullModel):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
         self.logit_op = self._add_predict_layer(self.model_proto.feature_op)
+        self.predict_op = tf.nn.softmax(self.logit_op)
 
   def _build_inference_graph_in_trn_tst(self, basegraph):
     framework.model.proto.FullModel._build_inference_graph_in_trn_tst(self, basegraph)
@@ -187,6 +193,7 @@ class NetVladModel(framework.model.proto.FullModel):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
         self.logit_op = self._add_predict_layer(self.model_proto.feature_op)
+        self.predict_op = tf.nn.softmax(self.logit_op)
 
   def add_loss(self, basegraph):
     with basegraph.as_default():
@@ -200,11 +207,13 @@ class NetVladModel(framework.model.proto.FullModel):
     return {
       'loss_op': self.loss_op,
       'logit_op': self.logit_op,
+      'predict_op': self.predict_op,
     }
 
   def op_in_tst(self):
     return {
-      'logit_op': self.logit_op
+      'logit_op': self.logit_op,
+      'predict_op': self.predict_op,
     }
 
 
@@ -296,6 +305,8 @@ class TrnReader(framework.model.data.Reader):
     self.cfg = model_cfg
     self.track_lens = track_lens
 
+    capacity = 500
+
     self.video_names = []
     with open(video_lst_file) as f:
       for line in f:
@@ -304,9 +315,66 @@ class TrnReader(framework.model.data.Reader):
 
         self.video_names.append(name)
 
-    self.label2lid = {}
-    with open(label2lid_file) as f:
-      self.label2lid = cPickle.load(f)
+    cam2neg_files = {}
+    with open(neg_lst_file) as f:
+      for line in f:
+        line = line.strip()
+        begin = line.rfind('_')
+        end = line.find('.')
+        cam = line[begin+1:end]
+        if cam not in self.cam2neg_files:
+          self.cam2neg_files[cam] = []
+        self.cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
+    self.negative_cam_generators = []
+    for cam in cam2neg_files:
+      neg_files = cam2neg_files[cam]
+      negative_cam_generator = CircularInstanceGenerator(neg_files, capacity, True,
+        num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+      self.negative_cam_generators.append(negative_cam_generator)
+
+  def num_record(self):
+    pass
+
+  def yield_trn_batch(self, batch_size):
+    pos_files = []
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        file = os.path.join(self.ft_track_group_dir, 
+          '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
+    pos_files.append(file)
+    self.positive_generator = InstanceGenerator(pos_files, capacity, True,
+      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+
+    num_pos = self.pos_idxs.shape[0]
+    for pos_batch_data in self.positive_generator.next(batch_size):
+      batch_data = pos_batch_data 
+      num = batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch / len(self.negative_cam_generators) 
+      for i in range(num):
+        neg_batch_data = self.negative_cam_generators[i].next()
+        batch_data.extend(neg_batch_data)
+      fts = np.array([d[0] for d in batch_data])
+      masks = np.array([d[1] for d in batch_data])
+      labels = np.array([d[2] for d in batch_data])
+      yield fts, masks, labels
+
+
+class ValReader(framework.model.data.Reader):
+  def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
+      label2lid_file, model_cfg, track_lens=[25, 50]):
+    self.ft_track_group_dir = ft_track_group_dir
+    self.label_dir = label_dir
+    self.cfg = model_cfg
+    self.track_lens = track_lens
+
+    capacity = 500
+
+    self.video_names = []
+    with open(video_lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+
+        self.video_names.append(name)
 
     pos_files = []
     for video_name in self.video_names:
@@ -314,7 +382,7 @@ class TrnReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
     pos_files.append(file)
-    positive_generator = InstanceReader(pos_files, 
+    self.positive_generator = InstanceGenerator(pos_files, capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
     cam2neg_files = {}
@@ -327,23 +395,77 @@ class TrnReader(framework.model.data.Reader):
         if cam not in self.cam2neg_files:
           self.cam2neg_files[cam] = []
         self.cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
-    negative_cam_generators = []
+    self.negative_cam_generators = []
     for cam in cam2neg_files:
       neg_files = cam2neg_files[cam]
-      negative_cam_generator = InstanceReader(neg_files,
+      negative_cam_generator = InstanceGenerator(neg_files, capacity, False,
         num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
-      negative_cam_generators.append(negative_cam_generator)
+      self.negative_cam_generators.append(negative_cam_generator)
 
   def num_record(self):
     pass
 
-  def yield_trn_batch(self, batch_size):
-    pass
+  def yield_val_batch(self, batch_size):
+    for batch_data in self.positive_generator.next(batch_size):
+      fts = np.array([d[0] for d in batch_data])
+      masks = np.array([d[1] for d in batch_data])
+      labels = np.array([d[2] for d in batch_data])
+      yield fts, masks, labels
+
+    for negative_cam_generator in self.negative_cam_generators:
+      for batch_data in negative_cam_generator.next(batch_size):
+        fts = np.array([d[0] for d in batch_data])
+        masks = np.array([d[1] for d in batch_data])
+        labels = np.array([d[2] for d in batch_data])
+        yield fts, masks, labels
 
 
-class InstanceReader(input_tool.ShuffleBatchJoin):
-  def __init__(self, files, capacity, shuffle_files, **kwargs):
-    input_tool.ShuffleBatchJoin.__init__(files, capacity, shuffle_files)
+class TstReader(framework.model.data.Reader):
+  def __init__(self, tst_video_name, ft_track_group_dir, label_dir,
+      label2lid_file, model_cfg, track_lens=[25, 50]):
+    self.ft_track_group_dir = ft_track_group_dir
+    self.label_dir = label_dir
+    self.cfg = model_cfg
+    self.track_lens = track_lens
+
+    capacity = 500
+
+    self.video_names = [tst_video_name]
+
+    pos_files = []
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        file = os.path.join(self.ft_track_group_dir, 
+          '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
+    pos_files.append(file)
+    self.positive_generator = InstanceGenerator(pos_files, capacity, False,
+      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+
+    neg_files = []
+    for track_len in self.track_lens:
+      file = os.path.join(self.ft_track_group_dir, 
+        '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(tst_video_name, track_len))
+      neg_files.append(file)
+    self.negative_generator = InstanceGenerator(neg_files, capacity, False,
+      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+
+  def yield_tst_batch(self, batch_size):
+    for batch_data in self.positive_generator.next(batch_size):
+      fts = np.array([d[0] for d in batch_data])
+      masks = np.array([d[1] for d in batch_data])
+      labels = np.array([d[2] for d in batch_data])
+      yield fts, masks, labels
+
+    for batch_data in self.negative_generator.next(batch_size):
+      fts = np.array([d[0] for d in batch_data])
+      masks = np.array([d[1] for d in batch_data])
+      labels = np.array([d[2] for d in batch_data])
+      yield fts, masks, labels
+
+
+class InstanceGenerator(input_tool.ShuffleBatchJoin):
+  def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
+    input_tool.ShuffleBatchJoin.__init__(files, capacity, shuffle_files, shuffle)
     self.num_ft = kwargs['num_ft']
     self.num_class = kwargs['num_class']
 
@@ -354,7 +476,7 @@ class InstanceReader(input_tool.ShuffleBatchJoin):
 
     fts = feature['ft'].byte_list.value[0]
     fts = np.fromstring(fts, dtype=np.float32).reshape(num, dim_ft)
-    ft, mask = self._norm_ft_buffer(fts, self.num_ft, dim_ft)
+    ft, mask = _norm_ft_buffer(fts, self.num_ft, dim_ft)
 
     lid = int(feature['label'].int64_list.value[0])
     label = np.zeros((self.num_class,), dtype=np.int32)
@@ -362,12 +484,35 @@ class InstanceReader(input_tool.ShuffleBatchJoin):
 
     return ft, mask, label
 
-  def _norm_ft_buffer(self, ft_buffer, num_ft, dim_ft):
-    ft = np.zeros((num_ft, dim_ft))
-    mask = np.zeros((num_ft,), dtype=np.int32)
-    num_valid = min(len(ft_buffer), num_ft)
-    idxs = range(len(ft_buffer))
-    random.shuffle(idxs)
-    ft[:num_valid] = np.array(ft_buffer)[idxs[:num_valid]]
-    mask[:num_valid] = 1
-    return ft, mask
+
+class CircularInstanceGenerator(input_tool.CircularShuffleBatchJoin):
+  def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
+    input_tool.CircularShuffleBatchJoin.__init__(files, capacity, shuffle_files, shuffle)
+    self.num_ft = kwargs['num_ft']
+    self.num_class = kwargs['num_class']
+
+  def generate_data_from_record(self, example):
+    feature = example.features.feature
+    num = int(feature['num'].int64_list.value[0])
+    dim_ft = int(feature['dim_ft'].int64_list.value[0])
+
+    fts = feature['ft'].byte_list.value[0]
+    fts = np.fromstring(fts, dtype=np.float32).reshape(num, dim_ft)
+    ft, mask = _norm_ft_buffer(fts, self.num_ft, dim_ft)
+
+    lid = int(feature['label'].int64_list.value[0])
+    label = np.zeros((self.num_class,), dtype=np.int32)
+    label[lid] = 1
+
+    return ft, mask, label
+
+
+def _norm_ft_buffer(ft_buffer, num_ft, dim_ft):
+  ft = np.zeros((num_ft, dim_ft))
+  mask = np.zeros((num_ft,), dtype=np.int32)
+  num_valid = min(len(ft_buffer), num_ft)
+  idxs = range(len(ft_buffer))
+  random.shuffle(idxs)
+  ft[:num_valid] = np.array(ft_buffer)[idxs[:num_valid]]
+  mask[:num_valid] = 1
+  return ft, mask

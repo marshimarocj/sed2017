@@ -607,10 +607,10 @@ class TstReader(framework.model.data.Reader):
     # neg instances
     num_neg = len(self.neg_fts)
     for i in range(0, num_neg, batch_size):
-     fts = np.array(self.neg_fts[i:i+batch_size])
-     masks = np.array(self.neg_masks[i:i+batch_size])
-     labels = self.neg_labels[i:i+batch_size]
-     yield fts, masks, labels
+      fts = np.array(self.neg_fts[i:i+batch_size])
+      masks = np.array(self.neg_masks[i:i+batch_size])
+      labels = self.neg_labels[i:i+batch_size]
+      yield fts, masks, labels
 
 
 def norm_ft_buffer(ft_buffer, num_ft, dim_ft):
