@@ -90,7 +90,7 @@ def transform_by_grouping():
           'id': _int64_feature(id),
           'frame': _bytes_feature(_frames),
           'ft': _bytes_feature(_fts),
-          'center': _bytes_feature(_centers)
+          'center': _bytes_feature(_centers),
           'num': _int64_feature(num),
           'dim_ft': _int64_feature(dim_ft),
           'dim_center': _int64_feature(dim_center),
