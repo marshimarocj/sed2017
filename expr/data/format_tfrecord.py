@@ -100,7 +100,7 @@ def tst_load_tfrecords():
     example.ParseFromString(string_record)
 
     id = int(example.features.feature['id'].int64_list.value[0])
-    fts = example.features.feature['ft'].bytes_list[0].value[0]
+    fts = example.features.feature['ft'].bytes_list.value[0]
     fts = np.fromstring(fts, dtype=np.float32)
 
     print id, fts.shape
