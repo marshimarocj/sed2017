@@ -89,15 +89,15 @@ def _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d'):
 '''
 def prepare_pos_ft():
   # root_dir = '/data1/jiac/sed' # uranus
-  # root_dir = '/home/jiac/data/sed' # xiaojun
-  root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  # ft_root_dir = os.path.join(root_dir, 'c3d')
-  # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
-  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  ft_root_dir = os.path.join(root_dir, 'c3d')
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
@@ -110,10 +110,10 @@ def prepare_pos_ft():
   args = parser.parse_args()
   name = args.name
 
-  # center_grid = api.db.C3DFtCenters()
-  # threshold_func = c3d_threshold_func
-  center_grid = api.db.FlowFtCenters()
-  threshold_func = flow_threshold_func
+  center_grid = api.db.C3DFtCenters()
+  threshold_func = c3d_threshold_func
+  # center_grid = api.db.FlowFtCenters()
+  # threshold_func = flow_threshold_func
   # center_grid = api.db.VggFtCenters()
 
   for track_len in track_lens:
@@ -126,8 +126,8 @@ def prepare_pos_ft():
     track_db.load(db_file, pos_trackids)
 
     ft_dir = os.path.join(ft_root_dir, name)
-    # ft_db = api.db.C3DFtDb(ft_dir)
-    ft_db = api.db.FlowFtDb(ft_dir)
+    ft_db = api.db.C3DFtDb(ft_dir)
+    # ft_db = api.db.FlowFtDb(ft_dir)
     # ft_db = api.db.VggFtDb(ft_dir)
 
     pos_ft_in_track_generator = api.generator.crop_duration_ft_in_track(
@@ -349,24 +349,25 @@ def generate_script():
   # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # root_dir = '/home/jiac/data/sed' # gpu9
-  root_dir = '/home/jiac/data3/sed' # gpu4
+  # root_dir = '/home/jiac/data3/sed' # gpu4
+  root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
-    # os.path.join(root_dir, 'dev08-1.lst'),
-    # os.path.join(root_dir, 'eev08-1.lst'),
-    os.path.join(root_dir, '2017.refined.lst')
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+    # os.path.join(root_dir, '2017.refined.lst')
     # os.path.join(root_dir, 'video', '2017.refined.lst')
   ]
 
-  num_process = 5
-  # num_process = 3
+  # num_process = 5
+  num_process = 1
 
   names = []
   for lst_file in lst_files:
     with open(lst_file) as f:
       for line in f:
         line = line.strip()
-        # name, _ = os.path.splitext(line)
-        name = line
+        name, _ = os.path.splitext(line)
+        # name = line
         # pos = line.find('.')
         # name = line[:pos]
         if 'CAM4' in name:
@@ -378,8 +379,8 @@ def generate_script():
 
   for i in range(0, num, gap):
     idx = i/gap
-    # out_file = 'prepare_toi_data.%d.sh'%idx
-    out_file = 'prepare_toi_data.tst.%d.sh'%idx
+    out_file = 'prepare_toi_data.%d.sh'%idx
+    # out_file = 'prepare_toi_data.tst.%d.sh'%idx
     with open(out_file, 'w') as fout:
       for j in range(i, min(i+gap, num)):
         name = names[j]
@@ -503,7 +504,7 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  # prepare_pos_ft()
+  prepare_pos_ft()
   # generate_script()
   # gen_script_rocks()
   # retrieve_failed_jobs()
@@ -512,5 +513,5 @@ if __name__ == '__main__':
   # check_track_group_npzfile()
   # prepare_neg_ft_missing()
   # remove_neg_data_in_dev_for_consistency()
-  prepare_neg_ft_on_all_splits()
+  # prepare_neg_ft_on_all_splits()
   # prepare_toi_ft_for_tst()
