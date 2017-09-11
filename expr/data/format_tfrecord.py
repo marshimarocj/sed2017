@@ -76,7 +76,7 @@ def transform_by_grouping():
       data = np.load(src_file)
       ids = data['ids']
       fts = data['fts']
-      frames = data['frames']track_group_trn_split
+      frames = data['frames']
       centers = data['centers']
       num = ids.shape[0]
 
