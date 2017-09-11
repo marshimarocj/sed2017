@@ -90,6 +90,7 @@ def transform_by_grouping():
         for i in range(num):
           id = int(ids[i])
           if id != prev_id:
+            prev_id = id
             num_record += 1
       num_record += 1
 
