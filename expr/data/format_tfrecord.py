@@ -55,9 +55,9 @@ def transform_by_grouping():
             _centers = np.array(center_in_track, dtype=np.float32).tostring()
             example = tf.train.Example(features=tf.train.Features(feature={
               'id': _int64_feature(prev_id),
-              # 'frame': _bytes_feature(_frames),
-              # 'ft': _bytes_feature(_fts),
-              # 'center': _bytes_feature(_centers)
+              'frame': _bytes_feature(_frames),
+              'ft': _bytes_feature(_fts),
+              'center': _bytes_feature(_centers)
               }))
             writer.write(example.SerializeToString())
 
@@ -81,9 +81,9 @@ def transform_by_grouping():
         _centers = np.array(center_in_track, dtype=np.float32).tostring()
         example = tf.train.Example(features=tf.train.Features(feature={
           'id': _int64_feature(id),
-          # 'frame': _bytes_feature(_frames),
-          # 'ft': _bytes_feature(_fts),
-          # 'center': _bytes_feature(_centers)
+          'frame': _bytes_feature(_frames),
+          'ft': _bytes_feature(_fts),
+          'center': _bytes_feature(_centers)
           }))
         writer.write(example.SerializeToString())
       break
@@ -93,7 +93,8 @@ def tst_load_tfrecords():
   root_dir = '/data/extDisk3/jiac/sed' # danny
   file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071206_E1_CAM1.25.forward.backward.square.neg.0.50.0.tfrecords')
 
-  record_iterator = tf.python_io.tf_record_iterator(path=file)
+  options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP) 
+  record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
   for string_record in record_iterator:
     example = tf.train.Example()
     example.ParseFromString(string_record)
