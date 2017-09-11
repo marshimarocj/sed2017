@@ -50,7 +50,7 @@ def transform_by_grouping():
           video2track_len2pos_id2lid[name][track_len] = {}
           label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
           with open(label_file) as f_label:
-            for line in f:
+            for line in f_label:
               line = line.strip()
               data = line.split(' ')
               id = int(data[0])
