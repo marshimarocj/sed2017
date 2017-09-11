@@ -51,7 +51,7 @@ class ShuffleBatchJoin(object):
     return total
 
   def next(self, batch_size):
-    assert batch_size < self.capacity
+    assert batch_size <= self.capacity
 
     for file in self.files:
       options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
