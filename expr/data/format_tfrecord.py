@@ -92,7 +92,7 @@ def transform_by_grouping():
 
 def tst_load_tfrecords():
   root_dir = '/data/extDisk3/jiac/sed' # danny
-  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071206_E1_CAM1.25.forward.backward.square.neg.0.50.0.npz')
+  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071206_E1_CAM1.25.forward.backward.square.neg.0.50.0.tfrecords')
 
   record_iterator = tf.python_io.tf_record_iterator(path=file)
   for string_record in record_iterator:
