@@ -642,16 +642,19 @@ def gen_tst_script():
 
 
 def eval():
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # aladdin3
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
   # expr_name = 'netvlad.0.25.32'
   # expr_name = 'netvlad.0.25.8'
-  expr_name = 'netvlad.l2norm_input.0.25.16'
+  # expr_name = 'netvlad.l2norm_input.0.25.16'
+  expr_name = 'netvlad.0.25_50'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
-  best_epoch = 5
+  best_epoch = 0
+  # best_epoch = 5
   # best_epoch = 9
   # best_epoch = 1
 
@@ -689,7 +692,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -700,4 +703,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  # eval()
+  eval()
