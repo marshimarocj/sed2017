@@ -19,9 +19,9 @@ def _int64_feature(value):
 def transform_by_grouping():
   root_dir = '/data/extDisk3/jiac/sed' # danny
   ft_dirs = [
-    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
     os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val'),
-    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
   ]
 
   dim_ft = 1024
@@ -96,7 +96,6 @@ def transform_by_grouping():
           'dim_center': _int64_feature(dim_center),
           }))
         writer.write(example.SerializeToString())
-      break
 
 
 def tst_load_tfrecords():
@@ -123,5 +122,5 @@ def tst_load_tfrecords():
 
 
 if __name__ == '__main__':
-  # transform_by_grouping()
-  tst_load_tfrecords()
+  transform_by_grouping()
+  # tst_load_tfrecords()
