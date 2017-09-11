@@ -113,7 +113,7 @@ def tst_load_tfrecords():
     id = int(feature['id'].int64_list.value[0])
     num = int(feature['num'].int64_list.value[0])
     dim_ft = int(feature['dim_ft'].int64_list.value[0])
-    dim_center = int(feature['dim_center'])
+    dim_center = int(feature['dim_center'].int64_list.value[0])
     fts = feature['ft'].bytes_list.value[0]
     fts = np.fromstring(fts, dtype=np.float32).reshape(num, dim_ft)
     centers = feature['center'].bytes_list.value[0]
