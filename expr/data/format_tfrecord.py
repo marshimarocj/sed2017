@@ -85,7 +85,7 @@ def transform_by_grouping():
       num = ids.shape[0]
 
       num_record = 0
-      if len(ids[0]) > 0:
+      if len(ids) > 0:
         prev_id = ids[0]
         for i in range(num):
           id = int(ids[i])
