@@ -21,6 +21,6 @@ def gen_dir_struct_info(path_cfg, path_cfg_file):
 
   timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
   path_cfg.log_file = os.path.join(log_dir, 'log-' + timestamp)
-  path_cfg.val_metric_file = os.path.join(log_dir, 'val_metrics.pkl')
+  path_cfg.val_metric_file = os.path.join(log_dir, 'val_metrics-0.pkl')
 
   return path_cfg
