@@ -101,7 +101,7 @@ def transform_by_grouping():
 
 def tst_load_tfrecords():
   root_dir = '/data/extDisk3/jiac/sed' # danny
-  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071206_E1_CAM1.25.forward.backward.square.pos.0.75.tfrecords')
+  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071130_E2_CAM2.25.forward.backward.square.pos.0.75.tfrecords')
 
   options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP) 
   record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
@@ -119,7 +119,7 @@ def tst_load_tfrecords():
     centers = feature['center'].bytes_list.value[0]
     centers = np.fromstring(centers, dtype=np.float32).reshape(num, dim_center)
 
-    print id, fts.shape
+    print id, fts.shape, centers.shape
 
 
 if __name__ == '__main__':
