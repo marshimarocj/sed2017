@@ -315,6 +315,16 @@ class TrnReader(framework.model.data.Reader):
 
         self.video_names.append(name)
 
+    self.pos_files = []
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        file = os.path.join(self.ft_track_group_dir, 
+          '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
+        self.pos_files.append(file)
+    self.positive_generator = InstanceGenerator(pos_files, capacity, True,
+      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+    self.pos_cnt = self.positive_generator.num_record()
+
     cam2neg_files = {}
     with open(neg_lst_file) as f:
       for line in f:
@@ -333,15 +343,9 @@ class TrnReader(framework.model.data.Reader):
       self.negative_cam_generators.append(negative_cam_generator)
 
   def num_record(self):
-    pass
+    return self.pos_cnt
 
   def yield_trn_batch(self, batch_size):
-    pos_files = []
-    for video_name in self.video_names:
-      for track_len in self.track_lens:
-        file = os.path.join(self.ft_track_group_dir, 
-          '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
-    pos_files.append(file)
     self.positive_generator = InstanceGenerator(pos_files, capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
@@ -381,7 +385,7 @@ class ValReader(framework.model.data.Reader):
       for track_len in self.track_lens:
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
-    pos_files.append(file)
+        pos_files.append(file)
     self.positive_generator = InstanceGenerator(pos_files, capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
@@ -401,9 +405,6 @@ class ValReader(framework.model.data.Reader):
       negative_cam_generator = InstanceGenerator(neg_files, capacity, False,
         num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
       self.negative_cam_generators.append(negative_cam_generator)
-
-  def num_record(self):
-    pass
 
   def yield_val_batch(self, batch_size):
     for batch_data in self.positive_generator.next(batch_size):

@@ -37,12 +37,24 @@ class ShuffleBatchJoin(object):
   def generate_data_from_record(self, example):
     raise NotImplementedError("""please customize generate_data_from_record""")
 
+  def num_record(self):
+    total = 0
+    for file in self.files:
+      options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
+      record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+      string_record = record_iterator.next()
+      example = tf.train.Example()
+      example.ParserFromString(string_record)
+      total += int(example.features.feature['num_record'].int64_list.value[0])
+    return total
+
   def next(self, batch_size):
     assert batch_size < self.capacity
 
     for file in self.files:
       options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
       record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+      record_iterator.next() # skip meta data
       for string_record in record_iterator:
         example = tf.train.Example()
         example.ParserFromString(string_record)
@@ -70,6 +82,7 @@ class CircularShuffleBatchJoin(ShuffleBatchJoin):
       for file in self.files:
         options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
         record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+        record_iterator.next() # skip meta data
         for string_record in record_iterator:
           example = tf.train.Example()
           example.ParserFromString(string_record)
