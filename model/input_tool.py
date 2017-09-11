@@ -30,8 +30,9 @@ class RandomShuffleQueue(object):
 class ShuffleBatchJoin(object):
   def __init__(self, files, capacity, shuffle_files, **kwargs):
     self.capacity = capacity
+    self.files = files
     if shuffle_files:
-      self.files = random.shuffle(files)
+      random.shuffle(self.files)
     self.random_shuffle_queue = RandomShuffleQueue(capacity)
 
   def generate_data_from_record(self, example):
