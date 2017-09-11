@@ -389,22 +389,14 @@ class ValReader(framework.model.data.Reader):
     self.positive_generator = InstanceGenerator(pos_files, capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
-    cam2neg_files = {}
-    with open(neg_lst_file) as f:
-      for line in f:
-        line = line.strip()
-        begin = line.rfind('_')
-        end = line.find('.')
-        cam = line[begin+1:end]
-        if cam not in self.cam2neg_files:
-          self.cam2neg_files[cam] = []
-        self.cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
-    self.negative_cam_generators = []
-    for cam in cam2neg_files:
-      neg_files = cam2neg_files[cam]
-      negative_cam_generator = InstanceGenerator(neg_files, capacity, False,
-        num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
-      self.negative_cam_generators.append(negative_cam_generator)
+    neg_files = []
+    for video_name in self.video_names:
+      for track_len in self.track_lens:
+        file = os.path.join(self.ft_track_group_dir,
+          '%s.%d.forward.backward.square.neg.0.50.0.tfrecords'%(video_name, track_len))
+        neg_files.append(file)
+    self.negative_generator = InstanceGenerator(neg_files, capacity, False,
+      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
   def yield_val_batch(self, batch_size):
     for batch_data in self.positive_generator.next(batch_size):
@@ -413,12 +405,11 @@ class ValReader(framework.model.data.Reader):
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
 
-    for negative_cam_generator in self.negative_cam_generators:
-      for batch_data in negative_cam_generator.next(batch_size):
-        fts = np.array([d[0] for d in batch_data])
-        masks = np.array([d[1] for d in batch_data])
-        labels = np.array([d[2] for d in batch_data])
-        yield fts, masks, labels
+    for batch_data in self.negative_generator.next(batch_size):
+      fts = np.array([d[0] for d in batch_data])
+      masks = np.array([d[1] for d in batch_data])
+      labels = np.array([d[2] for d in batch_data])
+      yield fts, masks, labels
 
 
 class TstReader(framework.model.data.Reader):
@@ -445,7 +436,7 @@ class TstReader(framework.model.data.Reader):
     neg_files = []
     for track_len in self.track_lens:
       file = os.path.join(self.ft_track_group_dir, 
-        '%s.%d.forward.backward.square.neg.0.50.0.5.npz'%(tst_video_name, track_len))
+        '%s.%d.forward.backward.square.neg.0.50.0.5.tfrecords'%(tst_video_name, track_len))
       neg_files.append(file)
     self.negative_generator = InstanceGenerator(neg_files, capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
