@@ -109,13 +109,19 @@ def tst_load_tfrecords():
     example = tf.train.Example()
     example.ParseFromString(string_record)
 
-    id = int(example.features.feature['id'].int64_list.value[0])
-    fts = example.features.feature['ft'].bytes_list.value[0]
-    fts = np.fromstring(fts, dtype=np.float32)
+    feature = example.features.feature
+    id = int(feature['id'].int64_list.value[0])
+    num = int(feature['num'])
+    dim_ft = int(feature['dim_ft'])
+    dim_center = int(feature['dim_center'])
+    fts = feature['ft'].bytes_list.value[0]
+    fts = np.fromstring(fts, dtype=np.float32).reshape(num, dim_ft)
+    centers = feature['center'].bytes_list.value[0]
+    centers = np.fromstring(centers, dtype=np.float32).reshape(num, dim_center)
 
     print id, fts.shape
 
 
 if __name__ == '__main__':
-  transform_by_grouping()
-  # tst_load_tfrecords()
+  # transform_by_grouping()
+  tst_load_tfrecords()
