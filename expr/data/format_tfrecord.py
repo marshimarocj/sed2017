@@ -158,6 +158,7 @@ def tst_load_tfrecords():
 
     feature = example.features.feature
     id = int(feature['id'].int64_list.value[0])
+    label = int(feature['label'].int64_list.value[0])
     num = int(feature['num'].int64_list.value[0])
     dim_ft = int(feature['dim_ft'].int64_list.value[0])
     dim_center = int(feature['dim_center'].int64_list.value[0])
@@ -166,9 +167,9 @@ def tst_load_tfrecords():
     centers = feature['center'].bytes_list.value[0]
     centers = np.fromstring(centers, dtype=np.float32).reshape(num, dim_center)
 
-    print id, fts.shape, centers.shape
+    print id, label, fts.shape, centers.shape
 
 
 if __name__ == '__main__':
-  transform_by_grouping()
-  # tst_load_tfrecords()
+  # transform_by_grouping()
+  tst_load_tfrecords()
