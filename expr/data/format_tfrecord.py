@@ -27,9 +27,9 @@ event2lid = {
 def transform_by_grouping():
   root_dir = '/home/jiac/data/sed' # danny
   ft_dirs = [
-    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
-    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val'),
-    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
+    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val'),
+    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
   ]
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
@@ -200,5 +200,5 @@ def tst_load_tfrecords():
 
 
 if __name__ == '__main__':
-  # transform_by_grouping()
-  tst_load_tfrecords()
+  transform_by_grouping()
+  # tst_load_tfrecords()
