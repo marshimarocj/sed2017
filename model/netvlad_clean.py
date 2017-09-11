@@ -361,6 +361,8 @@ class TrnReader(framework.model.data.Reader):
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
 
+    del self.positive_generator
+
 
 class ValReader(framework.model.data.Reader):
   def __init__(self, video_lst_file, ft_track_group_dir, label_dir, 
@@ -380,13 +382,14 @@ class ValReader(framework.model.data.Reader):
 
         self.video_names.append(name)
 
+  def yield_val_batch(self, batch_size):
     pos_files = []
     for video_name in self.video_names:
       for track_len in self.track_lens:
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
         pos_files.append(file)
-    self.positive_generator = InstanceGenerator(pos_files, capacity, False,
+    positive_generator = InstanceGenerator(pos_files, capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
     neg_files = []
@@ -395,21 +398,23 @@ class ValReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir,
           '%s.%d.forward.backward.square.neg.0.50.0.tfrecords'%(video_name, track_len))
         neg_files.append(file)
-    self.negative_generator = InstanceGenerator(neg_files, capacity, False,
+    negative_generator = InstanceGenerator(neg_files, capacity, False,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
-  def yield_val_batch(self, batch_size):
-    for batch_data in self.positive_generator.next(batch_size):
+    for batch_data in positive_generator.next(batch_size):
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
 
-    for batch_data in self.negative_generator.next(batch_size):
+    for batch_data in negative_generator.next(batch_size):
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
+
+    del positive_generator
+    del negative_generator
 
 
 class TstReader(framework.model.data.Reader):
