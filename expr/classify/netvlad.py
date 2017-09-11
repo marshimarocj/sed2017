@@ -228,32 +228,32 @@ def prepare_cfg():
   num_ft = 100
   dim_ft = 1024
   tst_neg_lst = [0]
-  track_lens = [25, 50]
+  # track_lens = [25, 50]
   # track_lens = [50]
-  # track_lens = [25]
+  track_lens = [25]
   # gamma = 2
 
-  out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
-    '_'.join([str(d) for d in track_lens])))
+  # out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
+  #   '_'.join([str(d) for d in track_lens])))
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
-  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
-    # '_'.join([str(d) for d in track_lens]), num_center))
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
-  # proto_cfg['l2_norm_input'] = True
+  proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
   # model_cfg['trn_batch_size'] = 16
   # model_cfg['tst_batch_size'] = 64
   # model_cfg['gamma'] = gamma
-  # model_cfg['dropout'] = True
+  model_cfg['dropout'] = True
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
@@ -271,6 +271,7 @@ def prepare_cfg():
     'tst_neg_lst': tst_neg_lst,
     'track_lens': track_lens,
     'init_weight_file': init_weight_file,
+    'model_file': os.path.join(out_prefix, 'model', 'epoch-9'),
   }
   path_cfg_file = '%s.path.json'%out_prefix
   with open(path_cfg_file, 'w') as fout:
@@ -694,7 +695,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -705,4 +706,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()
