@@ -305,7 +305,7 @@ class TrnReader(framework.model.data.Reader):
     self.cfg = model_cfg
     self.track_lens = track_lens
 
-    capacity = 500
+    self.capacity = 500
 
     self.video_names = []
     with open(video_lst_file) as f:
@@ -321,7 +321,7 @@ class TrnReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
         self.pos_files.append(file)
-    self.positive_generator = InstanceGenerator(self.pos_files, capacity, True,
+    self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
     self.pos_cnt = self.positive_generator.num_record()
 
@@ -338,7 +338,7 @@ class TrnReader(framework.model.data.Reader):
     self.negative_cam_generators = []
     for cam in cam2neg_files:
       neg_files = cam2neg_files[cam]
-      negative_cam_generator = CircularInstanceGenerator(neg_files, capacity, True,
+      negative_cam_generator = CircularInstanceGenerator(neg_files, self.capacity, True,
         num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
       self.negative_cam_generators.append(negative_cam_generator)
 
@@ -346,7 +346,7 @@ class TrnReader(framework.model.data.Reader):
     return self.pos_cnt
 
   def yield_trn_batch(self, batch_size):
-    self.positive_generator = InstanceGenerator(self.pos_files, capacity, True,
+    self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
     num_pos = self.pos_idxs.shape[0]
