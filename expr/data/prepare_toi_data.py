@@ -3,7 +3,7 @@ import argparse
 import random
 import itertools
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import numpy as np
 
