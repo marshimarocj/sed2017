@@ -43,6 +43,8 @@ def transform_by_grouping():
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
+        if 'CAM4' in name:
+          continue
 
         video2track_len2pos_id2lid[name] = {}
 
