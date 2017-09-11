@@ -46,7 +46,7 @@ class ShuffleBatchJoin(object):
       record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
       string_record = record_iterator.next()
       example = tf.train.Example()
-      example.ParserFromString(string_record)
+      example.ParseFromString(string_record)
       total += int(example.features.feature['num_record'].int64_list.value[0])
     return total
 
@@ -59,7 +59,7 @@ class ShuffleBatchJoin(object):
       record_iterator.next() # skip meta data
       for string_record in record_iterator:
         example = tf.train.Example()
-        example.ParserFromString(string_record)
+        example.ParseFromString(string_record)
         data = self.generate_data_from_record(example)
         if self.random_shuffle_queue.is_full():
           batch_data = []
@@ -87,7 +87,7 @@ class CircularShuffleBatchJoin(ShuffleBatchJoin):
         record_iterator.next() # skip meta data
         for string_record in record_iterator:
           example = tf.train.Example()
-          example.ParserFromString(string_record)
+          example.ParseFromString(string_record)
           data = self.generate_data_from_record(example)
           if self.random_shuffle_queue.is_full():
             batch_data = []
