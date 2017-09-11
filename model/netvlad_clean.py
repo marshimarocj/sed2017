@@ -347,7 +347,7 @@ class TrnReader(framework.model.data.Reader):
 
   def yield_trn_batch(self, batch_size):
     self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
-      num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
+      num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
 
     num_pos = self.pos_idxs.shape[0]
     for pos_batch_data in self.positive_generator.next(batch_size):
