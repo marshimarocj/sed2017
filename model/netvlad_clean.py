@@ -358,7 +358,7 @@ class TrnReader(framework.model.data.Reader):
         neg_batch_data = self.negative_cam_generators[i].next(neg_batch_size).next()
         batch_data.extend(neg_batch_data)
         # print len(neg_batch_data)
-      print len(batch_data)
+      # print len(batch_data)
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
