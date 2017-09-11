@@ -62,7 +62,7 @@ def transform_by_grouping():
               'ft': _bytes_feature(_fts),
               'center': _bytes_feature(_centers),
               'num': _int64_feature(num),
-              'dim_ft'; _int64_feature(dim_ft),
+              'dim_ft': _int64_feature(dim_ft),
               'dim_center': _int64_feature(dim_center),
               }))
             writer.write(example.SerializeToString())
@@ -85,11 +85,15 @@ def transform_by_grouping():
         _fts = np.array(ft_in_track, dtype=np.float32).tostring()
         _frames = np.array(frame_in_track, dtype=np.float32).tostring()
         _centers = np.array(center_in_track, dtype=np.float32).tostring()
+        num = len(ft_in_track)
         example = tf.train.Example(features=tf.train.Features(feature={
           'id': _int64_feature(id),
           'frame': _bytes_feature(_frames),
           'ft': _bytes_feature(_fts),
           'center': _bytes_feature(_centers)
+          'num': _int64_feature(num),
+          'dim_ft': _int64_feature(dim_ft),
+          'dim_center': _int64_feature(dim_center),
           }))
         writer.write(example.SerializeToString())
       break
