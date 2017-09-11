@@ -107,5 +107,5 @@ def tst_load_tfrecords():
 
 
 if __name__ == '__main__':
-  transform_by_grouping()
-  # tst_load_tfrecords()
+  # transform_by_grouping()
+  tst_load_tfrecords()
