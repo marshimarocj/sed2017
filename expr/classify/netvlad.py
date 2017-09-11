@@ -275,7 +275,7 @@ def prepare_cfg():
     'tst_neg_lst': tst_neg_lst,
     'track_lens': track_lens,
     'init_weight_file': init_weight_file,
-    'model_file': os.path.join(out_prefix, 'model', 'epoch-9'),
+    # 'model_file': os.path.join(out_prefix, 'model', 'epoch-9'),
   }
   path_cfg_file = '%s.path.json'%out_prefix
   with open(path_cfg_file, 'w') as fout:
