@@ -78,7 +78,7 @@ class ShuffleBatchJoin(object):
 # call next() instead
 class CircularShuffleBatchJoin(ShuffleBatchJoin):
   def next(self, batch_size):
-    assert batch_size < self.capacity
+    assert batch_size <= self.capacity
 
     while True:
       for file in self.files:
