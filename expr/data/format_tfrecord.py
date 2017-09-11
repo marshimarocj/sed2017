@@ -54,6 +54,8 @@ def transform_by_grouping():
               line = line.strip()
               data = line.split(' ')
               id = int(data[0])
+              if data[1] not in event2lid:
+                continue
               lid = event2lid[data[1]]
               video2track_len2pos_id2lid[name][track_len][id] = lid
 
