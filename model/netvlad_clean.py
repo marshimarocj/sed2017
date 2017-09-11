@@ -456,8 +456,8 @@ class TstReader(framework.model.data.Reader):
 
 
 class InstanceGenerator(input_tool.ShuffleBatchJoin):
-  def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
-    input_tool.ShuffleBatchJoin.__init__(self, files, capacity, shuffle_files, shuffle)
+  def __init__(self, files, capacity, shuffle_files, **kwargs):
+    input_tool.ShuffleBatchJoin.__init__(self, files, capacity, shuffle_files)
     self.num_ft = kwargs['num_ft']
     self.num_class = kwargs['num_class']
 
@@ -478,8 +478,8 @@ class InstanceGenerator(input_tool.ShuffleBatchJoin):
 
 
 class CircularInstanceGenerator(input_tool.CircularShuffleBatchJoin):
-  def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
-    input_tool.CircularShuffleBatchJoin.__init__(self, files, capacity, shuffle_files, shuffle)
+  def __init__(self, files, capacity, shuffle_files, **kwargs):
+    input_tool.CircularShuffleBatchJoin.__init__(self, files, capacity, shuffle_files)
     self.num_ft = kwargs['num_ft']
     self.num_class = kwargs['num_class']
 

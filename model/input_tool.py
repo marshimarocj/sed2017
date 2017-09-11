@@ -28,9 +28,9 @@ class RandomShuffleQueue(object):
 
 
 class ShuffleBatchJoin(object):
-  def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
+  def __init__(self, files, capacity, shuffle_files, **kwargs):
     self.capacity = capacity
-    if shuffle:
+    if shuffle_files:
       self.files = random.shuffle(files)
     self.random_shuffle_queue = RandomShuffleQueue(capacity)
 
