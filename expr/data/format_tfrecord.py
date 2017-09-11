@@ -173,6 +173,12 @@ def tst_load_tfrecords():
 
   options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP) 
   record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+  string_record = record_iterator.next()
+  example = tf.train.Example()
+  example.ParseFromString(string_record)
+  num_record = int(example.features.feature['num_record'].int64_list.value[0])
+  print num_record
+  cnt = 0
   for string_record in record_iterator:
     example = tf.train.Example()
     example.ParseFromString(string_record)
@@ -188,14 +194,11 @@ def tst_load_tfrecords():
     centers = feature['center'].bytes_list.value[0]
     centers = np.fromstring(centers, dtype=np.float32).reshape(num, dim_center)
 
-    print id, label, fts.shape, centers.shape
-
-
-def cnt_pos_instances():
-  root_dir = '/home/jiac/data/sed' # danny
-  lst_file = os.path.join()
+    # print id, label, fts.shape, centers.shape
+    cnt += 1
+  print cnt
 
 
 if __name__ == '__main__':
-  transform_by_grouping()
-  # tst_load_tfrecords()
+  # transform_by_grouping()
+  tst_load_tfrecords()
