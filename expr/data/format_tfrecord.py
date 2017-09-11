@@ -14,15 +14,48 @@ def _int64_feature(value):
   return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 
+event2lid = {
+  'CellToEar': 1,
+  'Embrace': 2,
+  'Pointing': 3,
+  'PersonRuns': 4 
+}
+
+
 '''expr
 '''
 def transform_by_grouping():
-  root_dir = '/data/extDisk3/jiac/sed' # danny
+  root_dir = '/home/jiac/data/sed' # danny
   ft_dirs = [
-    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
+    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split'),
     os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val'),
-    os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
+    # os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst'),
   ]
+  lst_files = [
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+  ]
+  label_dir = os.path.join(root_dir, 'pseudo_label')
+
+  video2track_len2pos_id2lid = {}
+  for lst_file in lst_files:
+    with open(lst_file) as f:
+      for line in f:
+        line = line.strip()
+        name, _ = os.path.splitext(line)
+
+        video2track_len2pos_id2lid[name] = {}
+
+        for track_len in [25, 50]:
+          video2track_len2pos_id2lid[name][track_len] = {}
+          label_file = os.path.join(label_dir, '%s.%d.forward.backward.square.0.75.pos'%(name, track_len))
+          with open(label_file) as f_label:
+            for line in f:
+              line = line.strip()
+              data = line.split(' ')
+              id = int(data[0])
+              lid = event2lid[data[1]]
+              video2track_len2pos_id2lid[name][track_len][id] = lid
 
   dim_ft = 1024
   dim_center = 2
@@ -32,6 +65,10 @@ def transform_by_grouping():
       if 'tfrecords' in name:
         continue
       _name, _ = os.path.splitext(name)
+      data = _name.split('.')
+      video_name = data[0]
+      track_len = int(data[1])
+      pos_id2lid = video2track_len2pos_id2lid[video_name][track_len]
       src_file = os.path.join(ft_dir, name)
       dst_file = os.path.join(ft_dir, _name + '.tfrecords')
       print name
@@ -39,7 +76,7 @@ def transform_by_grouping():
       data = np.load(src_file)
       ids = data['ids']
       fts = data['fts']
-      frames = data['frames']
+      frames = data['frames']track_group_trn_split
       centers = data['centers']
       num = ids.shape[0]
 
@@ -58,8 +95,13 @@ def transform_by_grouping():
             _frames = np.array(frame_in_track, dtype=np.float32).tostring()
             _centers = np.array(center_in_track, dtype=np.float32).tostring()
             num = len(frame_in_track)
+            if prev_id in pos_id2lid:
+              label = pos_id2lid[prev_id]
+            else:
+              label = 0
             example = tf.train.Example(features=tf.train.Features(feature={
               'id': _int64_feature(prev_id),
+              'label': _int64_feature(label),
               'frame': _bytes_feature(_frames),
               'ft': _bytes_feature(_fts),
               'center': _bytes_feature(_centers),
