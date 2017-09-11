@@ -254,6 +254,7 @@ def prepare_cfg():
   # model_cfg['tst_batch_size'] = 64
   # model_cfg['gamma'] = gamma
   model_cfg['dropout'] = True
+  model_cfg['num_epoch'] = 20
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)
