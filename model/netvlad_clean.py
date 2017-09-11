@@ -127,7 +127,7 @@ class NetVladModel(framework.model.proto.FullModel):
   name_scope = 'netvlad.NetVladModel'
 
   def __init__(self, config):
-    framework.model.proto.FullModel.__init__(config)
+    framework.model.proto.FullModel.__init__(self, config)
     self.logit_op = tf.no_op()
     self.predict_op = tf.no_op()
 
@@ -457,7 +457,7 @@ class TstReader(framework.model.data.Reader):
 
 class InstanceGenerator(input_tool.ShuffleBatchJoin):
   def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
-    input_tool.ShuffleBatchJoin.__init__(files, capacity, shuffle_files, shuffle)
+    input_tool.ShuffleBatchJoin.__init__(self, files, capacity, shuffle_files, shuffle)
     self.num_ft = kwargs['num_ft']
     self.num_class = kwargs['num_class']
 
@@ -479,7 +479,7 @@ class InstanceGenerator(input_tool.ShuffleBatchJoin):
 
 class CircularInstanceGenerator(input_tool.CircularShuffleBatchJoin):
   def __init__(self, files, capacity, shuffle_files, shuffle, **kwargs):
-    input_tool.CircularShuffleBatchJoin.__init__(files, capacity, shuffle_files, shuffle)
+    input_tool.CircularShuffleBatchJoin.__init__(self, files, capacity, shuffle_files, shuffle)
     self.num_ft = kwargs['num_ft']
     self.num_class = kwargs['num_class']
 
