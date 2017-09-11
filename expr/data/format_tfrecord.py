@@ -45,6 +45,8 @@ def transform_by_grouping():
 
       options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP) 
       with tf.python_io.TFRecordWriter(dst_file, options=options) as writer:
+        if ids.shape[0] == 0:
+          continue
         prev_id = ids[0]
         ft_in_track = []
         frame_in_track = []
