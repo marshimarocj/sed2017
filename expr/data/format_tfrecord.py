@@ -76,9 +76,9 @@ def transform_by_grouping():
         ft_in_track.append(ft)
         center_in_track.append(center)
 
-      _fts = np.array(ft_in_track).tostring()
-      _frames = np.array(frame_in_track).tostring()
-      _centers = np.array(center_in_track).tostring()
+      _fts = np.array(ft_in_track, dtype=np.float32).tostring()
+      _frames = np.array(frame_in_track, dtype=np.float32).tostring()
+      _centers = np.array(center_in_track, dtype=np.float32).tostring()
       example = tf.train.Example(features=tf.train.Features(feature={
         'id': _int64_feature(prev_id),
         'frame': _bytes_feature(_frames),
@@ -92,7 +92,18 @@ def transform_by_grouping():
 
 def tst_load_tfrecords():
   root_dir = '/data/extDisk3/jiac/sed' # danny
-  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', '')
+  file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071206_E1_CAM1.25.forward.backward.square.neg.0.50.0.npz')
+
+  record_iterator = tf.python_io.tf_record_iterator(path=file)
+  for string_record in record_iterator:
+    example = tf.train.Example()
+    example.ParseFromString(string_record)
+
+    id = int(example.features.feature['id'].int64_list.value[0])
+    fts = example.features.feature['ft'].bytes_list[0].value[0]
+    fts = np.fromstring(fts, dtype=np.float32)
+
+    print id, fts.shape
 
 
 if __name__ == '__main__':
