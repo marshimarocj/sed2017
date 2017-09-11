@@ -348,12 +348,13 @@ class TrnReader(framework.model.data.Reader):
   def yield_trn_batch(self, batch_size):
     self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
+    num_cam = len(self.negative_cam_generators)
 
     for pos_batch_data in self.positive_generator.next(batch_size):
       batch_data = pos_batch_data 
-      num = batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch / len(self.negative_cam_generators) 
-      for i in range(num):
-        neg_batch_data = self.negative_cam_generators[i].next()
+      neg_batch_size = batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch / num_cam
+      for i in range(num_cam):
+        neg_batch_data = self.negative_cam_generators[i].next(neg_batch_size)
         batch_data.extend(neg_batch_data)
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
