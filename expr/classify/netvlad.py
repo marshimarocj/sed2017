@@ -340,7 +340,7 @@ def prepare_focalloss_cfg():
   # alphas = np.array(alphas)
   # alphas = 1./alphas
   # alphas = num_class / np.sum(alphas) * alphas
-  alphas = [1.]*5
+  alphas = np.ones((5,)) 
   model_cfg = gen_focal_loss_model_cfg(proto_cfg, num_class, alphas.tolist())
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
