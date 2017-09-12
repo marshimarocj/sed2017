@@ -73,8 +73,8 @@ if __name__ == '__main__':
     # trn_reader = model.netvlad.TrnReader(
       path_cfg.trn_video_lst_file, path_cfg.trn_neg_lst_file, path_cfg.trn_ft_track_group_dir, path_cfg.label_dir,
       path_cfg.label2lid_file, model_cfg, track_lens=path_cfg.track_lens)
-    val_reader = model.netvlad_clean.ValReader(
-    # val_reader = model.netvlad.ValReader(
+    # val_reader = model.netvlad_clean.ValReader(
+    val_reader = model.netvlad.ValReader(
       path_cfg.val_video_lst_file, path_cfg.val_ft_track_group_dir, path_cfg.label_dir,
       path_cfg.label2lid_file, model_cfg, track_lens=path_cfg.track_lens)
     if path_cfg.model_file != '':
