@@ -256,7 +256,8 @@ def prepare_cfg():
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
@@ -265,7 +266,8 @@ def prepare_cfg():
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
   proto_cfg['l2_norm_input'] = True
-  proto_cfg['l2_norm_output'] = True
+  # proto_cfg['l2_norm_output'] = True
+  proto_cfg['dropin'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
@@ -725,7 +727,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -736,4 +738,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()

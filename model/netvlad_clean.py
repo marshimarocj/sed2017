@@ -22,6 +22,7 @@ class Config(framework.model.proto.ProtoConfig):
 
     self.l2_norm_input = False
     self.l2_norm_output = False
+    self.dropin = False
 
     self.centers = np.empty((0,)) # (dim_ft, num_center)
 
@@ -116,6 +117,8 @@ class NetVladEncoder(framework.model.proto.ModelProto):
 
         if self._config.l2_norm_output:
           V_jk = tf.nn.l2_normalize(V_jk, dim=1)
+        if self._config.dropin:
+          V_jk = tf.nn.dropout(V_jk, 0.5)
 
         self._feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
 
