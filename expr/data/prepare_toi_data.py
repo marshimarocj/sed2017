@@ -201,11 +201,11 @@ def prepare_neg_ft():
   root_dir = '/home/jiac/data/sed2017' # rocks
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_dir = os.path.join(root_dir, 'tracking')
-  # ft_root_dir = os.path.join(root_dir, 'c3d')
-  # out_dir = os.path.join(root_dir, 'c3d', 'track_group')
-  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  ft_root_dir = os.path.join(root_dir, 'c3d')
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
-  out_dir = os.path.join('/data/MM22/jiac/sed2017', 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # out_dir = os.path.join('/data/MM22/jiac/sed2017', 'twostream', 'feat_anet_flow_6frame', 'track_group')
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
@@ -507,10 +507,10 @@ def prepare_toi_ft_for_tst():
 if __name__ == '__main__':
   # prepare_pos_ft()
   # generate_script()
-  gen_script_rocks()
+  # gen_script_rocks()
   # retrieve_failed_jobs()
   # shuffle_neg()
-  # prepare_neg_ft()
+  prepare_neg_ft()
   # check_track_group_npzfile()
   # prepare_neg_ft_missing()
   # remove_neg_data_in_dev_for_consistency()
