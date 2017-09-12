@@ -355,12 +355,15 @@ class TrnReader(framework.model.data.Reader):
 
         self.video_names.append(name)
 
-    self.pos_files = []
-    for video_name in self.video_names:
-      for track_len in self.track_lens:
-        file = os.path.join(self.ft_track_group_dir, 
-          '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
-        self.pos_files.append(file)
+    # self.pos_files = []
+    # for video_name in self.video_names:
+    #   for track_len in self.track_lens:
+    #     file = os.path.join(self.ft_track_group_dir, 
+    #       '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
+    #     self.pos_files.append(file)
+    self.pos_files = [
+      os.path.join(self.ft_track_group_dir, '%d.forward.backward.square.pos.0.75.tfrecords'%track_len)
+    ]
     self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
     self.pos_cnt = self.positive_generator.num_record()
@@ -369,9 +372,9 @@ class TrnReader(framework.model.data.Reader):
     with open(neg_lst_file) as f:
       for line in f:
         line = line.strip()
-        begin = line.rfind('_')
-        end = line.find('.')
-        cam = line[begin+1:end]
+        data = line.split('.')
+        begin = data[0].rfind('_')
+        cam = data[begin+1:]
         if cam not in cam2neg_files:
           cam2neg_files[cam] = []
         cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
