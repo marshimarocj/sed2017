@@ -192,7 +192,7 @@ def shuffle_pos_tfrecords():
   random.shuffle(idxs)
   num_record = len(records)
   print num_record
-  with tf.python_io.TFRecordWriter(dst_file, options=options) as writer:
+  with tf.python_io.TFRecordWriter(out_file, options=options) as writer:
     meta = tf.train.Example(features=tf.train.Features(feature={
       'num_record': _int64_feature(num_record),
       }))
