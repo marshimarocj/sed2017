@@ -91,8 +91,8 @@ if __name__ == '__main__':
 
     trntst = model.netvlad_clean.TrnTst(model_cfg, path_cfg, _model)
 
-    # tst_reader = model.netvlad_clean.TstReader(
-    tst_reader = model.netvlad.TstReader(
+    tst_reader = model.netvlad_clean.TstReader(
+    # tst_reader = model.netvlad.TstReader(
       opts.tst_video_name, path_cfg.tst_ft_track_group_dir, path_cfg.label_dir,
       path_cfg.label2lid_file, model_cfg,
       track_lens=path_cfg.track_lens)
