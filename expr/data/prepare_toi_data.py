@@ -391,8 +391,8 @@ def generate_script():
 
 
 def gen_script_rocks():
-  # root_dir = '/home/jiac/data/sed2017' # rocks
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed2017' # rocks
+  # root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
