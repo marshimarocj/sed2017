@@ -168,7 +168,8 @@ def transform_by_grouping():
 
 
 def tst_load_tfrecords():
-  root_dir = '/data/extDisk3/jiac/sed' # danny
+  # root_dir = '/data/extDisk3/jiac/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus
   # file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071130_E2_CAM2.25.forward.backward.square.pos.0.75.tfrecords')
   file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val', 'LGW_20071130_E2_CAM2.25.forward.backward.square.neg.0.50.0.tfrecords')
 
