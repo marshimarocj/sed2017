@@ -394,12 +394,17 @@ class TrnReader(framework.model.data.Reader):
       num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
     num_cam = len(self.negative_cam_generators)
 
-    for pos_batch_data in self.positive_generator.next(batch_size):
+    neg_batch_size = batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch / num_cam
+    pos_iterator = self.positive_generator.iterator(batch_size)
+    neg_iterators = [
+      negative_cam_generator.iterator(neg_batch_size) \
+      for negative_cam_generator in self.negative_cam_generators
+    ]
+    for pos_batch_data in pos_iterator:
       batch_data = [] + pos_batch_data
       # print len(batch_data)
-      neg_batch_size = batch_size * self.cfg.proto_cfg.trn_neg2pos_in_batch / num_cam
-      for i in range(num_cam):
-        neg_batch_data = self.negative_cam_generators[i].next(neg_batch_size).next()
+      for neg_iterator in neg_iterators:
+        neg_batch_data = neg_iterator.next(neg_batch_size)
         batch_data.extend(neg_batch_data)
         # print len(neg_batch_data)
       # print len(batch_data), len(pos_batch_data), neg_batch_size
@@ -448,13 +453,15 @@ class ValReader(framework.model.data.Reader):
     negative_generator = InstanceGenerator(neg_files, self.capacity, False,
       num_ft=self.cfg.proto_cfg.num_ft, num_class=self.cfg.num_class)
 
-    for batch_data in positive_generator.next(batch_size):
+    pos_iterator = positive_generator.iterator(batch_size)
+    for batch_data in pos_iterator:
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
 
-    for batch_data in negative_generator.next(batch_size):
+    neg_iterator = negative_generator.iterator(batch_size)
+    for batch_data in neg_iterator:
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
@@ -494,13 +501,15 @@ class TstReader(framework.model.data.Reader):
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
   def yield_tst_batch(self, batch_size):
-    for batch_data in self.positive_generator.next(batch_size):
+    pos_iterator = self.positive_generator.next(batch_size)
+    for batch_data in pos_iterator:
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
 
-    for batch_data in self.negative_generator.next(batch_size):
+    neg_iterator = self.negative_generator.next(batch_size)
+    for batch_data in neg_iterator:
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])

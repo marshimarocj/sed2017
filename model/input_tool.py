@@ -50,7 +50,7 @@ class ShuffleBatchJoin(object):
       total += int(example.features.feature['num_record'].int64_list.value[0])
     return total
 
-  def next(self, batch_size):
+  def iterator(self, batch_size):
     assert batch_size <= self.capacity
 
     for file in self.files:
@@ -81,7 +81,7 @@ class ShuffleBatchJoin(object):
 # don't call by for loop
 # call next() instead
 class CircularShuffleBatchJoin(ShuffleBatchJoin):
-  def next(self, batch_size):
+  def iterator(self, batch_size):
     assert batch_size <= self.capacity
 
     while True:
