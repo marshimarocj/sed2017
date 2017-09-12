@@ -404,7 +404,7 @@ class TrnReader(framework.model.data.Reader):
       batch_data = [] + pos_batch_data
       # print len(batch_data)
       for neg_iterator in neg_iterators:
-        neg_batch_data = neg_iterator.next(neg_batch_size)
+        neg_batch_data = neg_iterator.next()
         batch_data.extend(neg_batch_data)
         # print len(neg_batch_data)
       # print len(batch_data), len(pos_batch_data), neg_batch_size
