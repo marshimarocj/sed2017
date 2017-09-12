@@ -297,7 +297,8 @@ def prepare_cfg():
 
 
 def prepare_focalloss_cfg():
-  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # danny
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
@@ -322,6 +323,7 @@ def prepare_focalloss_cfg():
   gamma = 0
   num_class = 5
 
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
   out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center, gamma))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
@@ -334,10 +336,11 @@ def prepare_focalloss_cfg():
   # proto_cfg['l2_norm_output'] = True
   # proto_cfg['dropin'] = True
   neg2pos = proto_cfg['trn_neg2pos_in_batch']
-  alphas = [neg2pos] + [1./(num_class-1) for _ in range(num_class-1)]
-  alphas = np.array(alphas)
-  alphas = 1./alphas
-  alphas = num_class / np.sum(alphas) * alphas
+  # alphas = [neg2pos] + [1./(num_class-1) for _ in range(num_class-1)]
+  # alphas = np.array(alphas)
+  # alphas = 1./alphas
+  # alphas = num_class / np.sum(alphas) * alphas
+  alphas = [1.]*5
   model_cfg = gen_focal_loss_model_cfg(proto_cfg, num_class, alphas.tolist())
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
@@ -800,7 +803,7 @@ if __name__ == "__main__":
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  # prepare_focalloss_cfg()
+  prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -811,4 +814,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()
