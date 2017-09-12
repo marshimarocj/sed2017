@@ -181,7 +181,7 @@ def shuffle_pos_tfrecords():
       line = line.strip()
       name, _ = os.path.splitext(line)
       ft_file = os.path.join(ft_dir,'%s.25.forward.backward.square.pos.0.75.tfrecords'%name)
-      record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+      record_iterator = tf.python_io.tf_record_iterator(path=ft_file, options=options)
       record_iterator.next() # skip meta data
       for string_record in record_iterator:
         records.append(string_record)
