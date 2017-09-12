@@ -222,8 +222,8 @@ def prepare_lst_files():
 def prepare_cfg():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
-  root_dir = '/home/jiac/data/sed' # danny
-  # root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     # os.path.join(root_dir, 'meta', 'debug.lst'),
@@ -255,7 +255,7 @@ def prepare_cfg():
   #   '_'.join([str(d) for d in track_lens])))
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d.npz'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
