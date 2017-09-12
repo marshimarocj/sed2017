@@ -1,4 +1,5 @@
 import os
+import random
 
 import numpy as np
 import tensorflow as tf
@@ -167,6 +168,39 @@ def transform_by_grouping():
         writer.write(example.SerializeToString())
 
 
+def shuffle_pos_tfrecords():
+  root_dir = '/data1/jiac/sed' # uranus
+  trn_lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  out_file = os.path.join(ft_dir, 'pos.25.0.75.tfrecords')
+
+  options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
+  records = []
+  with open(trn_lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      ft_file = os.path.join(ft_dir,'%s.25.forward.backward.square.pos.0.75.tfrecords'%name)
+      record_iterator = tf.python_io.tf_record_iterator(path=file, options=options)
+      record_iterator.next() # skip meta data
+      for string_record in record_iterator:
+        records.append(string_record)
+
+  idxs = range(len(records))
+  random.shuffle(idxs)
+  num_record = len(records)
+  print num_record
+  with tf.python_io.TFRecordWriter(dst_file, options=options) as writer:
+    meta = tf.train.Example(features=tf.train.Features(feature={
+      'num_record': _int64_feature(num_record),
+      }))
+    writer.write(meta.SerializeToString())
+
+    for idx in idxs:
+      record = records[idx]
+      writer.write(record)
+
+
 def tst_load_tfrecords():
   # root_dir = '/data/extDisk3/jiac/sed' # danny
   root_dir = '/data1/jiac/sed' # uranus
@@ -204,4 +238,5 @@ def tst_load_tfrecords():
 
 if __name__ == '__main__':
   # transform_by_grouping()
-  tst_load_tfrecords()
+  # tst_load_tfrecords()
+  shuffle_pos_tfrecords()
