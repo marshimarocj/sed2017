@@ -362,7 +362,8 @@ class TrnReader(framework.model.data.Reader):
     #       '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
     #     self.pos_files.append(file)
     self.pos_files = [
-      os.path.join(self.ft_track_group_dir, '%d.forward.backward.square.pos.0.75.tfrecords'%track_len)
+      os.path.join(self.ft_track_group_dir, '%d.forward.backward.square.pos.0.75.tfrecords'%track_len) \
+      for track_len in self.track_lens
     ]
     self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
