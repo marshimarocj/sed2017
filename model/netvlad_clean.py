@@ -51,6 +51,7 @@ class ModelFocalLossCfg(ModelCfg):
     self.alphas = np.array(self.alphas)
     self.alphas = 1./self.alphas # inverse proportional
     self.alphas = self.num_class / np.sum(self.alphas) * self.alphas
+    print self.alphas
 
 
 class NetVladEncoder(framework.model.proto.ModelProto):
