@@ -271,11 +271,12 @@ def prepare_cfg():
   proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   # proto_cfg['dropin'] = True
-  model_cfg = gen_model_cfg(proto_cfg)
-  # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
+  # model_cfg = gen_model_cfg(proto_cfg)
+  model_cfg = gen_focal_loss_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
   model_cfg['gamma'] = gamma
+  model_cfg['learning_rate'] = 1e-3
   # model_cfg['dropout'] = True
   model_cfg['num_epoch'] = 20
   model_cfg_file = '%s.model.json'%out_prefix
