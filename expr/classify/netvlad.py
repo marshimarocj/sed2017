@@ -40,7 +40,7 @@ def select_best_epoch_from_dir(log_dir):
   min_loss = 1e10
   best_epoch = -1
   for name in names:
-    if 'val_metrics' not in name:
+    if 'val_metrics' in name:
       file = os.path.join(log_dir, name)
       with open(file) as f:
         data = json.load(f)
