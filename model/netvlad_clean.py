@@ -241,7 +241,8 @@ class NetVladFocalLossModel(NetVladModel):
       with tf.variable_scope(self.name_scope):
         log_p = tf.nn.log_softmax(self.logit_op)
         p = tf.nn.softmax(self.logit_op)
-        loss_op = - tf.to_float(self._labels) * tf.pow(1-p, self._config.gamma) * log_p # (None, num_class)
+        focus = tf.pow(tf.clip_by_value(1-p, 1e-10, 1.), self._config.gamma)
+        loss_op = - tf.to_float(self._labels) * focus * log_p # (None, num_class)
         alphas = tf.constant(self._config.alphas, dtype=tf.float32)
         loss_op *= tf.expand_dims(alphas, 0)
         loss_op = tf.reduce_sum(loss_op, axis=1)
