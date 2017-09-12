@@ -375,7 +375,7 @@ class TrnReader(framework.model.data.Reader):
         line = line.strip()
         data = line.split('.')
         begin = data[0].rfind('_')
-        cam = data[begin+1:]
+        cam = data[0][begin+1:]
         if cam not in cam2neg_files:
           cam2neg_files[cam] = []
         cam2neg_files[cam].append(os.path.join(self.ft_track_group_dir, line))
