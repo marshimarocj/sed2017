@@ -18,7 +18,6 @@ def build_parser():
   parser.add_argument('path_cfg_file')
   parser.add_argument('--is_train', dest='is_train', type=int, default=True)
   parser.add_argument('--memory_fraction', dest='memory_fraction', type=float, default=1.0)
-  parser.add_argument('--is_wb', dest='is_wb', type=int, default=True)
   parser.add_argument('--is_focal_loss', dest='is_focal_loss', type=int, default=False)
   parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=True)
   parser.add_argument('--tst_video_name', dest='tst_video_name')
@@ -40,13 +39,26 @@ def load_and_fill_model_cfg(path_cfg, model_cfg_file):
   return model_cfg
 
 
+def load_and_fill_focalloss_model_cfg(path_cfg, model_cfg_file):
+  model_cfg = model.netvlad_clean.ModelFocalLossCfg()
+  model_cfg.load(model_cfg_file)
+  data = np.load(path_cfg.init_weight_file)
+  model_cfg.proto_cfg.centers = data['centers']
+
+  return model_cfg
+
+
 if __name__ == '__main__':
   parser = build_parser()
   opts = parser.parse_args()
 
   path_cfg = gen_dir_struct_info(opts.path_cfg_file)
-  model_cfg = load_and_fill_model_cfg(path_cfg, opts.model_cfg_file)
-  _model = model.netvlad_clean.NetVladModel(model_cfg)
+  if opts.is_focal_loss:
+    model_cfg = load_and_fill_focalloss_model_cfg(path_cfg, opts.model_cfg_file)
+    _model = model.netvlad_clean.NetVladFocalLossModel(model_cfg)
+  else:
+    model_cfg = load_and_fill_model_cfg(path_cfg, opts.model_cfg_file)
+    _model = model.netvlad_clean.NetVladModel(model_cfg)
 
   if opts.is_train:
     with open(os.path.join(path_cfg.log_dir, 'cfg.pkl'), 'w') as fout:
