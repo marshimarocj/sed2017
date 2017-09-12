@@ -345,7 +345,7 @@ class TrnReader(framework.model.data.Reader):
     self.cfg = model_cfg
     self.track_lens = track_lens
 
-    self.capacity = 1000
+    self.capacity = 5000
 
     self.video_names = []
     with open(video_lst_file) as f:
