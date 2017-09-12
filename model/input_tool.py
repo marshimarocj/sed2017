@@ -22,10 +22,10 @@ class RandomShuffleQueue(object):
 
   def dequeue(self):
     r = random.randint(0, len(self.q)-1)
-    tmp = self.q[0]
-    self.q[0] = self.q[r]
-    self.q[r] = tmp
-    return self.q.popleft()
+    tmp = self.q[r]
+    self.q[r] = self.q[0]
+    self.q.popleft()
+    return tmp
 
 
 class ShuffleBatchJoin(object):
