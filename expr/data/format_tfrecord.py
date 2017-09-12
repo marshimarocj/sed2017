@@ -180,6 +180,8 @@ def shuffle_pos_tfrecords():
     for line in f:
       line = line.strip()
       name, _ = os.path.splitext(line)
+      if 'CAM4' in name:
+        continue
       ft_file = os.path.join(ft_dir,'%s.25.forward.backward.square.pos.0.75.tfrecords'%name)
       record_iterator = tf.python_io.tf_record_iterator(path=ft_file, options=options)
       record_iterator.next() # skip meta data
