@@ -35,6 +35,21 @@ def select_best_epoch(file):
   return best_epoch
 
 
+def select_best_epoch_from_dir(log_dir):
+  names = os.listdir(log_dir)
+  min_loss = 1e10
+  best_epoch = -1
+  for name in names:
+    if 'val_metrics' not in name:
+      file = os.path.join(log_dir, name)
+      with open(file) as f:
+        data = json.load(f)
+        if data['loss'] < min_loss:
+          best_epoch = data['epoch']
+
+  return best_epoch
+
+
 def gen_proto_cfg(num_ft, dim_ft, num_center):
   return {
     'dim_ft': dim_ft,
@@ -609,7 +624,8 @@ def prepare_tst_files():
 
 def gen_tst_script():
   # root_dir = '/home/jiac/data/sed' # xiaojun
-  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  root_dir = '/home/jiac/data/sed' # danny
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
@@ -618,16 +634,18 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm.0.25.16'
   # expr_name = 'netvlad.l2norm_input.0.25.16'
   # expr_name = 'netvlad.0.25_50'
-  expr_name = 'netvlad.l2norm_input.dropout.0.25.16'
+  # expr_name = 'netvlad.l2norm_input.dropout.0.25.16'
+  expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
   out_file = '../../driver/tst.sh'
 
-  # gpu = 1
+  gpu = 0
 
   val_file = os.path.join(expr_dir, 'log', 'val_metrics.pkl')
-  best_epoch = select_best_epoch(val_file)
+  # best_epoch = select_best_epoch(val_file)
+  best_epoch = select_best_epoch_from_dir(os.path.join(expr_dir, 'log'))
   # best_epoch = 9
 
   names = []
@@ -639,10 +657,11 @@ def gen_tst_script():
         names.append(name)
 
   with open(out_file, 'w') as fout:
-    # fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
+    fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
     for name in names:
       cmd = [
-        'python', 'netvlad.py', 
+        # 'python', 'netvlad.py', 
+        'python', 'netvlad_clean.py', 
         model_cfg_file, path_cfg_file, 
         '--is_train', '0',
         '--best_epoch' , str(best_epoch),
@@ -703,7 +722,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -713,5 +732,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
+  gen_tst_script()
   # eval()

@@ -385,13 +385,14 @@ def generate_script():
       for j in range(i, min(i+gap, num)):
         name = names[j]
         cmd = [
-          'python', 'prepare_toi_data.py', name
+          'python', 'prepare_toi_data.py', name, 
         ]
         fout.write(' '.join(cmd) + '\n')
 
 
 def gen_script_rocks():
-  root_dir = '/home/jiac/data/sed2017' # rocks
+  # root_dir = '/home/jiac/data/sed2017' # rocks
+  root_dir = '/home/jiac/data/sed' # xiaojun
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
@@ -399,28 +400,28 @@ def gen_script_rocks():
 
   out_file = 'prepare_toi_data.sh'
   with open(out_file, 'w') as fout:
-  #   with open(lst_files[0]) as f:
-  #     for line in f:
-  #       line = line.strip()
-  #       name, _ = os.path.splitext(line)
-  #       if 'CAM4' in name:
-  #         continue
-  #       cmd = [
-  #         'python', 'prepare_toi_data.py', name, '0'
-  #       ]
-  #       fout.write(' '.join(cmd) + '\n')
     with open(lst_files[0]) as f:
       for line in f:
         line = line.strip()
         name, _ = os.path.splitext(line)
         if 'CAM4' in name:
           continue
-        # for s in range(1):
-        for s in range(1, 10):
-          cmd = [
-            'python', 'prepare_toi_data.py', name, str(s)
-          ]
-          fout.write(' '.join(cmd) + '\n')
+        cmd = [
+          'python', 'prepare_toi_data.py', name, '0'
+        ]
+        fout.write(' '.join(cmd) + '\n')
+    # with open(lst_files[0]) as f:
+    #   for line in f:
+    #     line = line.strip()
+    #     name, _ = os.path.splitext(line)
+    #     if 'CAM4' in name:
+    #       continue
+    #     # for s in range(1):
+    #     for s in range(1, 10):
+    #       cmd = [
+    #         'python', 'prepare_toi_data.py', name, str(s)
+    #       ]
+    #       fout.write(' '.join(cmd) + '\n')
 
 
 def retrieve_failed_jobs():
@@ -504,9 +505,9 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  prepare_pos_ft()
+  # prepare_pos_ft()
   # generate_script()
-  # gen_script_rocks()
+  gen_script_rocks()
   # retrieve_failed_jobs()
   # shuffle_neg()
   # prepare_neg_ft()
