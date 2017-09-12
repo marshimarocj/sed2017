@@ -318,7 +318,8 @@ def prepare_focalloss_cfg():
   dim_ft = 1024
   tst_neg_lst = [0]
   track_lens = [25]
-  gamma = 2
+  # gamma = 2
+  gamma = 0
   num_class = 5
 
   out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
