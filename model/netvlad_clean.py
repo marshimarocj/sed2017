@@ -239,17 +239,23 @@ class NetVladFocalLossModel(NetVladModel):
   def add_loss(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
+        # log_p = tf.nn.log_softmax(self.logit_op)
+        # self.append_op2monitor('log_p_min', tf.reduce_min(log_p))
+        # self.append_op2monitor('log_p_max', tf.reduce_max(log_p))
+        # p = tf.nn.softmax(self.logit_op)
+        # self.append_op2monitor('p_min', tf.reduce_min(p))
+        # self.append_op2monitor('p_max', tf.reduce_max(p))
+        # focus = tf.pow(tf.clip_by_value(1-p, 1e-7, 1.), self._config.gamma)
+        # # self.append_op2monitor('focus', focus)
+        # loss_op = - tf.to_float(self._labels) * focus * log_p # (None, num_class)
+        # alphas = tf.constant(self._config.alphas, dtype=tf.float32)
+        # loss_op *= tf.expand_dims(alphas, 0)
+        # loss_op = tf.reduce_sum(loss_op, axis=1)
+        # loss_op = tf.reduce_mean(loss_op)
+        # self.append_op2monitor('loss', loss_op)
+
         log_p = tf.nn.log_softmax(self.logit_op)
-        self.append_op2monitor('log_p_min', tf.reduce_min(log_p))
-        self.append_op2monitor('log_p_max', tf.reduce_max(log_p))
-        p = tf.nn.softmax(self.logit_op)
-        self.append_op2monitor('p_min', tf.reduce_min(p))
-        self.append_op2monitor('p_max', tf.reduce_max(p))
-        focus = tf.pow(tf.clip_by_value(1-p, 1e-7, 1.), self._config.gamma)
-        # self.append_op2monitor('focus', focus)
-        loss_op = - tf.to_float(self._labels) * focus * log_p # (None, num_class)
-        alphas = tf.constant(self._config.alphas, dtype=tf.float32)
-        loss_op *= tf.expand_dims(alphas, 0)
+        loss_op = -tf.to_float(self._labels) * log_p
         loss_op = tf.reduce_sum(loss_op, axis=1)
         loss_op = tf.reduce_mean(loss_op)
         self.append_op2monitor('loss', loss_op)
