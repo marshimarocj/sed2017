@@ -53,7 +53,7 @@ if __name__ == '__main__':
   opts = parser.parse_args()
 
   path_cfg = gen_dir_struct_info(opts.path_cfg_file)
-  if opts.is_focal_loss:
+  if bool(opts.is_focal_loss):
     model_cfg = load_and_fill_focalloss_model_cfg(path_cfg, opts.model_cfg_file)
     _model = model.netvlad_clean.NetVladFocalLossModel(model_cfg)
   else:
