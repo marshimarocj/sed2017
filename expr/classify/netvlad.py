@@ -221,7 +221,8 @@ def prepare_lst_files():
 def prepare_cfg():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
-  root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     # os.path.join(root_dir, 'meta', 'debug.lst'),
@@ -248,7 +249,7 @@ def prepare_cfg():
   # track_lens = [25, 50]
   # track_lens = [50]
   track_lens = [25]
-  # gamma = 2
+  gamma = 2
 
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
   #   '_'.join([str(d) for d in track_lens])))
@@ -257,8 +258,10 @@ def prepare_cfg():
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
-    '_'.join([str(d) for d in track_lens]), num_center))
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
+    # '_'.join([str(d) for d in track_lens]), num_center))
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center, gamma))
   # out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
     # '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
@@ -267,12 +270,12 @@ def prepare_cfg():
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
   proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
-  proto_cfg['dropin'] = True
+  # proto_cfg['dropin'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   # model_cfg = gen_focal_loss_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
-  # model_cfg['gamma'] = gamma
+  model_cfg['gamma'] = gamma
   # model_cfg['dropout'] = True
   model_cfg['num_epoch'] = 20
   model_cfg_file = '%s.model.json'%out_prefix

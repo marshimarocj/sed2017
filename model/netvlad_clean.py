@@ -41,6 +41,16 @@ class ModelCfg(framework.model.proto.FullModelConfig):
     self.proto_cfg.load(data['proto'])
 
 
+class ModelFocalLossCfg(ModelCfg):
+  def __init__(self):
+    ModelCfg.__init__(self)
+    self.gamma = 2
+    neg2pos = self.trn_neg2pos_in_batch
+    self.alphas = [1./(neg2pos+1)] + \
+      [(self.num_class-1) * neg2pos / float(neg2pos+1)for _ in range(self.num_class-1)]
+    self.alphas = np.array(self.alphas)
+
+
 class NetVladEncoder(framework.model.proto.ModelProto):
   namespace = 'netvlad.NetVladEncoder'
 
@@ -218,6 +228,24 @@ class NetVladModel(framework.model.proto.FullModel):
       'logit_op': self.logit_op,
       'predict_op': self.predict_op,
     }
+
+
+class NetVladFocalLossModel(NetVladModel):
+  name_scope = 'netvlad.NetVladFocalLossModel'
+
+  def add_loss(self, basegraph):
+    with basegraph.as_default():
+      with tf.variable_scope(self.name_scope):
+        log_p = tf.nn.log_softmax(self.logit_op)
+        p = tf.nn.softmax(self.logit_op)
+        loss_op = - tf.pow(1-p, self._config.gamma) * log_p # (None, num_class)
+        alphas = tf.constant(self._config.alphas, dtype=tf.float32)
+        loss_op *= tf.expand_dims(alphas, 0)
+        loss_op = tf.reduce_sum(loss_op, axis=1)
+        loss_op = tf.reduce_mean(loss_op)
+        self.append_op2monitor('loss', loss_op)
+
+    return loss_op
 
 
 class TrnTst(framework.model.trntst.TrnTst):
