@@ -707,7 +707,8 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm_input.0.25.16'
   # expr_name = 'netvlad.0.25_50'
   # expr_name = 'netvlad.l2norm_input.dropout.0.25.16'
-  expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
+  # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
+  expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
@@ -798,7 +799,7 @@ if __name__ == "__main__":
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  prepare_focalloss_cfg()
+  # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -808,5 +809,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
+  gen_tst_script()
   # eval()
