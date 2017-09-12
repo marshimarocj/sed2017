@@ -45,7 +45,7 @@ class ModelFocalLossCfg(ModelCfg):
   def __init__(self):
     ModelCfg.__init__(self)
     self.gamma = 2
-    neg2pos = self.trn_neg2pos_in_batch
+    neg2pos = self.proto_cfg.trn_neg2pos_in_batch
     self.alphas = [1./(neg2pos+1)] + \
       [(self.num_class-1) * neg2pos / float(neg2pos+1)for _ in range(self.num_class-1)]
     self.alphas = np.array(self.alphas)
