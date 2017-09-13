@@ -83,7 +83,7 @@ def prepare_cfg():
   track_lens = [25]
 
   out_prefix = os.path.join(out_dir, 'attention.l2norm_input.0.%s.%d'%(
-    '_'.join([str(d) for d in track_lens])), num_hidden)
+    '_'.join([str(d) for d in track_lens]), num_hidden))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
