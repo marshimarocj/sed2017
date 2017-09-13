@@ -497,14 +497,14 @@ class TstReader(framework.model.data.Reader):
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
 
   def yield_tst_batch(self, batch_size):
-    pos_iterator = self.positive_generator.next()
+    pos_iterator = self.positive_generator
     for batch_data in pos_iterator:
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
       labels = np.array([d[2] for d in batch_data])
       yield fts, masks, labels
 
-    neg_iterator = self.negative_generator.next()
+    neg_iterator = self.negative_generator
     for batch_data in neg_iterator:
       fts = np.array([d[0] for d in batch_data])
       masks = np.array([d[1] for d in batch_data])
