@@ -233,26 +233,26 @@ class NetVladFocalLossModel(NetVladModel):
   def add_loss(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        # log_p = tf.nn.log_softmax(self.logit_op)
+        log_p = tf.nn.log_softmax(self.logit_op)
         # self.append_op2monitor('log_p_min', tf.reduce_min(log_p))
         # self.append_op2monitor('log_p_max', tf.reduce_max(log_p))
-        # p = tf.nn.softmax(self.logit_op)
+        p = tf.nn.softmax(self.logit_op)
         # self.append_op2monitor('p_min', tf.reduce_min(p))
         # self.append_op2monitor('p_max', tf.reduce_max(p))
-        # focus = tf.pow(tf.clip_by_value(1-p, 1e-7, 1.), self._config.gamma)
-        # # self.append_op2monitor('focus', focus)
-        # loss_op = - tf.to_float(self._labels) * focus * log_p # (None, num_class)
-        # alphas = tf.constant(self._config.alphas, dtype=tf.float32)
-        # loss_op *= tf.expand_dims(alphas, 0)
-        # loss_op = tf.reduce_sum(loss_op, axis=1)
-        # loss_op = tf.reduce_mean(loss_op)
-        # self.append_op2monitor('loss', loss_op)
-
-        log_p = tf.nn.log_softmax(self.logit_op)
-        loss_op = -tf.to_float(self._labels) * log_p
+        focus = tf.pow(tf.clip_by_value(1-p, 1e-7, 1.), self._config.gamma)
+        # self.append_op2monitor('focus', focus)
+        loss_op = - tf.to_float(self._labels) * focus * log_p # (None, num_class)
+        alphas = tf.constant(self._config.alphas, dtype=tf.float32)
+        loss_op *= tf.expand_dims(alphas, 0)
         loss_op = tf.reduce_sum(loss_op, axis=1)
         loss_op = tf.reduce_mean(loss_op)
         self.append_op2monitor('loss', loss_op)
+
+        # log_p = tf.nn.log_softmax(self.logit_op)
+        # loss_op = -tf.to_float(self._labels) * log_p
+        # loss_op = tf.reduce_sum(loss_op, axis=1)
+        # loss_op = tf.reduce_mean(loss_op)
+        # self.append_op2monitor('loss', loss_op)
 
     return loss_op
 
@@ -361,10 +361,6 @@ class TrnReader(framework.model.data.Reader):
         file = os.path.join(self.ft_track_group_dir, 
           '%s.%d.forward.backward.square.pos.0.75.tfrecords'%(video_name, track_len))
         self.pos_files.append(file)
-    # self.pos_files = [
-    #   os.path.join(self.ft_track_group_dir, '%d.forward.backward.square.pos.0.75.tfrecords'%track_len) \
-    #   for track_len in self.track_lens
-    # ]
     self.positive_generator = InstanceGenerator(self.pos_files, self.capacity, True,
       num_ft=model_cfg.proto_cfg.num_ft, num_class=model_cfg.num_class)
     self.pos_cnt = self.positive_generator.num_record()
