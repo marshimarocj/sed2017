@@ -727,28 +727,29 @@ def gen_tst_script():
   # best_epoch = select_best_epoch(val_file)
   best_epoch = select_best_epoch_from_dir(os.path.join(expr_dir, 'log'))
   # best_epoch = 9
+  print best_epoch
 
-  names = []
-  with open(lst_file) as f:
-    for line in f:
-      line = line.strip()
-      name, _ = os.path.splitext(line)
-      if 'CAM4' not in name:
-        names.append(name)
+  # names = []
+  # with open(lst_file) as f:
+  #   for line in f:
+  #     line = line.strip()
+  #     name, _ = os.path.splitext(line)
+  #     if 'CAM4' not in name:
+  #       names.append(name)
 
-  with open(out_file, 'w') as fout:
-    fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
-    for name in names:
-      cmd = [
-        # 'python', 'netvlad.py', 
-        'python', 'netvlad_clean.py', 
-        model_cfg_file, path_cfg_file, 
-        '--is_train', '0',
-        '--best_epoch' , str(best_epoch),
-        '--tst_video_name', name,
-        # '--is_focal_loss', '1',
-      ]
-      fout.write(' '.join(cmd) + '\n')
+  # with open(out_file, 'w') as fout:
+  #   fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
+  #   for name in names:
+  #     cmd = [
+  #       # 'python', 'netvlad.py', 
+  #       'python', 'netvlad_clean.py', 
+  #       model_cfg_file, path_cfg_file, 
+  #       '--is_train', '0',
+  #       '--best_epoch' , str(best_epoch),
+  #       '--tst_video_name', name,
+  #       # '--is_focal_loss', '1',
+  #     ]
+  #     fout.write(' '.join(cmd) + '\n')
 
 
 def eval():
@@ -823,5 +824,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
-  eval()
+  gen_tst_script()
+  # eval()
