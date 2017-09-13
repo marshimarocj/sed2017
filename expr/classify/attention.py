@@ -36,7 +36,7 @@ def select_best_epoch_from_dir(log_dir):
   return best_epoch
 
 
-def gen_proto_cfg(num_ft, dim_ft, num_center):
+def gen_proto_cfg(num_ft, dim_ft):
   return {
     'dim_ft': dim_ft,
     'num_ft': num_ft,
