@@ -81,6 +81,8 @@ class AttentionEncoder(framework.model.proto.ModelProto):
   def build_inference_graph_in_tst(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
+        print self._fts.get_shape()
+        print self._config.dim_ft, self._config.num_ft
         fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
         fts = tf.nn.l2_normalize(fts, dim=1)
         e = tf.matmul(fts, self.A) # (None*num_ft, num_attention)
