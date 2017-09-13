@@ -45,6 +45,7 @@ def select_best_epoch_from_dir(log_dir):
       with open(file) as f:
         data = json.load(f)
         if data['loss'] < min_loss:
+          min_loss = data['loss']
           best_epoch = data['epoch']
 
   return best_epoch
