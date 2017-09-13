@@ -89,7 +89,7 @@ def prepare_cfg():
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft)
   proto_cfg['l2_norm_input'] = True
-  model_cfg = gen_model_cfg(proto_cfg)
+  model_cfg = gen_model_cfg(proto_cfg, num_hidden)
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
   model_cfg['num_epoch'] = 20
