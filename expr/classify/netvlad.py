@@ -324,9 +324,7 @@ def prepare_focalloss_cfg():
   gamma = 0
   num_class = 5
 
-  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
-    # '_'.join([str(d) for d in track_lens]), num_center, gamma))
-  out_prefix = os.path.join(out_dir, 'netvlad.focalloss.0.%s.%d.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
