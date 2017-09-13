@@ -324,7 +324,9 @@ def prepare_focalloss_cfg():
   gamma = 0
   num_class = 5
 
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
+  #   '_'.join([str(d) for d in track_lens]), num_center, gamma))
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d.nobalance'%(
     '_'.join([str(d) for d in track_lens]), num_center, gamma))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
@@ -333,12 +335,12 @@ def prepare_focalloss_cfg():
   proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   # proto_cfg['dropin'] = True
-  neg2pos = proto_cfg['trn_neg2pos_in_batch']
-  alphas = [neg2pos] + [1./(num_class-1) for _ in range(num_class-1)]
-  alphas = np.array(alphas)
-  alphas = 1./alphas
-  alphas = num_class / np.sum(alphas) * alphas
-  # alphas = np.ones((5,)) 
+  # neg2pos = proto_cfg['trn_neg2pos_in_batch']
+  # alphas = [neg2pos] + [1./(num_class-1) for _ in range(num_class-1)]
+  # alphas = np.array(alphas)
+  # alphas = 1./alphas
+  # alphas = num_class / np.sum(alphas) * alphas
+  alphas = np.ones((5,)) 
   model_cfg = gen_focal_loss_model_cfg(proto_cfg, num_class, alphas.tolist())
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
