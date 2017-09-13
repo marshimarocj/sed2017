@@ -89,7 +89,7 @@ class AttentionEncoder(framework.model.proto.ModelProto):
         ft_masks = tf.reshape(self._ft_masks, (-1, self._config.num_ft, 1, 1)) 
         alpha *= ft_masks
         alpha /= tf.reduce_sum(alpha, axis=1, keep_dims=True)
-        fts = tf.reshape(fts, (-1, self._config.num_ft, self._config.dim_ft, 1))
+        fts = tf.expand_dims(self._fts, 3) # (None, num_ft, dim_ft, 1)
         self._feature_op = tf.reduce_sum(fts * alpha, axis=1) # (None, dim_ft, num_attention)
 
   def build_inference_graph_in_trn_tst(self, basegraph):
