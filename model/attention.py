@@ -172,8 +172,7 @@ class AttentionModel(framework.model.proto.FullModel):
         hidden = tf.nn.dropout(hidden, 0.5)
       logit = tf.nn.xw_plus_b(hidden, self.fc_Ws[i], self.fc_Bs[i]) # (None, 1)
       logits.append(logit)
-    logits = tf.stack(logits, axis=1) # (None, num_class)
-    print logits.get_shape()
+    logits = tf.concat(logits, 1) # (None, num_class)
     return logits
 
   def _build_inference_graph_in_tst(self, basegraph):
