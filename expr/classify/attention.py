@@ -46,11 +46,11 @@ def gen_proto_cfg(num_ft, dim_ft, num_center):
   }
 
 
-def gen_model_cfg(proto_cfg):
+def gen_model_cfg(proto_cfg, num_hidden):
   return {
     'proto': proto_cfg,
     'num_class': 5,
-    'num_hidden': 512,
+    'num_hidden': num_hidden,
 
     'learning_rate': 1e-4,
     'monitor_iter': 50,
@@ -87,7 +87,7 @@ def prepare_cfg():
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
-  proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
+  proto_cfg = gen_proto_cfg(num_ft, dim_ft)
   proto_cfg['l2_norm_input'] = True
   model_cfg = gen_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
