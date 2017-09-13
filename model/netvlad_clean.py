@@ -177,7 +177,7 @@ class NetVladModel(framework.model.proto.FullModel):
         self.fc_class_W = tf.get_variable('fc_class_W',
           shape=(self._config.proto_cfg.dim_output, self._config.num_class),
           dtype=tf.float32,
-          initializer=tf.random_uniform_initializer(scale, scale))
+          initializer=tf.random_uniform_initializer(-scale, scale))
         self.fc_class_B = tf.get_variable('fc_class_B',
           shape=(self._config.num_class), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
