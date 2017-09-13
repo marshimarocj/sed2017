@@ -756,8 +756,8 @@ def gen_tst_script():
 def eval():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  root_dir = '/home/jiac/data/sed' # danny
-  # root_dir = '/data1/jiac/sed' # uranus 
+  # root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus 
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
