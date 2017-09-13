@@ -714,7 +714,8 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0.nobalance'
-  expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
+  # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
+  expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
@@ -745,7 +746,7 @@ def gen_tst_script():
         '--is_train', '0',
         '--best_epoch' , str(best_epoch),
         '--tst_video_name', name,
-        '--is_focal_loss', '1',
+        # '--is_focal_loss', '1',
       ]
       fout.write(' '.join(cmd) + '\n')
 
@@ -766,7 +767,8 @@ def eval():
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0.nobalance'
-  expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
+  # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
+  expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
   # best_epoch = 0
