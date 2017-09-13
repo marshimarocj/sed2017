@@ -230,9 +230,9 @@ def prepare_cfg():
     os.path.join(root_dir, 'meta', 'val.lst'),
   ]
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
+  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
-  # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.tfrecords.lst')
+  trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.tfrecords.lst')
   trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
   val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
   tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
@@ -255,7 +255,8 @@ def prepare_cfg():
   #   '_'.join([str(d) for d in track_lens])))
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d.npz'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d.npz'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
