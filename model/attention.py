@@ -9,6 +9,7 @@ import framework.model.proto
 import framework.model.trntst
 import framework.model.data
 import input_tool
+import netvlad_clean
 
 
 class Config(framework.model.proto.ProtoConfig):
@@ -211,3 +212,23 @@ class AttentionModel(framework.model.proto.FullModel):
       'logit_op': self.logit_op,
       'predict_op': self.predict_op,
     }
+
+
+class TrnTst(netvlad_clean.TrnTst):
+  pass
+
+
+class PathCfg(netvlad_clean.PathCfg):
+  pass
+
+
+class TrnReader(netvlad_clean.TrnReader):
+  pass
+
+
+class ValReader(netvlad_clean.ValReader):
+  pass
+
+
+class TstReader(netvlad_clean.TstReader):
+  pass
