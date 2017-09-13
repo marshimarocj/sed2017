@@ -298,8 +298,8 @@ def prepare_cfg():
 
 
 def prepare_focalloss_cfg():
-  # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/home/jiac/data/sed' # danny
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     os.path.join(root_dir, 'meta', 'val.lst'),
