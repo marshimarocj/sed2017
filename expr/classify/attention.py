@@ -75,7 +75,6 @@ def prepare_cfg():
   tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
-  init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'attention')
   num_ft = 100
   dim_ft = 1024
@@ -109,7 +108,6 @@ def prepare_cfg():
     'output_dir': out_prefix,
     'tst_neg_lst': tst_neg_lst,
     'track_lens': track_lens,
-    'init_weight_file': init_weight_file,
   }
   path_cfg_file = '%s.path.json'%out_prefix
   with open(path_cfg_file, 'w') as fout:
