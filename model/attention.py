@@ -16,7 +16,6 @@ class Config(framework.model.proto.ProtoConfig):
   def __init__(self):
     self.dim_ft = 0
     self.num_ft = 0
-    self.num_center = 0
     self.num_attention = 0
     self.trn_neg2pos_in_batch = 10
     self.val_neg2pos_in_batch = 1
