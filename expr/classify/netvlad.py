@@ -222,8 +222,8 @@ def prepare_lst_files():
 def prepare_cfg():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
-  # root_dir = '/home/jiac/data/sed' # danny
-  root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/data1/jiac/sed' # uranus
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     # os.path.join(root_dir, 'meta', 'debug.lst'),
@@ -320,8 +320,8 @@ def prepare_focalloss_cfg():
   dim_ft = 1024
   tst_neg_lst = [0]
   track_lens = [25]
-  # gamma = 2
-  gamma = 0
+  gamma = 2
+  # gamma = 0
   num_class = 5
 
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.focalloss.0.%s.%d.%d'%(
@@ -813,7 +813,7 @@ if __name__ == "__main__":
   # num_descriptor_toi_stat()
   # prepare_lst_files()
   # prepare_cfg()
-  # prepare_focalloss_cfg()
+  prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
   # prepare_init_center_file()
@@ -824,4 +824,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()
