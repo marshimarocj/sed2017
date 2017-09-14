@@ -119,7 +119,7 @@ def gen_tst_script():
   root_dir = '/home/jiac/data/sed' # danny
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   expr_name = 'attention.l2norm_input.0.25.512'
-  expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
+  expr_dir = os.path.join(root_dir, 'expr', 'attention', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
   out_file = '../../driver/tst.sh'
