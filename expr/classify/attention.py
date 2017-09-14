@@ -115,5 +115,41 @@ def prepare_cfg():
     json.dump(path_cfg, fout, indent=2)
 
 
+def gen_tst_script():
+  root_dir = '/home/jiac/data/sed' # danny
+  lst_file = os.path.join(root_dir, 'meta', 'val.lst')
+  expr_name = 'attention.l2norm_input.0.25.512'
+  expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
+  model_cfg_file = '%s.model.json'%expr_dir
+  path_cfg_file = '%s.path.json'%expr_dir
+  out_file = '../../driver/tst.sh'
+
+  gpu = 0
+
+  best_epoch = select_best_epoch_from_dir(os.path.join(expr_dir, 'log'))
+  print best_epoch
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      name, _ = os.path.splitext(line)
+      if 'CAM4' not in name:
+        names.append(name)
+
+  with open(out_file, 'w') as fout:
+    fout.write('export CUDA_VISIBLE_DEVICES=%d\n'%gpu)
+    for name in names:
+      cmd = [
+        'python', 'attention.py', 
+        model_cfg_file, path_cfg_file, 
+        '--is_train', '0',
+        '--best_epoch' , str(best_epoch),
+        '--tst_video_name', name,
+      ]
+      fout.write(' '.join(cmd) + '\n')
+
+
 if __name__ == '__main__':
-  prepare_cfg()
+  # prepare_cfg()
+  gen_tst_script()
