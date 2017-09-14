@@ -750,7 +750,7 @@ def gen_tst_script():
         '--is_train', '0',
         '--best_epoch' , str(best_epoch),
         '--tst_video_name', name,
-        '--is_focal_loss', '1',
+        # '--is_focal_loss', '1',
       ]
       fout.write(' '.join(cmd) + '\n')
 
