@@ -715,14 +715,15 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0.nobalance'
-  expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
+  # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
+  expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
   out_file = '../../driver/tst.sh'
 
-  gpu = 1
+  gpu = 0
 
   # val_file = os.path.join(expr_dir, 'log', 'val_metrics.pkl')
   # best_epoch = select_best_epoch(val_file)
@@ -825,5 +826,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
-  eval()
+  gen_tst_script()
+  # eval()
