@@ -642,14 +642,18 @@ def neg_lst_split_by_track_len():
 
 
 def prepare_tst_files():
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny 
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
-  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group') 
   pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
   neg_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst') 
+  # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group') 
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst') 
+  ft_dir = os.path.join(root_dir, 'c3d', 'track_group') 
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group_tst')
 
-  track_lens = [25, 50]
+  # track_lens = [25, 50]
+  track_lens = [25]
 
   name2ids = {}
   for file in [pos_file, neg_file]:
@@ -702,7 +706,7 @@ def prepare_tst_files():
               out_ids.append(ids[i])
           np.savez_compressed(dst_file, 
             frames=out_frames, fts=out_fts, centers=out_centers, ids=out_ids)
-      break
+      # break
 
 
 def gen_tst_script():
@@ -833,9 +837,9 @@ if __name__ == "__main__":
   # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
-  lnk_pos_for_trn()
+  # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
-  # prepare_tst_files()
+  prepare_tst_files()
   # gen_tst_script()
   # eval()
