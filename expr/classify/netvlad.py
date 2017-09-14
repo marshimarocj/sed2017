@@ -505,13 +505,16 @@ def prepare_neg_for_val():
 
 
 def split_neg_for_trn():
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  # track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  track_group_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group_trn_split')
 
   # num_id_in_chunk = 1000
   num_id_in_chunk = 500
@@ -825,10 +828,10 @@ if __name__ == "__main__":
   # tst_val_reader()
   # prepare_init_center_file()
   # prepare_neg_for_val()
-  # split_neg_for_trn()
+  split_neg_for_trn()
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()
