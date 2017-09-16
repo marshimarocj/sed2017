@@ -1148,7 +1148,7 @@ def eval_full():
 
 if __name__ == '__main__':
   # sample_neg_ids()
-  # prepare_trn_tst_pos_data()
+  prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
   # prepare_pos_data_with_tracklen_fixed()
   # prepare_neg_data_with_tracklen_fixed()
@@ -1159,7 +1159,7 @@ if __name__ == '__main__':
   # prepare_val_early_fusion_data()
   # train_model()
   # train_final_model()
-  val_model()
+  # val_model()
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
