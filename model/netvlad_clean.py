@@ -144,6 +144,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
 
         if self._config.l2_norm_output:
           V_jk = tf.nn.l2_normalize(V_jk, dim=1)
+        trn_V_jk = V_jk
         if self._config.dropin:
           trn_V_jk = tf.nn.dropout(V_jk, 0.5)
 
