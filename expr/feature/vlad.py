@@ -267,5 +267,5 @@ if __name__ == '__main__':
   # cluster_centers()
   # check_track_group_npzfile()
   # encode_vlad()
-  gen_script()
-  # encode_vlad_rocks()
+  # gen_script()
+  encode_vlad_rocks()
