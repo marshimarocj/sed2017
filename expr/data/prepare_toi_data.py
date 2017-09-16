@@ -227,7 +227,8 @@ def prepare_neg_ft():
     track_db_file = os.path.join(track_dir, '%s.%d.forward.backward.square.npz'%(name, track_len))
     ft_dir = os.path.join(ft_root_dir, name)
     out_file = os.path.join(out_dir, '%s.%d.forward.backward.square.neg.0.50.%d.npz'%(name, track_len, neg_split))
-    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
+    # _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='flow')
+    _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d')
 
 
 def check_track_group_npzfile():
@@ -509,12 +510,12 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  prepare_pos_ft()
+  # prepare_pos_ft()
   # generate_script()
   # gen_script_rocks()
   # retrieve_failed_jobs()
   # shuffle_neg()
-  # prepare_neg_ft()
+  prepare_neg_ft()
   # check_track_group_npzfile()
   # prepare_neg_ft_missing()
   # remove_neg_data_in_dev_for_consistency()
