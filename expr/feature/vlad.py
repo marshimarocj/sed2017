@@ -120,13 +120,13 @@ def cluster_centers():
   # num_center = 32
   num_center = 16
   # num_center = 8
-  out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
-  # out_file = os.path.join(ft_root_dir, 'kmeans.center.norm.%d.pkl'%num_center)
+  # out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
+  out_file = os.path.join(ft_root_dir, 'kmeans.center.norm.%d.pkl'%num_center)
 
   kmeans = KMeans(n_clusters=num_center)
 
   data = np.load(sample_file)
-  # data = normalize(data)
+  data = normalize(data)
   kmeans.fit(data)
 
   with open(out_file, 'w') as fout:
