@@ -117,8 +117,8 @@ def cluster_centers():
   # root_dir = '/home/jiac/data/sed' # danny
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
-  # num_center = 32
-  num_center = 16
+  num_center = 32
+  # num_center = 16
   # num_center = 8
   # out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
   out_file = os.path.join(ft_root_dir, 'kmeans.center.norm.%d.pkl'%num_center)
