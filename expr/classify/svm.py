@@ -283,9 +283,9 @@ def prepare_pos_data_with_tracklen_fixed():
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_len = 25
   # track_len = 50
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.16.pos.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.%d.npz'%track_len)
-  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  ft_dir = os.path.join(root_dir, 'c3d', 'vlad.16')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
@@ -329,9 +329,9 @@ def prepare_neg_data_with_tracklen_fixed():
   # neg_id_file = os.path.join(root_dir, 'expr', 'neg.dev08.5.lst')
   track_len = 25
   # track_len = 50
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.16.neg.5.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.%d.npz'%track_len)
-  ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  ft_dir = os.path.join(root_dir, 'c3d', 'vlad.16')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.%d.npz'%track_len)
   # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
@@ -1163,8 +1163,8 @@ if __name__ == '__main__':
   # sample_neg_ids()
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
-  # prepare_pos_data_with_tracklen_fixed()
-  # prepare_neg_data_with_tracklen_fixed()
+  prepare_pos_data_with_tracklen_fixed()
+  prepare_neg_data_with_tracklen_fixed()
   # prepare_trn_data()
   # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
@@ -1172,7 +1172,7 @@ if __name__ == '__main__':
   # prepare_val_early_fusion_data()
   # train_model()
   # train_final_model()
-  val_model()
+  # val_model()
   # predict_on_eev()
   # predict_liblinear_on_eev()
   # gen_predict_script()
