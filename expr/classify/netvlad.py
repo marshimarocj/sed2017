@@ -505,13 +505,16 @@ def prepare_neg_for_val():
 
 
 def split_neg_for_trn():
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny
   lst_files = [
     os.path.join(root_dir, 'dev08-1.lst'),
     os.path.join(root_dir, 'eev08-1.lst'),
   ]
-  track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  # track_group_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  track_group_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group_trn_split')
 
   # num_id_in_chunk = 1000
   num_id_in_chunk = 500
@@ -564,12 +567,16 @@ def split_neg_for_trn():
 
 
 def lnk_pos_for_trn():
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny 
   # lst_file = os.path.join(root_dir, 'meta', 'trn.lst')
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # src_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group')
-  src_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
-  dst_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
+  # src_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  # dst_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
+  src_dir = os.path.join(root_dir, 'c3d', 'track_group')
+  # dst_dir = os.path.join(root_dir, 'c3d', 'track_group_trn_split')
+  dst_dir = os.path.join(root_dir, 'c3d', 'track_group_val')
 
   track_lens = [25, 50]
 
@@ -635,14 +642,18 @@ def neg_lst_split_by_track_len():
 
 
 def prepare_tst_files():
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # danny 
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
-  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group') 
   pos_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
   neg_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
-  out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst') 
+  # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group') 
+  # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst') 
+  ft_dir = os.path.join(root_dir, 'c3d', 'track_group') 
+  out_dir = os.path.join(root_dir, 'c3d', 'track_group_tst')
 
-  track_lens = [25, 50]
+  # track_lens = [25, 50]
+  track_lens = [25]
 
   name2ids = {}
   for file in [pos_file, neg_file]:
@@ -695,14 +706,14 @@ def prepare_tst_files():
               out_ids.append(ids[i])
           np.savez_compressed(dst_file, 
             frames=out_frames, fts=out_fts, centers=out_centers, ids=out_ids)
-      break
+      # break
 
 
 def gen_tst_script():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  # root_dir = '/home/jiac/data/sed' # danny
-  root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/data1/jiac/sed' # uranus
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
@@ -716,7 +727,8 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0.nobalance'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
-  expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
+  # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
+  expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
@@ -749,7 +761,7 @@ def gen_tst_script():
         '--is_train', '0',
         '--best_epoch' , str(best_epoch),
         '--tst_video_name', name,
-        '--is_focal_loss', '1',
+        # '--is_focal_loss', '1',
       ]
       fout.write(' '.join(cmd) + '\n')
 
@@ -757,8 +769,8 @@ def gen_tst_script():
 def eval():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  # root_dir = '/home/jiac/data/sed' # danny
-  root_dir = '/data1/jiac/sed' # uranus 
+  root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/data1/jiac/sed' # uranus 
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
@@ -768,16 +780,17 @@ def eval():
   # expr_name = 'netvlad.0.25_50'
   # expr_name = 'netvlad.l2norm_input.dropout.0.25.16'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
-  # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
+  expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0.nobalance'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
-  expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
+  # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
   # best_epoch = 0
   # best_epoch = 5
-  best_epoch = 2
+  # best_epoch = 2
+  best_epoch = 6
   # best_epoch = 10 
   # best_epoch = 9
   # best_epoch = 1
@@ -817,7 +830,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
@@ -827,6 +840,6 @@ if __name__ == "__main__":
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
-  # prepare_tst_files()
+  prepare_tst_files()
   # gen_tst_script()
   # eval()
