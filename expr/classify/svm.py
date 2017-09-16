@@ -278,13 +278,13 @@ def prepare_trn_tst_neg_data():
 def prepare_pos_data_with_tracklen_fixed():
   # root_dir = '/data1/jiac/sed' # uranus
   root_dir = '/home/jiac/data/sed2017' # rocks
-  lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  # lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  # lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  lst_file = os.path.join(root_dir, 'dev08-1.lst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_len = 25
   # track_len = 50
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.16.pos.%d.npz'%track_len)
-  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.%d.npz'%track_len)
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.16.pos.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.16.pos.%d.npz'%track_len)
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad.16')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.%d.npz'%track_len)
@@ -323,14 +323,14 @@ def prepare_pos_data_with_tracklen_fixed():
 def prepare_neg_data_with_tracklen_fixed():
   # root_dir = '/data1/jiac/sed' # uranus
   root_dir = '/home/jiac/data/sed2017' # rocks
-  lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
-  # lst_file = os.path.join(root_dir, 'dev08-1.lst')
-  # neg_id_file = os.path.join(root_dir, 'expr', 'neg.dev08.5.lst')
+  # lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  # neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
+  lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  neg_id_file = os.path.join(root_dir, 'expr', 'neg.dev08.5.lst')
   track_len = 25
   # track_len = 50
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.16.neg.5.%d.npz'%track_len)
-  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.%d.npz'%track_len)
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.16.neg.5.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.16.neg.5.%d.npz'%track_len)
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad.16')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.%d.npz'%track_len)
