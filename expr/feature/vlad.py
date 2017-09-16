@@ -108,29 +108,27 @@ def sample_data_for_center():
 
 
 def cluster_centers():
-  # root_dir = '/data1/jiac/sed' # uranus
-  # ft_root_dir = os.path.join(root_dir, 'c3d')
+  root_dir = '/data1/jiac/sed' # uranus
+  ft_root_dir = os.path.join(root_dir, 'c3d')
   # root_dir = '/home/jiac/data2/sed' # gpu9
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
-  root_dir = '/home/jiac/data/sed' # danny
-  ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
+  # root_dir = '/home/jiac/data/sed' # danny
+  # ft_root_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame')
   sample_file = os.path.join(ft_root_dir, 'sample.10000.npy')
-  num_center = 32
-  # num_center = 16
+  # num_center = 32
+  num_center = 16
   # num_center = 8
-  # out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
-  out_file = os.path.join(ft_root_dir, 'kmeans.center.norm.%d.pkl'%num_center)
+  out_file = os.path.join(ft_root_dir, 'kmeans.center.%d.pkl'%num_center)
+  # out_file = os.path.join(ft_root_dir, 'kmeans.center.norm.%d.pkl'%num_center)
 
   kmeans = KMeans(n_clusters=num_center)
 
   data = np.load(sample_file)
-  data = normalize(data)
+  # data = normalize(data)
   kmeans.fit(data)
 
-  # cluster_centers = kmeans.cluster_centers_
-  # np.save(out_file, cluster_centers)
   with open(out_file, 'w') as fout:
     cPickle.dump(kmeans, fout)
 
@@ -266,8 +264,8 @@ def encode_vlad_rocks():
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  # cluster_centers()
+  cluster_centers()
   # check_track_group_npzfile()
   # encode_vlad()
   # gen_script()
-  encode_vlad_rocks()
+  # encode_vlad_rocks()
