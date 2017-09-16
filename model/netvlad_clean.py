@@ -213,7 +213,7 @@ class NetVladModel(framework.model.proto.FullModel):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
         # self.logit_op = self._add_predict_layer(self.model_proto.tst_feature_op)
-        feature = tf.nn.relu(self.model_proto.tst_feature_op)
+        feature_op = tf.nn.relu(self.model_proto.tst_feature_op)
         self.logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B)
         self.predict_op = tf.nn.softmax(self.logit_op)
 
@@ -222,9 +222,9 @@ class NetVladModel(framework.model.proto.FullModel):
 
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
+        trn_feature_op = self.model_proto.trn_feature_op
         if self._config.dropout:
-          trn_feature_op = tf.nn.dropout(
-            tf.nn.relu(self.model_proto.trn_feature_op), 0.5)
+          trn_feature_op = tf.nn.dropout(tf.nn.relu(trn_feature_op), 0.5)
         self.logit_op = tf.nn.xw_plus_b(trn_feature_op, self.fc_class_W, self.fc_class_B)
         self.predict_op = tf.nn.softmax(self.logit_op)
 
