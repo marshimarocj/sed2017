@@ -146,7 +146,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
           V_jk = tf.nn.l2_normalize(V_jk, dim=1)
         trn_V_jk = V_jk
         if self._config.dropin:
-          trn_V_jk = tf.nn.dropout(V_jk, 0.5)
+          trn_V_jk = tf.nn.dropout(trn_V_jk, 0.5)
 
         self._trn_feature_op = tf.nn.xw_plus_b(trn_V_jk, self.fc_W, self.fc_B)
         self._tst_feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
