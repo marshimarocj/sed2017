@@ -1157,7 +1157,7 @@ if __name__ == '__main__':
   # sample_neg_ids()
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
-  # prepare_pos_data_with_tracklen_fixed()
+  prepare_pos_data_with_tracklen_fixed()
   prepare_neg_data_with_tracklen_fixed()
   # prepare_trn_data()
   # prepare_trn_txt()
