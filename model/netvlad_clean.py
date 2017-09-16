@@ -58,7 +58,8 @@ class NetVladEncoder(framework.model.proto.ModelProto):
     self._fts = tf.no_op() # (None, num_ft, dim_ft)
     self._ft_masks = tf.no_op() # (None, num_ft)
     # output
-    self._feature_op = tf.no_op()
+    self._trn_feature_op = tf.no_op()
+    self._tst_feature_op = tf.no_op()
 
   @property
   def fts(self):
@@ -77,8 +78,12 @@ class NetVladEncoder(framework.model.proto.ModelProto):
     self._ft_masks = val
 
   @property
-  def feature_op(self):
-    return self._feature_op
+  def trn_feature_op(self):
+    return self._trn_feature_op
+
+  @property
+  def tst_feature_op(self):
+    return self._tst_feature_op
 
   def build_parameter_graph(self, basegraph):
     with basegraph.as_default():
@@ -102,35 +107,48 @@ class NetVladEncoder(framework.model.proto.ModelProto):
           shape=(self._config.dim_output), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
 
+  def _netvlad(self):
+    fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
+    if self._config.l2_norm_input:
+      fts = tf.nn.l2_normalize(fts, dim=1)
+    logits = tf.nn.xw_plus_b(fts, self.w, self.b) # (None*num_ft, num_center)
+    a = tf.nn.softmax(logits) 
+
+    a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
+    fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, 1)
+    centers = tf.expand_dims(self.centers, 0) # (1, dim_ft, num_center)
+    diff = fts - centers # (None*num_ft, dim_ft, num_center)
+    V_ijk = a * diff # (None*num_ft, dim_ft, num_center)
+    mask = tf.reshape(self._ft_masks, (-1, 1, 1))
+    V_ijk *= mask
+    dim_vlad = self._config.dim_ft* self._config.num_center
+    V_ijk = tf.reshape(V_ijk, (-1, self._config.num_ft, dim_vlad))
+    V_jk = tf.reduce_sum(V_ijk, 1) # (None, dim_vlad)
+
+    return V_jk
+
   def build_inference_graph_in_tst(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        fts = tf.reshape(self._fts, (-1, self._config.dim_ft)) # (None*num_ft, dim_ft)
-        if self._config.l2_norm_input:
-          fts = tf.nn.l2_normalize(fts, dim=1)
-        logits = tf.nn.xw_plus_b(fts, self.w, self.b) # (None*num_ft, num_center)
-        a = tf.nn.softmax(logits) 
+        V_jk = self._netvlad()
 
-        a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
-        fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, 1)
-        centers = tf.expand_dims(self.centers, 0) # (1, dim_ft, num_center)
-        diff = fts - centers # (None*num_ft, dim_ft, num_center)
-        V_ijk = a * diff # (None*num_ft, dim_ft, num_center)
-        mask = tf.reshape(self._ft_masks, (-1, 1, 1))
-        V_ijk *= mask
-        dim_vlad = self._config.dim_ft* self._config.num_center
-        V_ijk = tf.reshape(V_ijk, (-1, self._config.num_ft, dim_vlad))
-        V_jk = tf.reduce_sum(V_ijk, 1) # (None, dim_vlad)
+        if self._config.l2_norm_output:
+          V_jk = tf.nn.l2_normalize(V_jk, dim=1)
+
+        self._tst_feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
+
+  def build_inference_graph_in_trn_tst(self, basegraph):
+    with basegraph.as_default():
+      with tf.variable_scope(self.name_scope):
+        V_jk = self._netvlad()
 
         if self._config.l2_norm_output:
           V_jk = tf.nn.l2_normalize(V_jk, dim=1)
         if self._config.dropin:
-          V_jk = tf.nn.dropout(V_jk, 0.5)
+          trn_V_jk = tf.nn.dropout(V_jk, 0.5)
 
-        self._feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
-
-  def build_inference_graph_in_trn_tst(self, basegraph):
-    self.build_inference_graph_in_tst(basegraph)
+        self._trn_feature_op = tf.nn.xw_plus_b(trn_V_jk, self.fc_W, self.fc_B)
+        self._tst_feature_op = tf.nn.xw_plus_b(V_jk, self.fc_W, self.fc_B)
 
 
 class NetVladModel(framework.model.proto.FullModel):
@@ -182,19 +200,21 @@ class NetVladModel(framework.model.proto.FullModel):
           shape=(self._config.num_class), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
 
-  def _add_predict_layer(self, feature_op):
-    feature_op = tf.nn.relu(feature_op)
-    if self._config.dropout:
-      feature_op = tf.nn.dropout(feature_op, 0.5)
-    logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
-    return logit_op
+  # def _add_predict_layer(self, feature_op):
+  #   feature_op = tf.nn.relu(feature_op)
+  #   if self._config.dropout:
+  #     feature_op = tf.nn.dropout(feature_op, 0.5)
+  #   logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
+  #   return logit_op
 
   def _build_inference_graph_in_tst(self, basegraph):
     framework.model.proto.FullModel._build_inference_graph_in_tst(self, basegraph)
 
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        self.logit_op = self._add_predict_layer(self.model_proto.feature_op)
+        # self.logit_op = self._add_predict_layer(self.model_proto.tst_feature_op)
+        feature = tf.nn.relu(self.model_proto.tst_feature_op)
+        self.logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B)
         self.predict_op = tf.nn.softmax(self.logit_op)
 
   def _build_inference_graph_in_trn_tst(self, basegraph):
@@ -202,22 +222,30 @@ class NetVladModel(framework.model.proto.FullModel):
 
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        self.logit_op = self._add_predict_layer(self.model_proto.feature_op)
+        if self._config.dropout:
+          trn_feature_op = tf.nn.dropout(
+            tf.nn.relu(self.model_proto.trn_feature_op), 0.5)
+        self.logit_op = tf.nn.xw_plus_b(trn_feature_op, self.fc_class_W, self.fc_class_B)
         self.predict_op = tf.nn.softmax(self.logit_op)
+
+        tst_feature_op = tf.nn.relu(self.model_proto.tst_feature_op)
+        self.val_logit_op = tf.nn.xw_plus_b(tst_feature_op, self.fc_class_W, self.fc_class_B)
+        self.val_predict_op = tf.nn.softmax(self.val_logit_op)
 
   def add_loss(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
         loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self._labels, logits=self.logit_op))
+        self.val_loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self._labels, logits=self.val_logit_op))
         self.append_op2monitor('loss', loss_op)
 
     return loss_op
 
   def op_in_val(self):
     return {
-      'loss_op': self.loss_op,
-      'logit_op': self.logit_op,
-      'predict_op': self.predict_op,
+      'loss_op': self.val_loss_op,
+      'logit_op': self.val_logit_op,
+      'predict_op': self.val_predict_op,
     }
 
   def op_in_tst(self):

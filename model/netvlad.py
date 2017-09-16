@@ -252,10 +252,10 @@ class NetVladModel(framework.model.proto.FullModel):
           shape=(self._config.num_class), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
 
-  def _add_predict_layer(self, feature_op):
+  def _add_predict_layer(self, feature_op, trn_or_tst):
     feature_op = tf.nn.relu(feature_op)
     if self._config.dropout:
-      feature_op = tf.nn.dropout(feature_op, 0.5)
+      feature_op = tf.nn.dropout(feature_op, 0.5 if trn_or_tst else 1.0)
     logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
     return logit_op
 
@@ -264,27 +264,37 @@ class NetVladModel(framework.model.proto.FullModel):
 
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        self.logit_op = self._add_predict_layer(self.model_proto.feature_op)
+        # self.logit_op = self._add_predict_layer(self.model_proto.feature_op, False)
+        feature_op = tf.nn.relu(feature_op)
+        if self._config.dropout:
+          feature_op = tf.nn.dropout(feature_op, 1.0)
+        self.logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
 
   def _build_inference_graph_in_trn_tst(self, basegraph):
     framework.model.proto.FullModel._build_inference_graph_in_trn_tst(self, basegraph)
 
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        self.logit_op = self._add_predict_layer(self.model_proto.feature_op)
+        feature_op = tf.nn.relu(feature_op)
+        val_feature_op = feature_op
+        if self._config.dropout:
+          feature_op = tf.nn.dropout(feature_op)
+        self.logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
+        self.val_logit_op = tf.nn.xw_plus_b(val_feature_op, self.fc_class_W, self.fc_class_B)
 
   def add_loss(self, basegraph):
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
         loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self._labels, logits=self.logit_op))
         self.append_op2monitor('loss', loss_op)
+        self.val_loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self._labels, logits=self.val_logit_op))
 
     return loss_op
 
   def op_in_val(self):
     return {
-      'loss_op': self.loss_op,
-      'logit_op': self.logit_op,
+      'loss_op': self.val_loss_op,
+      'logit_op': self.val_logit_op,
     }
 
   def op_in_tst(self):
