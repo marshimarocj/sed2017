@@ -759,6 +759,9 @@ def train_model():
   # trn_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'dev08.vlad.npz')
   # out_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
+  trn_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.25.vlad.npz')
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
+
   # trn_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'dev08.vlad.npz')
   # # out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # out_file = os.path.join(root_dir, 'expr', 'c3d.flow', 'svm.prob.CellToEar.Embrace.Pointing.PersonRuns.pkl')
@@ -771,8 +774,8 @@ def train_model():
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
   # trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.16.npz')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.16.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
-  trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.8.npz')
-  out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.8.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
+  # trn_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.25.vlad.8.npz')
+  # out_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.8.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
 
   data = np.load(trn_file)
   fts = data['fts']
@@ -1159,12 +1162,12 @@ if __name__ == '__main__':
   # prepare_trn_tst_neg_data()
   # prepare_pos_data_with_tracklen_fixed()
   # prepare_neg_data_with_tracklen_fixed()
-  prepare_trn_data()
+  # prepare_trn_data()
   # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  # train_model()
+  train_model()
   # train_final_model()
   # val_model()
   # predict_on_eev()
