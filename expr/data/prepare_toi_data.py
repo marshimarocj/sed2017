@@ -89,7 +89,8 @@ def _prepare_neg_ft(label_file, track_db_file, ft_dir, out_file, ft='c3d'):
 '''
 def prepare_pos_ft():
   # root_dir = '/data1/jiac/sed' # uranus
-  root_dir = '/home/jiac/data/sed' # xiaojun
+  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed2017' # rocks
   # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/home/jiac/data2/sed' # gpu9
   label_dir = os.path.join(root_dir, 'pseudo_label')
@@ -103,7 +104,8 @@ def prepare_pos_ft():
 
   # track_len = 25
   # track_len = 50
-  track_lens = [25, 50]
+  # track_lens = [25, 50]
+  track_lens = [25]
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
@@ -507,12 +509,12 @@ def prepare_toi_ft_for_tst():
 
 
 if __name__ == '__main__':
-  # prepare_pos_ft()
+  prepare_pos_ft()
   # generate_script()
   # gen_script_rocks()
   # retrieve_failed_jobs()
   # shuffle_neg()
-  prepare_neg_ft()
+  # prepare_neg_ft()
   # check_track_group_npzfile()
   # prepare_neg_ft_missing()
   # remove_neg_data_in_dev_for_consistency()
