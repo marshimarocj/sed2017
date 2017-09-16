@@ -223,8 +223,8 @@ def prepare_lst_files():
 def prepare_cfg():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
-  root_dir = '/home/jiac/data/sed' # danny
-  # root_dir = '/data1/jiac/sed' # uranus
+  # root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     # os.path.join(root_dir, 'meta', 'debug.lst'),
@@ -256,9 +256,9 @@ def prepare_cfg():
   #   '_'.join([str(d) for d in track_lens])))
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d.npz'%(
-  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
@@ -272,7 +272,7 @@ def prepare_cfg():
   model_cfg = gen_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
-  # model_cfg['dropout'] = True
+  model_cfg['dropout'] = True
   model_cfg['num_epoch'] = 20
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
@@ -830,7 +830,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
@@ -840,6 +840,6 @@ if __name__ == "__main__":
   # lnk_pos_for_trn()
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
-  prepare_tst_files()
+  # prepare_tst_files()
   # gen_tst_script()
   # eval()
