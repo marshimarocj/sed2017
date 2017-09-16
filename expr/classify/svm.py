@@ -278,13 +278,13 @@ def prepare_trn_tst_neg_data():
 def prepare_pos_data_with_tracklen_fixed():
   # root_dir = '/data1/jiac/sed' # uranus
   root_dir = '/home/jiac/data/sed2017' # rocks
-  # lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  # lst_file = os.path.join(root_dir, 'dev08-1.lst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   track_len = 25
   # track_len = 50
-  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.%d.npz'%track_len)
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.%d.npz'%track_len)
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.pos.%d.npz'%track_len)
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.pos.%d.npz'%track_len)
@@ -323,14 +323,14 @@ def prepare_pos_data_with_tracklen_fixed():
 def prepare_neg_data_with_tracklen_fixed():
   # root_dir = '/data1/jiac/sed' # uranus
   root_dir = '/home/jiac/data/sed2017' # rocks
-  # lst_file = os.path.join(root_dir, 'eev08-1.lst')
-  # neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
-  lst_file = os.path.join(root_dir, 'dev08-1.lst')
-  neg_id_file = os.path.join(root_dir, 'expr', 'neg.dev08.5.lst')
+  lst_file = os.path.join(root_dir, 'eev08-1.lst')
+  neg_id_file = os.path.join(root_dir, 'expr', 'neg.eev08.5.lst')
+  # lst_file = os.path.join(root_dir, 'dev08-1.lst')
+  # neg_id_file = os.path.join(root_dir, 'expr', 'neg.dev08.5.lst')
   track_len = 25
   # track_len = 50
-  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.%d.npz'%track_len)
-  out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.%d.npz'%track_len)
+  out_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.%d.npz'%track_len)
+  # out_file = os.path.join(root_dir, 'expr', 'c3d', 'dev08.vlad.neg.5.%d.npz'%track_len)
   ft_dir = os.path.join(root_dir, 'c3d', 'vlad')
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.%d.npz'%track_len)
   # out_file = os.path.join(root_dir, 'expr', 'twostream', 'dev08.vlad.neg.5.%d.npz'%track_len)
@@ -859,10 +859,12 @@ def val_model():
   # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.neg.5.npz')
   # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.25.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.25.npz')
+  pos_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.pos.25.npz')
+  neg_val_file = os.path.join(root_dir, 'expr', 'c3d', 'eev08.vlad.neg.5.25.npz')
   # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.pos.25.npz')
   # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.16.neg.5.25.npz')
-  pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.pos.25.npz')
-  neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.neg.5.25.npz')
+  # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.pos.25.npz')
+  # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.8.neg.5.25.npz')
   # # pos_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.pos.50.npz')
   # # neg_val_file = os.path.join(root_dir, 'expr', 'twostream', 'eev08.vlad.neg.5.50.npz')
   # # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.pkl')
@@ -872,8 +874,9 @@ def val_model():
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.16.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.8.CellToEar.Embrace.Pointing.PersonRuns.pkl')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
+  model_file = os.path.join(root_dir, 'expr', 'c3d', 'svm.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.16.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
-  model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.8.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
+  # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.8.CellToEar.Embrace.Pointing.PersonRuns.25.pkl')
   # model_file = os.path.join(root_dir, 'expr', 'twostream', 'svm.cell2ear.refine.CellToEar.Embrace.Pointing.PersonRuns.pkl')
 
   # pos_val_file = os.path.join(root_dir, 'expr', 'vgg19.flow', 'eev08.vlad.pos.npz')
@@ -1160,14 +1163,14 @@ if __name__ == '__main__':
   # sample_neg_ids()
   # prepare_trn_tst_pos_data()
   # prepare_trn_tst_neg_data()
-  # prepare_pos_data_with_tracklen_fixed()
-  # prepare_neg_data_with_tracklen_fixed()
+  prepare_pos_data_with_tracklen_fixed()
+  prepare_neg_data_with_tracklen_fixed()
   # prepare_trn_data()
   # prepare_trn_txt()
   # prepare_trn_with_neg_sample()
   # prepare_trn_early_fusion_data()
   # prepare_val_early_fusion_data()
-  train_model()
+  # train_model()
   # train_final_model()
   # val_model()
   # predict_on_eev()
