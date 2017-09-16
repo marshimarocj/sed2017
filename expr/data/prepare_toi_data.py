@@ -209,7 +209,8 @@ def prepare_neg_ft():
   # ft_root_dir = os.path.join(root_dir, 'vgg19_pool5_fullres')
   # out_dir = os.path.join(root_dir, 'vgg19_pool5_fullres', 'track_group')
 
-  track_lens = [25, 50]
+  # track_lens = [25, 50]
+  track_lens = [25]
   # neg_split = 1
 
   parser = argparse.ArgumentParser()
