@@ -236,8 +236,10 @@ def encode_vlad_rocks():
   # kmeans_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.32.pkl')
   # out_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'vlad')
   ft_root_dir = os.path.join(root_dir, 'c3d', 'track_group')
-  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
-  out_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  # kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.32.pkl')
+  # out_dir = os.path.join(root_dir, 'c3d', 'vlad')
+  kmeans_file = os.path.join(root_dir, 'c3d', 'kmeans.center.16.pkl')
+  out_dir = os.path.join(root_dir, 'c3d', 'vlad.16')
 
   parser = argparse.ArgumentParser()
   parser.add_argument('name')
@@ -264,8 +266,8 @@ def encode_vlad_rocks():
 if __name__ == '__main__':
   # sample_data_for_center()
   # sample_data_for_twostream_sync_center()
-  cluster_centers()
+  # cluster_centers()
   # check_track_group_npzfile()
   # encode_vlad()
   # gen_script()
-  # encode_vlad_rocks()
+  encode_vlad_rocks()
