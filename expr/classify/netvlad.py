@@ -772,8 +772,8 @@ def gen_tst_script():
 def eval():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
-  root_dir = '/home/jiac/data/sed' # danny
-  # root_dir = '/data1/jiac/sed' # uranus 
+  # root_dir = '/home/jiac/data/sed' # danny
+  root_dir = '/data1/jiac/sed' # uranus 
   lst_file = os.path.join(root_dir, 'meta', 'val.lst')
   # expr_name = 'netvlad.0.50'
   # expr_name = 'netvlad.0.25'
@@ -781,9 +781,9 @@ def eval():
   # expr_name = 'netvlad.0.25.8'
   # expr_name = 'netvlad.l2norm_input.0.25.16'
   # expr_name = 'netvlad.0.25_50'
-  # expr_name = 'netvlad.l2norm_input.dropout.0.25.16'
+  expr_name = 'netvlad.l2norm_input.dropout.0.25.16'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
-  expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
+  # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0.nobalance'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
@@ -793,7 +793,8 @@ def eval():
   # best_epoch = 0
   # best_epoch = 5
   # best_epoch = 2
-  best_epoch = 16
+  # best_epoch = 16
+  best_epoch = 4
   # best_epoch = 10 
   # best_epoch = 9
   # best_epoch = 1
@@ -844,5 +845,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  gen_tst_script()
-  # eval()
+  # gen_tst_script()
+  eval()
