@@ -65,7 +65,8 @@ def transform_by_grouping():
               lid = event2lid[data[1]]
               video2track_len2pos_id2lid[name][track_len][id] = lid
 
-  dim_ft = 1024
+  # dim_ft = 1024
+  dim_ft = 512
   dim_center = 2
   for ft_dir in ft_dirs:
     names = os.listdir(ft_dir)
