@@ -223,8 +223,8 @@ def prepare_lst_files():
 def prepare_cfg():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
-  # root_dir = '/home/jiac/data/sed' # danny
-  root_dir = '/data1/jiac/sed' # uranus
+  root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/data1/jiac/sed' # uranus
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
     # os.path.join(root_dir, 'meta', 'debug.lst'),
@@ -234,19 +234,24 @@ def prepare_cfg():
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.lst')
   # trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.50.lst')
   trn_neg_lst_file = os.path.join(root_dir, 'meta', 'trn_neg.25.tfrecords.lst')
-  trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
-  val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
-  tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
+  # trn_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  # val_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_val')
+  # tst_ft_toi_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_tst')
+  trn_ft_toi_dir = os.path.join(root_dir, 'c3d', 'track_group_trn_split')
+  val_ft_toi_dir = os.path.join(root_dir, 'c3d', 'track_group_val')
+  tst_ft_toi_dir = os.path.join(root_dir, 'c3d', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
   num_center = 16
   # num_center = 32
   # num_center = 8
   # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
-  init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.%d.npz'%num_center)
+  # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.%d.npz'%num_center)
+  init_weight_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
-  dim_ft = 1024
+  # dim_ft = 1024
+  dim_ft = 512 
   tst_neg_lst = [0]
   # track_lens = [25, 50]
   # track_lens = [50]
@@ -257,8 +262,8 @@ def prepare_cfg():
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
-  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.0.%s.%d.npz'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d.npz'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
     '_'.join([str(d) for d in track_lens]), num_center))
@@ -272,7 +277,7 @@ def prepare_cfg():
   model_cfg = gen_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
-  model_cfg['dropout'] = True
+  # model_cfg['dropout'] = True
   model_cfg['num_epoch'] = 20
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
@@ -838,11 +843,11 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
-  prepare_init_center_file()
+  # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
