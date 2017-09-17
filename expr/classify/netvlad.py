@@ -606,9 +606,11 @@ def gen_neg_lst_for_trn():
   # root_dir = '/home/jiac/data/sed' # xiaojun
   root_dir = '/home/jiac/data/sed' # danny
   lst_file = os.path.join(root_dir, 'meta', 'trn.lst')
-  ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  # ft_dir = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'track_group_trn_split')
+  ft_dir = os.path.join(root_dir, 'c3d', 'track_group_trn_split')
   # out_file = os.path.join(root_dir, 'meta', 'trn_neg.lst')
-  out_file = os.path.join(root_dir, 'meta', 'trn_neg.25.tfrecords.lst')
+  # out_file = os.path.join(root_dir, 'meta', 'trn_neg.25.tfrecords.lst')
+  out_file = os.path.join(root_dir, 'meta', 'trn_neg.25.c3d.tfrecords.lst')
 
   video_names = set()
   with open(lst_file) as f:
@@ -843,7 +845,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  prepare_cfg()
+  # prepare_cfg()
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
@@ -851,7 +853,7 @@ if __name__ == "__main__":
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
-  # gen_neg_lst_for_trn()
+  gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
