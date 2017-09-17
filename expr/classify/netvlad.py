@@ -443,8 +443,10 @@ def prepare_init_center_file():
   # out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.8.npz')
   # center_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.16.pkl')
   # out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.16.npz')
-  center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.16.pkl')
-  out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.16.npz')
+  # center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.16.pkl')
+  # out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.16.npz')
+  center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.32.pkl')
+  out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.32.npz')
 
   with open(center_file) as f:
     kmeans = cPickle.load(f)
