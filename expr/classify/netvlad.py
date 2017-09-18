@@ -861,5 +861,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  # gen_tst_script()
-  eval()
+  gen_tst_script()
+  # eval()
