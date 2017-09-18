@@ -248,7 +248,8 @@ def prepare_cfg():
   # num_center = 8
   # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
   # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.%d.npz'%num_center)
-  init_weight_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.%d.npz'%num_center)
+  # init_weight_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.%d.npz'%num_center)
+  init_weight_file = os.path.join(root_dir, 'c3d', 'kmeans.center.%d.npz'%num_center)
   out_dir = os.path.join(root_dir, 'expr', 'netvlad')
   num_ft = 100
   # dim_ft = 1024
@@ -263,7 +264,8 @@ def prepare_cfg():
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
@@ -272,7 +274,7 @@ def prepare_cfg():
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
-  proto_cfg['l2_norm_input'] = True
+  # proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   # proto_cfg['dropin'] = True
   model_cfg = gen_model_cfg(proto_cfg)
@@ -856,11 +858,11 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
-  prepare_init_center_file()
+  # prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
