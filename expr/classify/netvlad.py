@@ -802,7 +802,8 @@ def eval():
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.0'
   # expr_name = 'netvlad.l2norm_input.focalloss.0.25.16.2.nobalance'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
-  expr_name = 'netvlad.c3d.l2norm_input.0.25.16'
+  # expr_name = 'netvlad.c3d.l2norm_input.0.25.16'
+  expr_name = 'netvlad.c3d.l2norm_input.0.25.32'
   predict_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name, 'pred')
 
   # best_epoch = 0
@@ -810,7 +811,8 @@ def eval():
   # best_epoch = 2
   # best_epoch = 16
   # best_epoch = 4
-  best_epoch = 15
+  # best_epoch = 15
+  best_epoch = 14
   # best_epoch = 10 
   # best_epoch = 9
   # best_epoch = 1
@@ -861,5 +863,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  gen_tst_script()
-  # eval()
+  # gen_tst_script()
+  eval()
