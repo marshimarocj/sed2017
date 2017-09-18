@@ -451,8 +451,10 @@ def prepare_init_center_file():
   # out_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.16.npz')
   # center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.16.pkl')
   # out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.16.npz')
-  center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.32.pkl')
-  out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.32.npz')
+  # center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.32.pkl')
+  # out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.norm.32.npz')
+  center_file = os.path.join(root_dir, 'c3d', 'kmeans.center.16.pkl')
+  out_file = os.path.join(root_dir, 'c3d', 'kmeans.center.16.npz')
 
   with open(center_file) as f:
     kmeans = cPickle.load(f)
@@ -856,7 +858,7 @@ if __name__ == "__main__":
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
-  # prepare_init_center_file()
+  prepare_init_center_file()
   # prepare_neg_for_val()
   # split_neg_for_trn()
   # lnk_pos_for_trn()
@@ -864,4 +866,4 @@ if __name__ == "__main__":
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
   # gen_tst_script()
-  eval()
+  # eval()
