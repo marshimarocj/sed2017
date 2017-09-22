@@ -756,7 +756,7 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   # expr_name = 'netvlad.c3d.l2norm_input.0.25.16'
   # expr_name = 'netvlad.c3d.l2norm_input.0.25.32'
-  expr_name = 'netvlad.c3d.l2norm_input.0.25.16'
+  expr_name = 'netvlad.c3d.l2norm_input.0.25.16.sgd'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
