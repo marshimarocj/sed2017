@@ -243,8 +243,8 @@ def prepare_cfg():
   tst_ft_toi_dir = os.path.join(root_dir, 'c3d', 'track_group_tst')
   label_dir = os.path.join(root_dir, 'pseudo_label')
   label2lid_file = os.path.join(root_dir, 'meta', 'label2lid.pkl')
-  # num_center = 16
-  num_center = 32
+  num_center = 16
+  # num_center = 32
   # num_center = 8
   # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.%d.npz'%num_center)
   # init_weight_file = os.path.join(root_dir, 'twostream', 'feat_anet_flow_6frame', 'kmeans.center.norm.%d.npz'%num_center)
@@ -265,7 +265,8 @@ def prepare_cfg():
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d.sgd'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
@@ -282,6 +283,7 @@ def prepare_cfg():
   model_cfg['tst_batch_size'] = 128
   # model_cfg['dropout'] = True
   model_cfg['num_epoch'] = 20
+  model_cfg['optimizer_alg'] = 'SGD'
   model_cfg_file = '%s.model.json'%out_prefix
   with open(model_cfg_file, 'w') as fout:
     json.dump(model_cfg, fout, indent=2)

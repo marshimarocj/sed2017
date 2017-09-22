@@ -201,19 +201,11 @@ class NetVladModel(framework.model.proto.FullModel):
           shape=(self._config.num_class), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
 
-  # def _add_predict_layer(self, feature_op):
-  #   feature_op = tf.nn.relu(feature_op)
-  #   if self._config.dropout:
-  #     feature_op = tf.nn.dropout(feature_op, 0.5)
-  #   logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B) # (None, num_class)
-  #   return logit_op
-
   def _build_inference_graph_in_tst(self, basegraph):
     framework.model.proto.FullModel._build_inference_graph_in_tst(self, basegraph)
 
     with basegraph.as_default():
       with tf.variable_scope(self.name_scope):
-        # self.logit_op = self._add_predict_layer(self.model_proto.tst_feature_op)
         feature_op = tf.nn.relu(self.model_proto.tst_feature_op)
         self.logit_op = tf.nn.xw_plus_b(feature_op, self.fc_class_W, self.fc_class_B)
         self.predict_op = tf.nn.softmax(self.logit_op)
