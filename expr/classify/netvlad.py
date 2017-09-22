@@ -221,9 +221,9 @@ def prepare_lst_files():
 
 
 def prepare_cfg():
-  # root_dir = '/home/jiac/data/sed' # xiaojun
+  root_dir = '/home/jiac/data/sed' # xiaojun
   # root_dir = '/usr0/home/jiac/data/sed' # aladdin3 
-  root_dir = '/home/jiac/data/sed' # danny
+  # root_dir = '/home/jiac/data/sed' # danny
   # root_dir = '/data1/jiac/sed' # uranus
   video_lst_files = [
     os.path.join(root_dir, 'meta', 'trn.lst'),
