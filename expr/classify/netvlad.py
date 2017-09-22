@@ -265,8 +265,9 @@ def prepare_cfg():
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d'%(
+  out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d.sgd'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d.sgd'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d.sgd'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
@@ -275,7 +276,7 @@ def prepare_cfg():
     os.mkdir(out_prefix)
 
   proto_cfg = gen_proto_cfg(num_ft, dim_ft, num_center)
-  # proto_cfg['l2_norm_input'] = True
+  proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   # proto_cfg['dropin'] = True
   model_cfg = gen_model_cfg(proto_cfg)
@@ -754,7 +755,8 @@ def gen_tst_script():
   # expr_name = 'netvlad.l2norm_input.dropin.0.25.16'
   # expr_name = 'netvlad.l2norm_input.l2norm_output.0.25.16'
   # expr_name = 'netvlad.c3d.l2norm_input.0.25.16'
-  expr_name = 'netvlad.c3d.l2norm_input.0.25.32'
+  # expr_name = 'netvlad.c3d.l2norm_input.0.25.32'
+  expr_name = 'netvlad.c3d.l2norm_input.0.25.16'
   expr_dir = os.path.join(root_dir, 'expr', 'netvlad', expr_name)
   model_cfg_file = '%s.model.json'%expr_dir
   path_cfg_file = '%s.path.json'%expr_dir
