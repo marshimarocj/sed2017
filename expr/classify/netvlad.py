@@ -259,19 +259,23 @@ def prepare_cfg():
   # track_lens = [50]
   track_lens = [25]
 
+  neg2pos_ratio = 10
+
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s'%(
   #   '_'.join([str(d) for d in track_lens])))
   # out_prefix = os.path.join(out_dir, 'netvlad.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_output.0.%s.%d.full_shuffle'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d'%(
-  out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d.sgd'%(
+  # out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d.sgd'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.c3d.0.%s.%d.sgd'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropout.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.l2norm_output.0.%s.%d'%(
   # out_prefix = os.path.join(out_dir, 'netvlad.l2norm_input.dropin.0.%s.%d'%(
-    '_'.join([str(d) for d in track_lens]), num_center))
+    # '_'.join([str(d) for d in track_lens]), num_center))
+  out_prefix = os.path.join(out_dir, 'netvlad.c3d.l2norm_input.0.%s.%d.%d'%(
+    '_'.join([str(d) for d in track_lens]), num_center, neg2pos_ratio))
   if not os.path.exists(out_prefix):
     os.mkdir(out_prefix)
 
@@ -279,6 +283,7 @@ def prepare_cfg():
   proto_cfg['l2_norm_input'] = True
   # proto_cfg['l2_norm_output'] = True
   # proto_cfg['dropin'] = True
+  proto_cfg['trn_neg2pos_in_batch'] = neg2pos_ratio
   model_cfg = gen_model_cfg(proto_cfg)
   model_cfg['trn_batch_size'] = 32
   model_cfg['tst_batch_size'] = 128
@@ -862,7 +867,7 @@ if __name__ == "__main__":
   # class_instance_stat()
   # num_descriptor_toi_stat()
   # prepare_lst_files()
-  # prepare_cfg()
+  prepare_cfg()
   # prepare_focalloss_cfg()
   # tst_trn_reader()
   # tst_val_reader()
@@ -873,5 +878,5 @@ if __name__ == "__main__":
   # gen_neg_lst_for_trn()
   # neg_lst_split_by_track_len()
   # prepare_tst_files()
-  gen_tst_script()
+  # gen_tst_script()
   # eval()
