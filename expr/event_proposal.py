@@ -505,27 +505,27 @@ def merge_track_db():
 
 
 def pad_proposal_to_square():
-  # root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  root_dir = '/usr0/home/jiac/data/sed' # aladdin3
+  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  # root_dir = '/usr0/home/jiac/data/sed' # aladdin3
   lst_files = [
-    # os.path.join(root_dir, 'dev08-1.lst'),
-    # os.path.join(root_dir, 'eev08-1.lst'),
-    os.path.join(root_dir, 'tst2017', '2017.refined.lst')
+    os.path.join(root_dir, 'dev08-1.lst'),
+    os.path.join(root_dir, 'eev08-1.lst'),
+    # os.path.join(root_dir, 'tst2017', '2017.refined.lst')
   ]
-  # track_dir = os.path.join(root_dir, 'tracking', 'person')
-  track_dir = os.path.join(root_dir, 'tst2017', 'tracking')
+  track_dir = os.path.join(root_dir, 'tracking', 'person')
+  # track_dir = os.path.join(root_dir, 'tst2017', 'tracking')
 
   threshold = 0.5
 
-  # parser = argparse.ArgumentParser()
-  # parser.add_argument('direction', type=str)
-  # parser.add_argument('track_len', type=int)
-  # args = parser.parse_args()
+  parser = argparse.ArgumentParser()
+  parser.add_argument('direction', type=str)
+  parser.add_argument('track_len', type=int)
+  args = parser.parse_args()
 
-  # direction = args.direction
-  # track_len = args.track_len
-  direction = 'forward'
-  track_len = 25
+  direction = args.direction
+  track_len = args.track_len
+  # direction = 'forward'
+  # track_len = 25
 
   names = []
   for lst_file in lst_files:
@@ -626,8 +626,8 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  intersect_backward_forward_tracks()
+  # intersect_backward_forward_tracks()
   # merge_track_db()
-  # pad_proposal_to_square()
+  pad_proposal_to_square()
 
   # tst2017
