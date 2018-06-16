@@ -112,7 +112,7 @@ class NetVladEncoder(framework.model.proto.ModelProto):
     if self._config.l2_norm_input:
       fts = tf.nn.l2_normalize(fts, dim=1)
     logits = tf.nn.xw_plus_b(fts, self.w, self.b) # (None*num_ft, num_center)
-    a = tf.nn.softmax(logits) 
+    a = tf.nn.softmax(logits)
 
     a = tf.expand_dims(a, 1) # (None*num_ft, 1, num_center)
     fts = tf.expand_dims(fts, 2) # (None*num_ft, dim_ft, 1)
