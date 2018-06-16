@@ -626,8 +626,8 @@ if __name__ == '__main__':
   # normalize_opticalflow()
   # gen_normalize_script()
   # correlation_between_opticalflow_and_boxsize()
-  # intersect_backward_forward_tracks()
+  intersect_backward_forward_tracks()
   # merge_track_db()
-  pad_proposal_to_square()
+  # pad_proposal_to_square()
 
   # tst2017
