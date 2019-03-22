@@ -96,7 +96,7 @@ def generate_25fps_lst_from_5fps_lst():
   # preprocess_root_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
   root_dir = '/usr0/home/jiac/data/sed' # aladdin3
   video_lst_file = os.path.join(root_dir, 'tst2017', '2017.refined.lst')
-  preprocess_root_dir = os.path.join(root_dir, 'dev09_preprocess')
+  preprocess_root_dir = os.path.join(root_dir, 'tst2017', 'dev09_preprocess')
 
   with open(video_lst_file) as f:
     for line in f:
@@ -137,7 +137,7 @@ def normalize_bbox_name():
 def normalize_track_name():
   # root_dir = '/home/jiac/sdb/jiac/data/sed' # gpu1
   root_dir = '/home/jiac/data/sed' # xiaojun
-  lst_file = os.path.join(root_dir, 'tst2017', '2017.refined.lst')
+  lst_file = os.path.join(root_dir, '2017.refined.lst')
   track_root_dir = os.path.join(root_dir, 'tst2017', 'tracking')
 
   with open(lst_file) as f:
