@@ -93,7 +93,7 @@ def group_script():
 def generate_25fps_lst_from_5fps_lst():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
   # video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
-  video_lst_file = os.path.join(root_dir, 'tst2017', '2017.refine.lst')
+  video_lst_file = os.path.join(root_dir, 'tst2017', '2017.refined.lst')
   preprocess_root_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
 
   with open(video_lst_file) as f:
