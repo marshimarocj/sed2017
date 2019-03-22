@@ -9,14 +9,15 @@ import shutil
 '''expr
 '''
 def generate_script():
-  # root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
+  root_dir = '/usr0/home/jiac/data/sed/tst2017' # aladdin3
   # video_lst_file = os.path.join(root_dir, '2017.refined.lst')
-  # preprocess_dir = os.path.join(root_dir, 'dev09_preprocess')
-  # script_dir = os.path.join(root_dir, 'script')
-  root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
-  preprocess_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
-  script_dir = os.path.join(root_dir, 'tst2017', 'script')
+  video_lst_file = os.path.join(root_dir, 'dev09_preprocess.long.lst')
+  preprocess_dir = os.path.join(root_dir, 'dev09_preprocess')
+  script_dir = os.path.join(root_dir, 'script')
+  # root_dir = '/usr0/home/jiac/data/sed' # aladdin1
+  # video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  # preprocess_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
+  # script_dir = os.path.join(root_dir, 'tst2017', 'script')
 
   image_name = 'diva_tracking:v1'
 
@@ -42,15 +43,15 @@ def generate_script():
             '-v', ':'.join([root_dir, '/data']),
             image_name,
             '/opt/conda/bin/python', '/workspace/diva_tracking/tracking.py',
-            # os.path.join('/data/dev09_preprocess', videoname, 'clip_6000_100', clip),
-            # os.path.join('/data/person_detect_0.8', videoname),
-            # os.path.join('/data/person_detect_0.8', videoname, '%s.frame_25.lst'%videoname),
-            # os.path.join('/data/tracking', videoname),
-            os.path.join('/data/video/dev09/preprocess', videoname, 'clip_6000_100', clip),
-            os.path.join('/data/tst2017/person_detect_0.8', videoname),
-            os.path.join('/data/tst2017/person_detect_0.8', videoname, '%s.frame_25.lst'%videoname),
-            os.path.join('/data/tst2017/tracking', videoname),
-            '--track_duration', '25',
+            os.path.join('/data/dev09_preprocess', videoname, 'clip_6000_100', clip),
+            os.path.join('/data/person_detect_0.8', videoname),
+            os.path.join('/data/person_detect_0.8', videoname, '%s.frame_25.lst'%videoname),
+            os.path.join('/data/tracking', videoname),
+            # os.path.join('/data/video/dev09/preprocess', videoname, 'clip_6000_100', clip),
+            # os.path.join('/data/tst2017/person_detect_0.8', videoname),
+            # os.path.join('/data/tst2017/person_detect_0.8', videoname, '%s.frame_25.lst'%videoname),
+            # os.path.join('/data/tst2017/tracking', videoname),
+            '--track_duration', '100',
           ]
           fout.write(' '.join(cmd) + '\n')
 
@@ -91,7 +92,8 @@ def group_script():
 
 def generate_25fps_lst_from_5fps_lst():
   root_dir = '/usr0/home/jiac/data/sed' # aladdin1
-  video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  # video_lst_file = os.path.join(root_dir, 'tst2017', 'dev09_preprocess.short.lst')
+  video_lst_file = os.path.join(root_dir, 'tst2017', '2017.refine.lst')
   preprocess_root_dir = os.path.join(root_dir, 'video', 'dev09', 'preprocess')
 
   with open(video_lst_file) as f:
@@ -100,11 +102,13 @@ def generate_25fps_lst_from_5fps_lst():
       pos = line.find('.')
       name = line[:pos]
       src_lst_file = os.path.join(preprocess_root_dir, name, 'frame_5.lst')
-      dst_lst_file = os.path.join(preprocess_root_dir, name, 'frame_25.lst')
+      # dst_lst_file = os.path.join(preprocess_root_dir, name, 'frame_25.lst')
+      dst_lst_file = os.path.join(preprocess_root_dir, name, 'frame_100.lst')
       with open(src_lst_file) as f, open(dst_lst_file, 'w') as fout:
         cnt = 0
         for line in f:
-          if cnt % 5 == 0:
+          # if cnt % 5 == 0:
+          if cnt % 20 == 0:
             fout.write(line)
           cnt += 1
 
@@ -160,6 +164,6 @@ def normalize_track_name():
 if __name__ == '__main__':
   # generate_script()
   # group_script()
-  # generate_25fps_lst_from_5fps_lst()
+  generate_25fps_lst_from_5fps_lst()
   # normalize_bbox_name()
-  normalize_track_name()
+  # normalize_track_name()
