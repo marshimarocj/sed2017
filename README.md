@@ -1,6 +1,8 @@
 # SED2017
 code of CMU entrance at Surveillance Event Detection TRECVID2017
 
+depends on my personal [tensorflow experiment framework](https://github.com/marshimarocj/tf_expr_framework) and [python toolkit](https://github.com/marshimarocj/toolkit)
+
 ## api
 #### db.py
 * TrackDb: file system based database storing person tracking data
